@@ -22,8 +22,8 @@ internal object AppModule {
     fun provideBaseUrl(): BaseUrl = BaseUrl(BuildConfig.BASE_URL)
 
     @Provides
-    fun provideInterceptors(): Interceptors {
-        return if (BuildConfig.DEBUG) {
+    fun provideInterceptors(): Interceptors =
+        if (BuildConfig.DEBUG) {
             val loggingInterceptor =
                 HttpLoggingInterceptor()
                     .apply { level = HttpLoggingInterceptor.Level.BODY }
@@ -33,7 +33,6 @@ internal object AppModule {
         } else {
             Interceptors.Empty
         }
-    }
 
     @Provides
     fun provideAuthenticationListener(
