@@ -26,20 +26,26 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     navigateToQRScanner: () -> Unit,
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     Box(
         modifier = Modifier.fillMaxSize(),
     ) {
         Column(
-            modifier = Modifier.fillMaxSize(),
+            Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             LottoHomeTopBar()
             AdmobBanner(modifier = Modifier.fillMaxWidth())
             LottoContent(
-                lotteryNumbers = uiState.lotteryNumbers,
-                pensionLotteryHome = uiState.pensionLotteryHome,
+                lotteryNumbers = state.lotteryNumbers,
+                pensionLotteryHome = state.pensionLotteryHome,
+                changeLottery = { offset ->
+                    viewModel.event(HomeContract.Event.ChangeLottery(offset = offset))
+                },
+                changePensionLottery = { offset ->
+                    viewModel.event(HomeContract.Event.ChangePensionLottery(offset = offset))
+                },
             )
         }
 
@@ -48,7 +54,7 @@ fun HomeScreen(
                 Modifier
                     .align(Alignment.BottomEnd)
                     .padding(bottom = 15.dp, end = 15.dp),
-            containerColor = LottoTheme.colors.lottoGreen,
+            containerColor = LottoTheme.colors.green,
             onClick = navigateToQRScanner,
         ) {
             Icon(

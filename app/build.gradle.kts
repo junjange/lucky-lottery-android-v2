@@ -16,6 +16,7 @@ localProperties.load(FileInputStream(localPropertiesFile))
 val baseUrl = localProperties.getProperty("BASE_URL") ?: ""
 val kakaoNativeAppKey = localProperties.getProperty("KAKAO_NATIVE_APP_KEY") ?: ""
 val kakaoOauthHost = localProperties.getProperty("KAKAO_OAUTH_HOST") ?: ""
+val adMobAppId = localProperties.getProperty("AD_MOB_APP_ID") ?: ""
 
 android {
     namespace = "com.junjange.lotto3"
@@ -39,7 +40,11 @@ android {
     }
 
     buildTypes {
+        debug {
+            manifestPlaceholders["AD_MOB_APP_ID"] = "ca-app-pub-3940256099942544~3347511713"
+        }
         release {
+            manifestPlaceholders["AD_MOB_APP_ID"] = adMobAppId
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),

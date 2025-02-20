@@ -1,5 +1,6 @@
 [versions]
 # plugins
+jsoup-version = "1.15.3"
 kotlin-lang = "1.9.20"
 android-gradle-plugin = "8.7.0"
 
@@ -55,6 +56,7 @@ junit-ktx = "1.1.5"
 
 [libraries]
 # default
+jsoup-jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup-version" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin-lang" }
 android-gradle-plugin = { group = "com.android", name = "application", version.ref = "android-gradle-plugin" }
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "ktx" }

@@ -14,4 +14,7 @@ fun LotteryNumbersEntity.toDomain() =
         fifthNum = fifthNum,
         sixthNum = sixthNum,
         bonusNum = bonusNum,
+        prizeAmount = prizeAmount,
+        perPersonAmount = perPersonAmount,
+        winnerCount = winnerCount,
     )

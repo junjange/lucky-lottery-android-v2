@@ -14,6 +14,8 @@ localProperties.load(FileInputStream(localPropertiesFile))
 
 val googleClientId = localProperties.getProperty("GOOGLE_CLIENT_ID") ?: ""
 val googleClientSecret = localProperties.getProperty("GOOGLE_CLIENT_SECRET") ?: ""
+val fullScreenAdUnitId = localProperties.getProperty("FULL_SCREEN_AD_UNIT_ID") ?: ""
+val bannerAdUnitId = localProperties.getProperty("BANNER_AD_UNIT_ID") ?: ""
 
 android {
     namespace = "com.junjange.presentation"
@@ -24,6 +26,8 @@ android {
 
         buildConfigField("String", "GOOGLE_CLIENT_ID", googleClientId)
         buildConfigField("String", "GOOGLE_CLIENT_SECRET", googleClientSecret)
+        buildConfigField("String", "FULL_SCREEN_AD_UNIT_ID", fullScreenAdUnitId)
+        buildConfigField("String", "BANNER_AD_UNIT_ID", bannerAdUnitId)
     }
 
     buildTypes {

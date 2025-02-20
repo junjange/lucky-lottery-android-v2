@@ -37,7 +37,7 @@ fun SplashScreen(
             when (effect) {
                 is SplashEffect.Loading -> {}
                 is SplashEffect.AlreadyLoggedIn -> navigateToMain()
-                is SplashEffect.RequireLoginIn -> navigateToLogin()
+                is SplashEffect.RequireLoginIn -> navigateToMain()
             }
         }
     }

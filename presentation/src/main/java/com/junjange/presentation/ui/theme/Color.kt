@@ -10,13 +10,14 @@ import androidx.compose.runtime.structuralEqualityPolicy
 import androidx.compose.ui.graphics.Color
 
 val LottoBlack = Color(0xFF1F2128)
-val LottoPurple = Color(0xFF6568EB)
-val LottoYellow = Color(0xFFFFF06B)
+val LottoGray = Color(0xFFAAAAAA)
+val LottoPurple = Color(0xFF8D70DA)
+val LottoYellow = Color(0xFFFBC400)
 val LottoWhite = Color(0xFFF9F9F9)
-val LottoOrange = Color(0xFFE78111)
-val LottoGreen = Color(0xFF30AA5B)
-val LottoError = Color(0xFFFF4747)
-val LottoBlue = Color(0xFF0065FF)
+val LottoOrange = Color(0xFFFF8E4F)
+val LottoGreen = Color(0xFFB0D840)
+val LottoError = Color(0xFFFF7272)
+val LottoBlue = Color(0xFF67C8F2)
 
 val Gray900 = Color(0xFF212121)
 val Gray800 = Color(0xFF424242)
@@ -31,6 +32,7 @@ val Gray50 = Color(0xFF7F7F7F)
 
 val Black = Color(0xFF000000)
 val White = Color(0xFFFFFFFF)
+val Green = Color(0xFF30AA5B)
 
 val MaterialColors =
     lightColorScheme(
@@ -50,6 +52,7 @@ val MaterialColors =
 class LottoColors(
     lottoBlack: Color,
     lottoWhite: Color,
+    lottoGray: Color,
     lottoPurple: Color,
     lottoYellow: Color,
     lottoOrange: Color,
@@ -68,10 +71,13 @@ class LottoColors(
     gray50: Color,
     black: Color,
     white: Color,
+    green: Color,
 ) {
     var lottoBlack: Color by mutableStateOf(lottoBlack, structuralEqualityPolicy())
         private set
     var lottoWhite: Color by mutableStateOf(lottoWhite, structuralEqualityPolicy())
+        private set
+    var lottoGray: Color by mutableStateOf(lottoGray, structuralEqualityPolicy())
         private set
     var lottoPurple: Color by mutableStateOf(lottoPurple, structuralEqualityPolicy())
         private set
@@ -109,10 +115,13 @@ class LottoColors(
         private set
     var white: Color by mutableStateOf(white, structuralEqualityPolicy())
         private set
+    var green: Color by mutableStateOf(green, structuralEqualityPolicy())
+        private set
 
     fun copy(
         lottoBlack: Color = this.lottoBlack,
         lottoWhite: Color = this.lottoWhite,
+        lottoGray: Color = this.lottoGray,
         lottoPurple: Color = this.lottoPurple,
         lottoYellow: Color = this.lottoYellow,
         lottoOrange: Color = this.lottoOrange,
@@ -131,9 +140,11 @@ class LottoColors(
         gray50: Color = this.gray50,
         black: Color = this.black,
         white: Color = this.white,
+        green: Color = this.green,
     ) = LottoColors(
         lottoBlack = lottoBlack,
         lottoWhite = lottoWhite,
+        lottoGray = lottoGray,
         lottoPurple = lottoPurple,
         lottoYellow = lottoYellow,
         lottoOrange = lottoOrange,
@@ -152,12 +163,14 @@ class LottoColors(
         gray50 = gray50,
         black = black,
         white = white,
+        green = green,
     )
 }
 
 fun lightColors(
     lottoBlack: Color = LottoBlack,
     lottoWhite: Color = LottoWhite,
+    lottoGray: Color = LottoGray,
     lottoPurple: Color = LottoPurple,
     lottoYellow: Color = LottoYellow,
     lottoOrange: Color = LottoOrange,
@@ -176,9 +189,11 @@ fun lightColors(
     gray50: Color = Gray50,
     black: Color = Black,
     white: Color = White,
+    green: Color = Green,
 ) = LottoColors(
     lottoBlack = lottoBlack,
     lottoWhite = lottoWhite,
+    lottoGray = lottoGray,
     lottoPurple = lottoPurple,
     lottoYellow = lottoYellow,
     lottoOrange = lottoOrange,
@@ -197,6 +212,7 @@ fun lightColors(
     gray50 = gray50,
     black = black,
     white = white,
+    green = green,
 )
 
 internal val LocalColors = staticCompositionLocalOf { lightColors() }

@@ -10,4 +10,7 @@ data class LotteryNumbers(
     val fifthNum: Int,
     val sixthNum: Int,
     val bonusNum: Int,
+    val prizeAmount: Long,
+    val perPersonAmount: Long,
+    val winnerCount: Int,
 )

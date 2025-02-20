@@ -1,12 +1,18 @@
 package com.junjange.presentation.ui.home
 
-import com.junjange.domain.usecase.GetLotteryHomeUseCase
-import com.junjange.domain.usecase.GetPensionLotteryHomeUseCase
+import android.util.Log
+import com.junjange.domain.usecase.GetLotteryRoundUseCase
+import com.junjange.domain.usecase.GetLotteryUseCase
+import com.junjange.domain.usecase.GetPensionLotteryRoundUseCase
+import com.junjange.domain.usecase.GetPensionLotteryUseCase
 import com.junjange.presentation.base.BaseViewModel
+import com.junjange.presentation.ui.home.HomeContract.*
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
@@ -14,38 +20,84 @@ import javax.inject.Inject
 class HomeViewModel
     @Inject
     constructor(
-        private val getLotteryHomeUseCase: GetLotteryHomeUseCase,
-        private val getPensionLotteryHomeUseCase: GetPensionLotteryHomeUseCase,
+        private val getLotteryRoundUseCase: GetLotteryRoundUseCase,
+        private val getPensionLotteryRoundUseCase: GetPensionLotteryRoundUseCase,
+        private val getLotteryUseCase: GetLotteryUseCase,
+        private val getPensionLotteryUseCase: GetPensionLotteryUseCase,
     ) : BaseViewModel() {
-        private val _uiState = MutableStateFlow(HomeState())
-        val uiState: StateFlow<HomeState> = _uiState.asStateFlow()
+        private val _state = MutableStateFlow(State())
+        val state: StateFlow<State> = _state.asStateFlow()
+
+        private val _effect = Channel<Effect>(Channel.BUFFERED)
+        val effect get() = _effect.receiveAsFlow()
 
         init {
-            getLotteryHome()
-            getPensionLotteryHome()
-        }
-
-        private fun getLotteryHome() {
             launch {
-                getLotteryHomeUseCase().onSuccess {
-                    _uiState.update { homeState ->
-                        homeState.copy(lotteryNumbers = it)
-                    }
-                }.onFailure {
-                    // TODO 예외처리
-                }
+                fetchLatestLotteryRound()
+                fetchLatestPensionLotteryRound()
             }
         }
 
-        private fun getPensionLotteryHome() {
-            launch {
-                getPensionLotteryHomeUseCase().onSuccess {
-                    _uiState.update { homeState ->
-                        homeState.copy(pensionLotteryHome = it)
+        fun event(event: Event) {
+            when (event) {
+                is Event.ChangeLottery -> changeLottery(offset = event.offset)
+                is Event.ChangePensionLottery -> changePensionLottery(offset = event.offset)
+            }
+        }
+
+        private suspend fun fetchLatestLotteryRound() {
+            getLotteryRoundUseCase()
+                .onSuccess { round ->
+                    fetchLotteryNumbers(round)
+                }.onFailure { }
+        }
+
+        private suspend fun fetchLatestPensionLotteryRound() {
+            getPensionLotteryRoundUseCase()
+                .onSuccess { round ->
+                    fetchPensionLotteryNumbers(round)
+                }.onFailure { }
+        }
+
+        private suspend fun fetchLotteryNumbers(round: Int) {
+            getLotteryUseCase(round)
+                .onSuccess { numbers ->
+                    _state.update {
+                        it.copy(
+                            lotteryNumbers = numbers,
+                            lotteryRound = round,
+                        )
+                    }
+                }.onFailure { }
+        }
+
+        private suspend fun fetchPensionLotteryNumbers(round: Int) {
+            Log.d("ttt round", round.toString())
+            getPensionLotteryUseCase(round)
+                .onSuccess { numbers ->
+                    Log.d("ttt numbers", numbers.toString())
+                    _state.update {
+                        it.copy(
+                            pensionLotteryHome = numbers,
+                            pensionLotteryRound = round,
+                        )
                     }
                 }.onFailure {
-                    // TODO 예외처리
+                    Log.d("ttt", it.toString())
                 }
+        }
+
+        private fun changeLottery(offset: Int) {
+            launch {
+                val round = state.value.lotteryRound
+                fetchLotteryNumbers(round + offset)
+            }
+        }
+
+        private fun changePensionLottery(offset: Int) {
+            launch {
+                val round = state.value.pensionLotteryRound
+                fetchPensionLotteryNumbers(round + offset)
             }
         }
     }

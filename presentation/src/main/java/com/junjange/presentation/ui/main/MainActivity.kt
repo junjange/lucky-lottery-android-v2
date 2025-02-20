@@ -15,6 +15,7 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.zxing.integration.android.IntentIntegrator
+import com.junjange.presentation.BuildConfig
 import com.junjange.presentation.R
 import com.junjange.presentation.base.BaseActivity
 import com.junjange.presentation.ui.editprofile.EditProfileActivity
@@ -99,9 +100,16 @@ class MainActivity : BaseActivity() {
     private fun setupInterstitialAd() {
         val adRequest = AdRequest.Builder().build()
 
+        val adUnitId =
+            if (BuildConfig.DEBUG) {
+                "ca-app-pub-3940256099942544/1033173712"
+            } else {
+                BuildConfig.FULL_SCREEN_AD_UNIT_ID
+            }
+
         InterstitialAd.load(
             this,
-            "ca-app-pub-3940256099942544/1033173712",
+            adUnitId,
             adRequest,
             object : InterstitialAdLoadCallback() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {

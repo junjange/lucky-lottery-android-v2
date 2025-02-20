@@ -227,7 +227,7 @@ fun MyPensionLotteryContent(
                 Modifier
                     .align(Alignment.BottomEnd)
                     .padding(bottom = 15.dp, end = 15.dp),
-            containerColor = LottoTheme.colors.lottoGreen,
+            containerColor = LottoTheme.colors.green,
             onClick = { viewModel.onPickedImage() },
         ) {
             Icon(
@@ -284,7 +284,7 @@ fun MyLotteryContent(
                 Modifier
                     .align(Alignment.BottomEnd)
                     .padding(bottom = 15.dp, end = 15.dp),
-            containerColor = LottoTheme.colors.lottoGreen,
+            containerColor = LottoTheme.colors.green,
             onClick = { viewModel.onPickedImage() },
         ) {
             Icon(
