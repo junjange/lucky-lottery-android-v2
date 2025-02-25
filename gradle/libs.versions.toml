@@ -53,6 +53,14 @@ coroutines = "1.6.4"
 okhttp = "4.10.0"
 retrofit = "2.9.0"
 junit-ktx = "1.1.5"
+retrofit2-kotlinx-serialization-converter = "1.0.0"
+
+# serialization
+serialization = "1.6.3"
+kotlinx-datetime = "0.4.0"
+
+# room
+room = "2.6.1"
 
 [libraries]
 # default
@@ -63,6 +71,10 @@ core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "ktx" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
 lifecycle-extensions = { group = "androidx.lifecycle", name = "lifecycle-extensions", version.ref = "lifecycle-extensions" }
+
+# kotlin
+kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 
 # compose
 activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "compose" }
@@ -113,6 +125,7 @@ retrofit-core = { group = "com.squareup.retrofit2", name = "retrofit", version.r
 retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
 okhttp-core = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
+retrofit2-kotlinx-serialization-converter = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofit2-kotlinx-serialization-converter" }
 
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
@@ -127,14 +140,21 @@ tesseract-android = { module = "cz.adaptech.tesseract4android:tesseract4android"
 tesseract-android-openmp = { module = "cz.adaptech.tesseract4android:tesseract4android-openmp", version.ref = "tesseract" }
 junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junit-ktx" }
 
+# room
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+
 [bundles]
 android = ["core-ktx", "lifecycle-runtime-ktx", "material", "lifecycle-extensions", "coil", "image-cropper", "zxing-android-embedded", "zxing-core"]
+kotlin = ["coroutines-core", "kotlinx-serialization", "kotlinx-datetime"]
 compose = ["activity-compose", "compose-lifecycle", "compose-ui", "compose-ui-graphics", "compose-ui-tooling-preview", "compose-material", "compose-material3", "compose-hilt-navigation", "compose-navigation", "paging-compose"]
 common = ["hilt"]
 google = ["google-services", "firebase-auth", "firebase-messaging", "firebase-bom", "google-auth", "google-admob-ads"]
 kakao = ["kakao-user"]
 network = ["retrofit-core", "retrofit-converter-gson", "okhttp-core", "okhttp-logging-interceptor"]
 datastore = ["datastore", "datastore-core"]
+room = ["room-runtime", "room-ktx"]
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
@@ -143,3 +163,4 @@ kotlin-lang = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin-lang"
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 ksp = { id = "com.google.devtools.ksp", version = "1.9.0-1.0.12" }
 parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin-lang" }
+kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-lang" }

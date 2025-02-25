@@ -150,7 +150,7 @@ fun LottoContent(
 fun LottoContentTitle(
     title: String,
     round: Int,
-    winningDate: String,
+    winningDate: String?,
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Spacer(modifier = Modifier.height(20.dp))
@@ -172,7 +172,8 @@ fun LottoContentTitle(
     }
 }
 
-fun String.parseDateToKoreanFormat(): String {
+fun String?.parseDateToKoreanFormat(): String {
+    this ?: return "미발표"
     val inputFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     val outputFormatter = SimpleDateFormat("yyyy년 MM월 dd일", Locale.getDefault())
 

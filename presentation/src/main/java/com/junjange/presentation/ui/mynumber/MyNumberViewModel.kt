@@ -1,9 +1,12 @@
 package com.junjange.presentation.ui.mynumber
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.junjange.domain.usecase.GetLotteryGetUseCase
 import com.junjange.domain.usecase.GetPensionLotteryGetUseCase
+import com.junjange.domain.usecase.InsertLotteryUseCase
+import com.junjange.domain.usecase.LoadLotteryRoundsUseCase
 import com.junjange.domain.usecase.PostLotterySaveUseCase
 import com.junjange.domain.usecase.PostPensionLotterySaveUseCase
 import com.junjange.presentation.base.BaseViewModel
@@ -29,6 +32,8 @@ class MyNumberViewModel
         private val getLotteryGetUseCase: GetLotteryGetUseCase,
         private val postLotterySaveUseCase: PostLotterySaveUseCase,
         private val postPensionLotterySaveUseCase: PostPensionLotterySaveUseCase,
+        private val insertLotteryUseCase: InsertLotteryUseCase,
+        private val loadLotteryRoundsUseCase: LoadLotteryRoundsUseCase,
     ) : BaseViewModel() {
         private val _uiState = MutableStateFlow(MyNumberState())
         val uiState: StateFlow<MyNumberState> = _uiState.asStateFlow()
@@ -44,7 +49,7 @@ class MyNumberViewModel
         fun getLotteryGet() {
             loading(isLoading = true)
             uiState.value.lotteryGetContent =
-                createLotteryPagingSource(getLotteryGetUseCase = getLotteryGetUseCase).flow.cachedIn(
+                createLotteryPagingSource(loadLotteryRoundsUseCase = loadLotteryRoundsUseCase).flow.cachedIn(
                     viewModelScope,
                 )
             loading(isLoading = false)
@@ -75,7 +80,7 @@ class MyNumberViewModel
         ) {
             launch {
                 loading(isLoading = true)
-                postLotterySaveUseCase(
+                insertLotteryUseCase(
                     firstNum = firstNum,
                     secondNum = secondNum,
                     thirdNum = thirdNum,
@@ -84,9 +89,11 @@ class MyNumberViewModel
                     sixthNum = sixthNum,
                 ).onSuccess {
                     loading(false)
-                    getLotteryGet()
+//                    getLotteryGet()
+                    Log.d("ttt insertLotteryUseCase onSuccess", it.toString())
                 }.onFailure {
                     // TODO 예외처리
+                    Log.d("ttt insertLotteryUseCase onFailure", it.toString())
                 }
             }
         }
@@ -165,28 +172,25 @@ class MyNumberViewModel
         }
     }
 
-private fun String.extractLottoNumbers(): List<List<String>> {
-    return this.split("\n").map { it.split(" ") }
-}
+private fun String.extractLottoNumbers(): List<List<String>> = this.split("\n").map { it.split(" ") }
 
-private fun String.extractPensionLottoNumbers(): List<List<String>> {
-    return this.split("\n").map { it.replace(" ", "").replace("조", "").map { it.toString() } }
-}
+private fun String.extractPensionLottoNumbers(): List<List<String>> =
+    this.split("\n").map {
+        it.replace(" ", "").replace("조", "").map { it.toString() }
+    }
 
-private fun List<List<String>>.isValidLottoNumbers(): Boolean {
-    return all { lottoNumbers ->
+private fun List<List<String>>.isValidLottoNumbers(): Boolean =
+    all { lottoNumbers ->
         lottoNumbers.size == 6 &&
             lottoNumbers.all { lottoNumber ->
                 lottoNumber.toIntOrNull() != null && lottoNumber.toInt() in 1..45
             }
     }
-}
 
-private fun List<List<String>>.isValidPensionLottoNumbers(): Boolean {
-    return all { lottoNumbers ->
+private fun List<List<String>>.isValidPensionLottoNumbers(): Boolean =
+    all { lottoNumbers ->
         lottoNumbers.size == 7 &&
             lottoNumbers.all { lottoNumber ->
                 lottoNumber.toIntOrNull() != null && lottoNumber.toInt() in 0..9
             }
     }
-}
