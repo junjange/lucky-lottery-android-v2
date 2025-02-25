@@ -379,13 +379,13 @@ fun RowScope.TableCell(
     ) {
         val lottoTitle =
             listOf(
-                lottoNumbers.pensionGroup,
-                lottoNumbers.pensionFirstNum,
-                lottoNumbers.pensionSecondNum,
-                lottoNumbers.pensionThirdNum,
-                lottoNumbers.pensionFourthNum,
-                lottoNumbers.pensionFifthNum,
-                lottoNumbers.pensionSixthNum,
+                lottoNumbers.group,
+                lottoNumbers.firstNum,
+                lottoNumbers.secondNum,
+                lottoNumbers.thirdNum,
+                lottoNumbers.fourthNum,
+                lottoNumbers.fifthNum,
+                lottoNumbers.sixthNum,
             ).map { it.toString() }
 
         lottoTitle.forEachIndexed { index, title ->

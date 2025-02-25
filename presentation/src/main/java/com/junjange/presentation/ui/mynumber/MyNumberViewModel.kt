@@ -1,14 +1,11 @@
 package com.junjange.presentation.ui.mynumber
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import com.junjange.domain.usecase.GetLotteryGetUseCase
-import com.junjange.domain.usecase.GetPensionLotteryGetUseCase
 import com.junjange.domain.usecase.InsertLotteryUseCase
+import com.junjange.domain.usecase.InsertPensionLotteryUseCase
 import com.junjange.domain.usecase.LoadLotteryRoundsUseCase
-import com.junjange.domain.usecase.PostLotterySaveUseCase
-import com.junjange.domain.usecase.PostPensionLotterySaveUseCase
+import com.junjange.domain.usecase.LoadPensionLotteryRoundsUseCase
 import com.junjange.presentation.base.BaseViewModel
 import com.junjange.presentation.feature.ocr.OcrService
 import com.junjange.presentation.ui.mynumber.MyNumberEffect.NavigateToGallery
@@ -28,12 +25,10 @@ class MyNumberViewModel
     @Inject
     constructor(
         private val ocrService: OcrService,
-        private val getPensionLotteryGetUseCase: GetPensionLotteryGetUseCase,
-        private val getLotteryGetUseCase: GetLotteryGetUseCase,
-        private val postLotterySaveUseCase: PostLotterySaveUseCase,
-        private val postPensionLotterySaveUseCase: PostPensionLotterySaveUseCase,
         private val insertLotteryUseCase: InsertLotteryUseCase,
         private val loadLotteryRoundsUseCase: LoadLotteryRoundsUseCase,
+        private val insertPensionLotteryUseCase: InsertPensionLotteryUseCase,
+        private val loadPensionLotteryRoundsUseCase: LoadPensionLotteryRoundsUseCase,
     ) : BaseViewModel() {
         private val _uiState = MutableStateFlow(MyNumberState())
         val uiState: StateFlow<MyNumberState> = _uiState.asStateFlow()
@@ -58,7 +53,7 @@ class MyNumberViewModel
         fun getPensionLotteryGet() {
             loading(isLoading = true)
             uiState.value.pensionLotteryGetContent =
-                createPensionLotteryPagingSource(getPensionLotteryGetUseCase = getPensionLotteryGetUseCase).flow.cachedIn(
+                createPensionLotteryPagingSource(loadPensionLotteryRoundsUseCase = loadPensionLotteryRoundsUseCase).flow.cachedIn(
                     viewModelScope,
                 )
             loading(isLoading = false)
@@ -89,11 +84,8 @@ class MyNumberViewModel
                     sixthNum = sixthNum,
                 ).onSuccess {
                     loading(false)
-//                    getLotteryGet()
-                    Log.d("ttt insertLotteryUseCase onSuccess", it.toString())
+                    getLotteryGet()
                 }.onFailure {
-                    // TODO 예외처리
-                    Log.d("ttt insertLotteryUseCase onFailure", it.toString())
                 }
             }
         }
@@ -109,19 +101,18 @@ class MyNumberViewModel
         ) {
             launch {
                 loading(isLoading = true)
-                postPensionLotterySaveUseCase(
-                    pensionGroup = pensionGroup,
-                    pensionFirstNum = pensionFirstNum,
-                    pensionSecondNum = pensionSecondNum,
-                    pensionThirdNum = pensionThirdNum,
-                    pensionFourthNum = pensionFourthNum,
-                    pensionFifthNum = pensionFifthNum,
-                    pensionSixthNum = pensionSixthNum,
+                insertPensionLotteryUseCase(
+                    group = pensionGroup,
+                    firstNum = pensionFirstNum,
+                    secondNum = pensionSecondNum,
+                    thirdNum = pensionThirdNum,
+                    fourthNum = pensionFourthNum,
+                    fifthNum = pensionFifthNum,
+                    sixthNum = pensionSixthNum,
                 ).onSuccess {
                     loading(false)
                     getPensionLotteryGet()
                 }.onFailure {
-                    // TODO 예외처리
                 }
             }
         }

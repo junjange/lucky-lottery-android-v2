@@ -6,13 +6,13 @@ import com.junjange.domain.model.PensionLotteryNumbers
 internal fun List<PensionLotteryNumbersEntity>.toDomain() =
     map {
         PensionLotteryNumbers(
-            pensionGroup = it.pensionGroup,
-            pensionFirstNum = it.pensionFirstNum,
-            pensionSecondNum = it.pensionSecondNum,
-            pensionThirdNum = it.pensionThirdNum,
-            pensionFourthNum = it.pensionFourthNum,
-            pensionFifthNum = it.pensionFifthNum,
-            pensionSixthNum = it.pensionSixthNum,
+            group = it.pensionGroup,
+            firstNum = it.pensionFirstNum,
+            secondNum = it.pensionSecondNum,
+            thirdNum = it.pensionThirdNum,
+            fourthNum = it.pensionFourthNum,
+            fifthNum = it.pensionFifthNum,
+            sixthNum = it.pensionSixthNum,
             rank = it.rank,
             checkWinningBonus = it.checkWinningBonus,
             correctNumbers = it.correctNumbers,

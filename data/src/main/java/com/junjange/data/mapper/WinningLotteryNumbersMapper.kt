@@ -2,7 +2,9 @@ package com.junjange.data.mapper
 
 import com.junjange.data.model.local.LotteryNumberDto
 import com.junjange.data.model.remote.WinningLotteryNumbersEntity
+import com.junjange.domain.model.PensionLotteryHome
 import com.junjange.domain.model.WinningLotteryNumbers
+import com.junjange.domain.model.WinningPensionLotteryNumbers
 
 internal fun WinningLotteryNumbersEntity.toDomain() =
     WinningLotteryNumbers(
@@ -13,6 +15,17 @@ internal fun WinningLotteryNumbersEntity.toDomain() =
         fourthNum = fourthNum,
         fifthNum = fifthNum,
         sixthNum = sixthNum,
+    )
+
+internal fun PensionLotteryHome.toWinningPensionLotteryNumbers(): WinningPensionLotteryNumbers =
+    WinningPensionLotteryNumbers(
+        lotteryGroup,
+        winningFirstNum,
+        winningSecondNum,
+        winningThirdNum,
+        winningFourthNum,
+        winningFifthNum,
+        winningSixthNum,
     )
 
 fun WinningLotteryNumbers.toCorrectNumbers(lotteryNumberDto: LotteryNumberDto): Pair<List<Boolean>, Boolean> {

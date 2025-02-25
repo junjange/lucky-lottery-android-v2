@@ -400,24 +400,24 @@ fun Lotto720Content(
 ) {
     val winningLotteryNumbersTitle =
         listOf(
-            winningPensionLotteryNumbers.lotteryGroup,
-            winningPensionLotteryNumbers.winningFirstNum,
-            winningPensionLotteryNumbers.winningSecondNum,
-            winningPensionLotteryNumbers.winningThirdNum,
-            winningPensionLotteryNumbers.winningFourthNum,
-            winningPensionLotteryNumbers.winningFifthNum,
-            winningPensionLotteryNumbers.winningSixthNum,
+            winningPensionLotteryNumbers.group,
+            winningPensionLotteryNumbers.firstNum,
+            winningPensionLotteryNumbers.secondNum,
+            winningPensionLotteryNumbers.thirdNum,
+            winningPensionLotteryNumbers.fourthNum,
+            winningPensionLotteryNumbers.fifthNum,
+            winningPensionLotteryNumbers.sixthNum,
         ).map { it.toString() }
 
     val winningPensionLotteryBonusNumbersTitle =
         listOf(
             "각",
-            winningPensionLotteryBonusNumbers.bonusFirstNum,
-            winningPensionLotteryBonusNumbers.bonusSecondNum,
-            winningPensionLotteryBonusNumbers.bonusThirdNum,
-            winningPensionLotteryBonusNumbers.bonusFourthNum,
-            winningPensionLotteryBonusNumbers.bonusFifthNum,
-            winningPensionLotteryBonusNumbers.bonusSixthNum,
+            winningPensionLotteryBonusNumbers.firstNum,
+            winningPensionLotteryBonusNumbers.secondNum,
+            winningPensionLotteryBonusNumbers.thirdNum,
+            winningPensionLotteryBonusNumbers.fourthNum,
+            winningPensionLotteryBonusNumbers.fifthNum,
+            winningPensionLotteryBonusNumbers.sixthNum,
         ).map { it.toString() }
 
     val lotteryColors =

@@ -4,12 +4,9 @@ import com.junjange.domain.model.LotteryGet
 import com.junjange.domain.model.LotteryGetContent
 import com.junjange.domain.model.LotteryNumbers
 import com.junjange.domain.model.LotteryRandomNumbers
-import com.junjange.domain.model.PensionLotteryHome
 
 interface LotteryRepository {
     suspend fun getLotteryRound(): Result<Int>
-
-    suspend fun getPensionLotteryRound(): Result<Int>
 
     suspend fun getLotteryGet(
         page: Int,
@@ -28,8 +25,6 @@ interface LotteryRepository {
     suspend fun getLotteryRandom(): Result<LotteryRandomNumbers>
 
     suspend fun getLottoNumber(drwNo: Int): Result<LotteryNumbers>
-
-    suspend fun getPensionLottoNumber(drwNo: Int): Result<PensionLotteryHome>
 
     suspend fun loadLotteryRounds(
         page: Int,

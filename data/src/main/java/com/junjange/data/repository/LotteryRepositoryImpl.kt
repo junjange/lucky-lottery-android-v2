@@ -11,7 +11,6 @@ import com.junjange.domain.model.LotteryGetContent
 import com.junjange.domain.model.LotteryGetNumbers
 import com.junjange.domain.model.LotteryNumbers
 import com.junjange.domain.model.LotteryRandomNumbers
-import com.junjange.domain.model.PensionLotteryHome
 import com.junjange.domain.repository.LotteryRepository
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -26,18 +25,12 @@ internal class LotteryRepositoryImpl
         private val lotteryRoomDataSource: LotteryRoomDataSource,
     ) : LotteryRepository {
         private val lottery: LinkedHashMap<Int, LotteryNumbers> = linkedMapOf()
-        private val pensionLottery: LinkedHashMap<Int, PensionLotteryHome> = linkedMapOf()
 
         private val nextLotteryRound
             get() = lottery.keys.first() + 1
-        private val nextPensionLotteryRound
-            get() = pensionLottery.keys.first() + 1
 
         private val nextLotteryWinningDate
             get() = addDaysToDate(lottery.values.first().winningDate)
-
-        private val nextPensionLotteryWinningDate
-            get() = addDaysToDate(pensionLottery.values.first().winningDate)
 
         override suspend fun loadLotteryRounds(
             page: Int,
@@ -92,13 +85,13 @@ internal class LotteryRepositoryImpl
                             lotteries.filter { it.round == round }.map { lottery ->
                                 val (correctNumbers, checkWinningBonus) =
                                     winningLotteryNumbers?.toCorrectNumbers(lottery) ?: Pair(
-                                        emptyList(),
+                                        null,
                                         false,
                                     )
 
                                 winningLotteryNumbers?.bonusNum
                                 val rank =
-                                    when (correctNumbers.count { it }) {
+                                    when (correctNumbers?.count { it }) {
                                         6 -> "FIRST"
                                         5 -> {
                                             if (checkWinningBonus) {
@@ -132,8 +125,6 @@ internal class LotteryRepositoryImpl
             }
 
         override suspend fun getLotteryRound(): Result<Int> = lotteryDataSource.getLotteryRound()
-
-        override suspend fun getPensionLotteryRound(): Result<Int> = lotteryDataSource.getPensionLotteryRound()
 
         override suspend fun getLotteryGet(
             page: Int,
@@ -178,21 +169,6 @@ internal class LotteryRepositoryImpl
             }
 
             return lotteryNumbers
-        }
-
-        override suspend fun getPensionLottoNumber(drwNo: Int): Result<PensionLotteryHome> {
-            pensionLottery[drwNo]?.let {
-                return Result.success(it)
-            }
-
-            val pensionLotteryHome =
-                lotteryDataSource.getPensionLottoNumber(drwNo = drwNo).mapCatching { it.toDomain() }
-
-            if (pensionLotteryHome.isSuccess) {
-                pensionLottery[drwNo] = pensionLotteryHome.getOrThrow()
-            }
-
-            return pensionLotteryHome
         }
 
         private fun addDaysToDate(dateStr: String): String {

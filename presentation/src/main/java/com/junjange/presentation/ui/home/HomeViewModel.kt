@@ -1,6 +1,5 @@
 package com.junjange.presentation.ui.home
 
-import android.util.Log
 import com.junjange.domain.usecase.GetLotteryRoundUseCase
 import com.junjange.domain.usecase.GetLotteryUseCase
 import com.junjange.domain.usecase.GetPensionLotteryRoundUseCase
@@ -72,10 +71,8 @@ class HomeViewModel
         }
 
         private suspend fun fetchPensionLotteryNumbers(round: Int) {
-            Log.d("ttt round", round.toString())
             getPensionLotteryUseCase(round)
                 .onSuccess { numbers ->
-                    Log.d("ttt numbers", numbers.toString())
                     _state.update {
                         it.copy(
                             pensionLotteryHome = numbers,
@@ -83,7 +80,6 @@ class HomeViewModel
                         )
                     }
                 }.onFailure {
-                    Log.d("ttt", it.toString())
                 }
         }
 

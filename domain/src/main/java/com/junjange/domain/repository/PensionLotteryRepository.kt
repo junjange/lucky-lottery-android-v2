@@ -1,8 +1,8 @@
 package com.junjange.domain.repository
 
-import com.junjange.domain.model.LotteryGet
-import com.junjange.domain.model.LotteryGetContent
 import com.junjange.domain.model.PensionLotteryGet
+import com.junjange.domain.model.PensionLotteryGetContent
+import com.junjange.domain.model.PensionLotteryHome
 import com.junjange.domain.model.PensionLotteryRandom
 
 interface PensionLotteryRepository {
@@ -25,17 +25,15 @@ interface PensionLotteryRepository {
 
     suspend fun getPensionLotteryRound(): Result<Int>
 
-    suspend fun getLotteryGet(
+    suspend fun getPensionLottoNumber(drwNo: Int): Result<PensionLotteryHome>
+
+    suspend fun loadPensionLotteryRounds(
         page: Int,
         size: Int,
-    ): Result<LotteryGet>
+    ): Result<List<PensionLotteryGetContent>>
 
-    suspend fun loadLotteryRounds(
-        page: Int,
-        size: Int,
-    ): Result<List<LotteryGetContent>>
-
-    suspend fun insertLottery(
+    suspend fun insertPensionLottery(
+        group: Int,
         firstNum: Int,
         secondNum: Int,
         thirdNum: Int,
