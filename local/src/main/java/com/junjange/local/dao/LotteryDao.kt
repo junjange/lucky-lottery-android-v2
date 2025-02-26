@@ -17,7 +17,7 @@ interface LotteryDao {
         offset: Int,
     ): List<Int>
 
-    @Query("SELECT * FROM lottery WHERE round IN (:rounds) ORDER BY round DESC, id ASC")
+    @Query("SELECT * FROM lottery WHERE round IN (:rounds) ORDER BY round DESC, id DESC")
     suspend fun getLotteriesByRounds(rounds: List<Int>): List<LotteryEntity>
 
     @Query("DELETE FROM lottery WHERE round = :round AND id = :id")
