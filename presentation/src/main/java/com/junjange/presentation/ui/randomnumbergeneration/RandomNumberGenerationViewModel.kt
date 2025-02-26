@@ -3,7 +3,7 @@ package com.junjange.presentation.ui.randomnumbergeneration
 import androidx.lifecycle.SavedStateHandle
 import com.junjange.domain.usecase.GetLotteryRandomUseCase
 import com.junjange.domain.usecase.GetPensionLotteryRandomUseCase
-import com.junjange.domain.usecase.PostLotterySaveUseCase
+import com.junjange.domain.usecase.InsertLotteryUseCase
 import com.junjange.domain.usecase.PostPensionLotterySaveUseCase
 import com.junjange.presentation.base.BaseViewModel
 import com.junjange.presentation.component.LottoType
@@ -21,7 +21,7 @@ class RandomNumberGenerationViewModel
     constructor(
         savedStateHandle: SavedStateHandle,
         private val getLotteryRandomUseCase: GetLotteryRandomUseCase,
-        private val postLotterySaveUseCase: PostLotterySaveUseCase,
+        private val insertLotteryUseCase: InsertLotteryUseCase,
         private val getPensionLotteryRandomUseCase: GetPensionLotteryRandomUseCase,
         private val postPensionLotterySaveUseCase: PostPensionLotterySaveUseCase,
     ) : BaseViewModel() {
@@ -80,19 +80,16 @@ class RandomNumberGenerationViewModel
 
         fun postLotterySave() {
             launch {
-                val lotteryNumbers = _uiState.value.lotteryRandomNumbers
-                lotteryNumbers?.let {
-                    postLotterySaveUseCase(
-                        firstNum = it.firstNum,
-                        secondNum = it.secondNum,
-                        thirdNum = it.thirdNum,
-                        fourthNum = it.fourthNum,
-                        fifthNum = it.fifthNum,
-                        sixthNum = it.sixthNum,
-                    ).onSuccess { }.onFailure {
-                        // TODO 예외 처리
-                    }
-                } ?: run {
+                val lotteryNumbers = _uiState.value.lotteryRandomNumbers ?: return@launch
+                insertLotteryUseCase(
+                    firstNum = lotteryNumbers.firstNum,
+                    secondNum = lotteryNumbers.secondNum,
+                    thirdNum = lotteryNumbers.thirdNum,
+                    fourthNum = lotteryNumbers.fourthNum,
+                    fifthNum = lotteryNumbers.fifthNum,
+                    sixthNum = lotteryNumbers.sixthNum,
+                ).onSuccess {
+                }.onFailure {
                     // TODO 예외 처리
                 }
             }
