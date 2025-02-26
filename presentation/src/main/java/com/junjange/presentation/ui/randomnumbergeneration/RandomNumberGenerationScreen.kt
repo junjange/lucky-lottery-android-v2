@@ -209,7 +209,7 @@ fun RandomNumberGenerationContent(
                     .width(160.dp),
             buttonText = stringResource(R.string.save_title),
             backgroundColor = LottoTheme.colors.lottoGreen,
-            isEnabled = true,
+            isEnabled = uiState.saveIsEnabled,
             onClick = { onSaveClicked() },
         )
     }

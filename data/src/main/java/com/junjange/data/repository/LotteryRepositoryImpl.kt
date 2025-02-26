@@ -154,7 +154,21 @@ internal class LotteryRepositoryImpl
             )
 
         override suspend fun getLotteryRandom(): Result<LotteryRandomNumbers> =
-            lotteryDataSource.getLotteryRandom().mapCatching { it.toDomain() }
+            runCatching {
+                val randomNumbers = generateNumbers()
+                LotteryRandomNumbers(
+                    round = nextLotteryRound,
+                    winningDate = nextLotteryWinningDate,
+                    firstNum = randomNumbers[0],
+                    secondNum = randomNumbers[1],
+                    thirdNum = randomNumbers[2],
+                    fourthNum = randomNumbers[3],
+                    fifthNum = randomNumbers[4],
+                    sixthNum = randomNumbers[5],
+                )
+            }
+
+        private fun generateNumbers(): List<Int> = (1..45).shuffled().take(6)
 
         override suspend fun getLottoNumber(drwNo: Int): Result<LotteryNumbers> {
             lottery[drwNo]?.let {

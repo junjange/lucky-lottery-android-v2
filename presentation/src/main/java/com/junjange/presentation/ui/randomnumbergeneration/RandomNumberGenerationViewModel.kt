@@ -8,6 +8,7 @@ import com.junjange.domain.usecase.PostPensionLotterySaveUseCase
 import com.junjange.presentation.base.BaseViewModel
 import com.junjange.presentation.component.LottoType
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -39,25 +40,34 @@ class RandomNumberGenerationViewModel
 
         fun generate645RandomNumbers() {
             launch {
-                getLotteryRandomUseCase().onSuccess {
-                    _uiState.update { state ->
-                        state.copy(lotteryRandomNumbers = it)
-                    }
-                }.onFailure {
-                    // TODO 예외 처리
+                repeat(6) {
+                    getLotteryRandomUseCase()
+                        .onSuccess {
+                            _uiState.update { state ->
+                                state.copy(saveIsEnabled = false, lotteryRandomNumbers = it)
+                            }
+                        }.onFailure {
+                            // TODO 예외 처리
+                        }
+
+                    delay(500)
+                }
+                _uiState.update { state ->
+                    state.copy(saveIsEnabled = true)
                 }
             }
         }
 
         fun generate720RandomNumbers() {
             launch {
-                getPensionLotteryRandomUseCase().onSuccess {
-                    _uiState.update { state ->
-                        state.copy(pensionLotteryRandom = it)
+                getPensionLotteryRandomUseCase()
+                    .onSuccess {
+                        _uiState.update { state ->
+                            state.copy(pensionLotteryRandom = it)
+                        }
+                    }.onFailure {
+                        // TODO 예외 처리
                     }
-                }.onFailure {
-                    // TODO 예외 처리
-                }
             }
         }
 
