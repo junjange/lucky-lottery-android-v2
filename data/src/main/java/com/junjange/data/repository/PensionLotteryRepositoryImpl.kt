@@ -30,7 +30,7 @@ internal class PensionLotteryRepositoryImpl
     ) : PensionLotteryRepository {
         private val pensionLottery: LinkedHashMap<Int, PensionLotteryHome> = linkedMapOf()
 
-        private val round
+        private val nextRound
             get() = pensionLottery.keys.first() + 1
 
         private val nextWinningDate
@@ -56,7 +56,24 @@ internal class PensionLotteryRepositoryImpl
             )
 
         override suspend fun getPensionLotteryRandom(): Result<PensionLotteryRandom> =
-            pensionLotteryDataSource.getPensionLotteryRandom().mapCatching { it.toDomain() }
+            runCatching {
+                val randomNumbers = generateNumbers()
+                val group = generateGroupNumber()
+                PensionLotteryRandom(
+                    pensionRound = nextRound,
+                    pensionGroup = group,
+                    pensionFirstNum = randomNumbers[0],
+                    pensionSecondNum = randomNumbers[1],
+                    pensionThirdNum = randomNumbers[2],
+                    pensionFourthNum = randomNumbers[3],
+                    pensionFifthNum = randomNumbers[4],
+                    pensionSixthNum = randomNumbers[5],
+                )
+            }
+
+        private fun generateGroupNumber(): Int = (1..5).shuffled().first()
+
+        private fun generateNumbers(): List<Int> = (0..9).shuffled().take(6)
 
         override suspend fun getPensionLotteryGet(
             page: Int,
@@ -115,7 +132,7 @@ internal class PensionLotteryRepositoryImpl
         ): Result<Unit> {
             val pensionLotteryNumberDto =
                 PensionLotteryNumberDto(
-                    round = round,
+                    round = nextRound,
                     group = group,
                     firstNum = firstNum,
                     secondNum = secondNum,
@@ -134,7 +151,8 @@ internal class PensionLotteryRepositoryImpl
             runCatching {
                 pagedRounds.map { round ->
                     val pensionLotteryNumbers = getPensionLottoNumber(drwNo = round).getOrNull()
-                    val winningLotteryNumbers = pensionLotteryNumbers?.toWinningPensionLotteryNumbers()
+                    val winningLotteryNumbers =
+                        pensionLotteryNumbers?.toWinningPensionLotteryNumbers()
                     val winningPensionLotteryBonusNumbers =
                         pensionLotteryNumbers?.toWinningPensionLotteryBonusNumbers()
                     val winningDate = pensionLotteryNumbers?.winningDate ?: nextWinningDate
@@ -147,9 +165,12 @@ internal class PensionLotteryRepositoryImpl
                         winningPensionLotteryNumbers = winningLotteryNumbers,
                         pensionLotteryNumbers =
                             pensionLotteries.filter { it.round == round }.map { pensionLottery ->
-                                val correctNumbers = winningLotteryNumbers?.toCorrectNumbers(pensionLottery)
+                                val correctNumbers =
+                                    winningLotteryNumbers?.toCorrectNumbers(pensionLottery)
                                 val bonusCorrectNumbers =
-                                    winningPensionLotteryBonusNumbers?.toBonusCorrectNumbers(pensionLottery)
+                                    winningPensionLotteryBonusNumbers?.toBonusCorrectNumbers(
+                                        pensionLottery,
+                                    )
                                 val checkWinningBonus = bonusCorrectNumbers?.all { it } ?: false
 
                                 val rank =

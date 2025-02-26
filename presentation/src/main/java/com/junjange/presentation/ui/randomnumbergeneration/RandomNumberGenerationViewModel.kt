@@ -60,14 +60,21 @@ class RandomNumberGenerationViewModel
 
         fun generate720RandomNumbers() {
             launch {
-                getPensionLotteryRandomUseCase()
-                    .onSuccess {
-                        _uiState.update { state ->
-                            state.copy(pensionLotteryRandom = it)
+                repeat(6) {
+                    getPensionLotteryRandomUseCase()
+                        .onSuccess {
+                            _uiState.update { state ->
+                                state.copy(saveIsEnabled = false, pensionLotteryRandom = it)
+                            }
+                        }.onFailure {
+                            // TODO 예외 처리
                         }
-                    }.onFailure {
-                        // TODO 예외 처리
-                    }
+
+                    delay(500)
+                }
+                _uiState.update { state ->
+                    state.copy(saveIsEnabled = true)
+                }
             }
         }
 
