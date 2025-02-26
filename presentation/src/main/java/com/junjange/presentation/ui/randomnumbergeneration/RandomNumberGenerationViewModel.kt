@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import com.junjange.domain.usecase.GetLotteryRandomUseCase
 import com.junjange.domain.usecase.GetPensionLotteryRandomUseCase
 import com.junjange.domain.usecase.InsertLotteryUseCase
-import com.junjange.domain.usecase.PostPensionLotterySaveUseCase
+import com.junjange.domain.usecase.InsertPensionLotteryUseCase
 import com.junjange.presentation.base.BaseViewModel
 import com.junjange.presentation.component.LottoType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,7 +23,7 @@ class RandomNumberGenerationViewModel
         private val getLotteryRandomUseCase: GetLotteryRandomUseCase,
         private val insertLotteryUseCase: InsertLotteryUseCase,
         private val getPensionLotteryRandomUseCase: GetPensionLotteryRandomUseCase,
-        private val postPensionLotterySaveUseCase: PostPensionLotterySaveUseCase,
+        private val insertPensionLotteryUseCase: InsertPensionLotteryUseCase,
     ) : BaseViewModel() {
         private val _uiState = MutableStateFlow(RandomNumberGenerationState())
         val uiState: StateFlow<RandomNumberGenerationState> = _uiState.asStateFlow()
@@ -97,20 +97,16 @@ class RandomNumberGenerationViewModel
 
         fun postPensionLotterySave() {
             launch {
-                val lotteryNumbers = _uiState.value.pensionLotteryRandom
-                lotteryNumbers?.let {
-                    postPensionLotterySaveUseCase(
-                        pensionGroup = it.pensionGroup,
-                        pensionFirstNum = it.pensionFirstNum,
-                        pensionSecondNum = it.pensionSecondNum,
-                        pensionThirdNum = it.pensionThirdNum,
-                        pensionFourthNum = it.pensionFourthNum,
-                        pensionFifthNum = it.pensionFifthNum,
-                        pensionSixthNum = it.pensionSixthNum,
-                    ).onSuccess { }.onFailure {
-                        // TODO 예외 처리
-                    }
-                } ?: run {
+                val lotteryNumbers = _uiState.value.pensionLotteryRandom ?: return@launch
+                insertPensionLotteryUseCase(
+                    group = lotteryNumbers.pensionGroup,
+                    firstNum = lotteryNumbers.pensionFirstNum,
+                    secondNum = lotteryNumbers.pensionSecondNum,
+                    thirdNum = lotteryNumbers.pensionThirdNum,
+                    fourthNum = lotteryNumbers.pensionFourthNum,
+                    fifthNum = lotteryNumbers.pensionFifthNum,
+                    sixthNum = lotteryNumbers.pensionSixthNum,
+                ).onSuccess { }.onFailure {
                     // TODO 예외 처리
                 }
             }
