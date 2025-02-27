@@ -8,14 +8,14 @@ import com.junjange.domain.usecase.LoadLotteryRoundsUseCase
 import com.junjange.domain.usecase.LoadPensionLotteryRoundsUseCase
 import com.junjange.presentation.base.BaseViewModel
 import com.junjange.presentation.feature.ocr.OcrService
-import com.junjange.presentation.ui.mynumber.MyNumberEffect.NavigateToGallery
+import com.junjange.presentation.ui.mynumber.MyNumberContract.*
+import com.junjange.presentation.ui.mynumber.MyNumberContract.Effect.NavigateToGallery
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import java.io.File
 import javax.inject.Inject
@@ -30,158 +30,125 @@ class MyNumberViewModel
         private val insertPensionLotteryUseCase: InsertPensionLotteryUseCase,
         private val loadPensionLotteryRoundsUseCase: LoadPensionLotteryRoundsUseCase,
     ) : BaseViewModel() {
-        private val _uiState = MutableStateFlow(MyNumberState())
-        val uiState: StateFlow<MyNumberState> = _uiState.asStateFlow()
+        private val _state = MutableStateFlow(State())
+        val state: StateFlow<State> = _state.asStateFlow()
 
-        private val _effect = MutableSharedFlow<MyNumberEffect>()
-        val effect: SharedFlow<MyNumberEffect> = _effect.asSharedFlow()
+        private val _effect = Channel<Effect>(Channel.BUFFERED)
+        val effect get() = _effect.receiveAsFlow()
 
         init {
-            getLotteryGet()
-            getPensionLotteryGet()
+            loadLottery()
+            loadPensionLottery()
         }
 
-        fun getLotteryGet() {
-            loading(isLoading = true)
-            uiState.value.lotteryGetContent =
-                createLotteryPagingSource(loadLotteryRoundsUseCase = loadLotteryRoundsUseCase).flow.cachedIn(
-                    viewModelScope,
-                )
-            loading(isLoading = false)
-        }
-
-        fun getPensionLotteryGet() {
-            loading(isLoading = true)
-            uiState.value.pensionLotteryGetContent =
-                createPensionLotteryPagingSource(loadPensionLotteryRoundsUseCase = loadPensionLotteryRoundsUseCase).flow.cachedIn(
-                    viewModelScope,
-                )
-            loading(isLoading = false)
-        }
-
-        private fun loading(isLoading: Boolean) {
-            _uiState.update { state ->
-                state.copy(isLoading = isLoading)
+        fun event(event: Event) {
+            when (event) {
+                is Event.PickedImage -> onPickedImage()
+                is Event.LoadLottery -> loadLottery()
+                is Event.LoadPensionLottery -> loadPensionLottery()
+                is Event.InsertLottery -> insertLottery(lottery = event.lottery)
+                is Event.InsertPensionLottery -> insertPensionLottery(pensionLottery = event.pensionLottery)
+                is Event.LottoTextOfImage -> getLottoTextOfImage(imagePath = event.imagePath)
+                is Event.PensionLottoTextOfImage -> getPensionLottoTextOfImage(imagePath = event.imagePath)
             }
         }
 
-        private fun postLotterySave(
-            firstNum: Int,
-            secondNum: Int,
-            thirdNum: Int,
-            fourthNum: Int,
-            fifthNum: Int,
-            sixthNum: Int,
-        ) {
+        private fun loadLottery() {
+            launch {
+                val lotteryFlow =
+                    createLotteryPagingSource(loadLotteryRoundsUseCase = loadLotteryRoundsUseCase).flow.cachedIn(
+                        viewModelScope,
+                    )
+
+                _state.update {
+                    state.value.copy(lotteryFlow = lotteryFlow)
+                }
+            }
+        }
+
+        private fun loadPensionLottery() {
+            launch {
+                val pensionLotteryFlow =
+                    createPensionLotteryPagingSource(loadPensionLotteryRoundsUseCase = loadPensionLotteryRoundsUseCase).flow.cachedIn(
+                        viewModelScope,
+                    )
+
+                _state.update {
+                    state.value.copy(pensionLotteryFlow = pensionLotteryFlow)
+                }
+            }
+        }
+
+        private fun insertLottery(lottery: List<String>) {
             launch {
                 loading(isLoading = true)
                 insertLotteryUseCase(
-                    firstNum = firstNum,
-                    secondNum = secondNum,
-                    thirdNum = thirdNum,
-                    fourthNum = fourthNum,
-                    fifthNum = fifthNum,
-                    sixthNum = sixthNum,
+                    firstNum = lottery[0].toInt(),
+                    secondNum = lottery[1].toInt(),
+                    thirdNum = lottery[2].toInt(),
+                    fourthNum = lottery[3].toInt(),
+                    fifthNum = lottery[4].toInt(),
+                    sixthNum = lottery[5].toInt(),
                 ).onSuccess {
-                    loading(false)
-                    getLotteryGet()
+                    loadLottery()
                 }.onFailure {
                 }
+                loading(false)
             }
         }
 
-        private fun postPensionLotterySave(
-            pensionGroup: Int,
-            pensionFirstNum: Int,
-            pensionSecondNum: Int,
-            pensionThirdNum: Int,
-            pensionFourthNum: Int,
-            pensionFifthNum: Int,
-            pensionSixthNum: Int,
-        ) {
+        private fun insertPensionLottery(pensionLottery: List<String>) {
             launch {
                 loading(isLoading = true)
                 insertPensionLotteryUseCase(
-                    group = pensionGroup,
-                    firstNum = pensionFirstNum,
-                    secondNum = pensionSecondNum,
-                    thirdNum = pensionThirdNum,
-                    fourthNum = pensionFourthNum,
-                    fifthNum = pensionFifthNum,
-                    sixthNum = pensionSixthNum,
+                    group = pensionLottery[0].toInt(),
+                    firstNum = pensionLottery[1].toInt(),
+                    secondNum = pensionLottery[2].toInt(),
+                    thirdNum = pensionLottery[3].toInt(),
+                    fourthNum = pensionLottery[4].toInt(),
+                    fifthNum = pensionLottery[5].toInt(),
+                    sixthNum = pensionLottery[6].toInt(),
                 ).onSuccess {
-                    loading(false)
-                    getPensionLotteryGet()
+                    loadPensionLottery()
                 }.onFailure {
                 }
+                loading(false)
             }
         }
 
-        fun onPickedImage() {
+        private fun onPickedImage() {
             launch {
-                _effect.emit(NavigateToGallery)
+                _effect.send(NavigateToGallery)
             }
         }
 
-        fun getLottoTextOfImage(imagePath: String) {
+        private fun getLottoTextOfImage(imagePath: String) {
             val text = ocrService.getTextOfImage(File(imagePath))
 
             val lottoNumbers = text.extractLottoNumbers()
 
             if (lottoNumbers.isValidLottoNumbers()) {
                 lottoNumbers.forEach { lottoNumber ->
-                    postLotterySave(
-                        lottoNumber[0].toInt(),
-                        lottoNumber[1].toInt(),
-                        lottoNumber[2].toInt(),
-                        lottoNumber[3].toInt(),
-                        lottoNumber[4].toInt(),
-                        lottoNumber[5].toInt(),
-                    )
+                    insertLottery(lottery = lottoNumber)
                 }
             }
         }
 
-        fun getPensionLottoTextOfImage(imagePath: String) {
+        private fun getPensionLottoTextOfImage(imagePath: String) {
             val text = ocrService.getTextOfImage(File(imagePath))
 
             val lottoNumbers = text.extractPensionLottoNumbers()
 
             if (lottoNumbers.isValidPensionLottoNumbers()) {
                 lottoNumbers.forEach { lottoNumber ->
-                    postPensionLotterySave(
-                        lottoNumber[0].toInt(),
-                        lottoNumber[1].toInt(),
-                        lottoNumber[2].toInt(),
-                        lottoNumber[3].toInt(),
-                        lottoNumber[4].toInt(),
-                        lottoNumber[5].toInt(),
-                        lottoNumber[6].toInt(),
-                    )
+                    insertPensionLottery(pensionLottery = lottoNumber)
                 }
             }
         }
-    }
 
-private fun String.extractLottoNumbers(): List<List<String>> = this.split("\n").map { it.split(" ") }
-
-private fun String.extractPensionLottoNumbers(): List<List<String>> =
-    this.split("\n").map {
-        it.replace(" ", "").replace("조", "").map { it.toString() }
-    }
-
-private fun List<List<String>>.isValidLottoNumbers(): Boolean =
-    all { lottoNumbers ->
-        lottoNumbers.size == 6 &&
-            lottoNumbers.all { lottoNumber ->
-                lottoNumber.toIntOrNull() != null && lottoNumber.toInt() in 1..45
+        private fun loading(isLoading: Boolean) {
+            _state.update { state ->
+                state.copy(isLoading = isLoading)
             }
-    }
-
-private fun List<List<String>>.isValidPensionLottoNumbers(): Boolean =
-    all { lottoNumbers ->
-        lottoNumbers.size == 7 &&
-            lottoNumbers.all { lottoNumber ->
-                lottoNumber.toIntOrNull() != null && lottoNumber.toInt() in 0..9
-            }
+        }
     }

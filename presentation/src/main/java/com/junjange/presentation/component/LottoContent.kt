@@ -31,6 +31,8 @@ import com.junjange.domain.model.WinningPensionLotteryNumbers
 import com.junjange.presentation.R
 import com.junjange.presentation.ui.home.formatPrizeAmount
 import com.junjange.presentation.ui.theme.LottoTheme
+import com.junjange.presentation.ui.theme.lotteryColors
+import com.junjange.presentation.ui.theme.toLotteryColor
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -199,15 +201,7 @@ fun Lotto645Content(lotteryNumbers: LotteryNumbers) {
         verticalAlignment = Alignment.CenterVertically,
     ) {
         lotteryContent.forEachIndexed { index, s ->
-            val color =
-                when (s) {
-                    in 1..10 -> LottoTheme.colors.lottoYellow
-                    in 11..20 -> LottoTheme.colors.lottoBlue
-                    in 21..30 -> LottoTheme.colors.lottoError
-                    in 31..40 -> LottoTheme.colors.lottoGray
-                    in 41..45 -> LottoTheme.colors.lottoGreen
-                    else -> LottoTheme.colors.lottoPurple
-                }
+            val color = s.toLotteryColor()
 
             if (index == 6) {
                 Spacer(modifier = Modifier.width(4.dp))
@@ -280,15 +274,7 @@ fun Lotto645Content(winningLotteryNumbers: WinningLotteryNumbers) {
         verticalAlignment = Alignment.CenterVertically,
     ) {
         lotteryContent.forEachIndexed { index, s ->
-            val color =
-                when (s) {
-                    in 1..10 -> LottoTheme.colors.lottoYellow
-                    in 11..20 -> LottoTheme.colors.lottoBlue
-                    in 21..30 -> LottoTheme.colors.lottoError
-                    in 31..40 -> LottoTheme.colors.lottoGray
-                    in 41..45 -> LottoTheme.colors.lottoGreen
-                    else -> LottoTheme.colors.lottoPurple
-                }
+            val color = s.toLotteryColor()
 
             if (index == 6) {
                 Spacer(modifier = Modifier.width(4.dp))
@@ -419,17 +405,6 @@ fun Lotto720Content(
             winningPensionLotteryBonusNumbers.fifthNum,
             winningPensionLotteryBonusNumbers.sixthNum,
         ).map { it.toString() }
-
-    val lotteryColors =
-        listOf(
-            LottoTheme.colors.lottoGray,
-            LottoTheme.colors.lottoError,
-            LottoTheme.colors.lottoOrange,
-            LottoTheme.colors.lottoYellow,
-            LottoTheme.colors.lottoBlue,
-            LottoTheme.colors.lottoPurple,
-            LottoTheme.colors.lottoBlack,
-        )
 
     Row(
         modifier = Modifier.padding(horizontal = 4.dp),

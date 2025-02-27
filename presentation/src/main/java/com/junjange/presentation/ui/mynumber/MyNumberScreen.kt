@@ -19,95 +19,89 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Surface
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.LoadState
+import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageContractOptions
 import com.canhub.cropper.CropImageOptions
 import com.canhub.cropper.CropImageView
+import com.junjange.domain.model.LotteryGetContent
 import com.junjange.domain.model.LotteryGetNumbers
+import com.junjange.domain.model.PensionLotteryGetContent
 import com.junjange.domain.model.PensionLotteryNumbers
 import com.junjange.presentation.R
+import com.junjange.presentation.component.ExpandableActionButton
+import com.junjange.presentation.component.LoadingDialog
 import com.junjange.presentation.component.Lotto645Content
 import com.junjange.presentation.component.Lotto720Content
 import com.junjange.presentation.component.LottoContentTitle
-import com.junjange.presentation.ui.mynumber.MyNumberEffect.NavigateToGallery
+import com.junjange.presentation.component.LottoNumberEntry
+import com.junjange.presentation.component.PensionLotteryNumberEntry
+import com.junjange.presentation.ui.mynumber.MyNumberContract.Effect.NavigateToGallery
+import com.junjange.presentation.ui.mynumber.MyNumberContract.Event.*
 import com.junjange.presentation.ui.theme.LottoTheme
+import com.junjange.presentation.ui.theme.lotteryColors
+import com.junjange.presentation.ui.theme.toLotteryColor
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MyNumberScreen(
-    viewModel: MyNumberViewModel = hiltViewModel(),
-    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
-) {
+fun MyNumberScreen(viewModel: MyNumberViewModel = hiltViewModel()) {
     val context = LocalContext.current
-
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
-    DisposableEffect(lifecycleOwner) {
-        val observer =
-            LifecycleEventObserver { _, event ->
-                if (event == Lifecycle.Event.ON_RESUME) {
-                    with(viewModel) {
-                        getLotteryGet()
-                        getPensionLotteryGet()
-                    }
-                }
-            }
-
-        lifecycleOwner.lifecycle.addObserver(observer)
-
-        onDispose {
-            lifecycleOwner.lifecycle.removeObserver(observer)
-        }
-    }
-
+    val state by viewModel.state.collectAsStateWithLifecycle()
     val tabs = listOf(R.string.lotto_645_title, R.string.lotto_720_title)
     val pagerState = rememberPagerState(pageCount = { tabs.size })
 
     val imageCropLauncher =
         rememberLauncherForActivityResult(CropImageContract()) { result ->
             if (result.isSuccessful) {
-                result.uriContent?.let {
-                    if (pagerState.currentPage == 0) {
-                        viewModel.getLottoTextOfImage(result.getUriFilePath(context, false)!!)
-                    } else {
-                        viewModel.getPensionLottoTextOfImage(result.getUriFilePath(context, false)!!)
-                    }
+                result.uriContent ?: return@rememberLauncherForActivityResult
+                val imagePath =
+                    result.getUriFilePath(context, false)
+                        ?: return@rememberLauncherForActivityResult
+                when (pagerState.currentPage) {
+                    0 -> viewModel.event(LottoTextOfImage(imagePath = imagePath))
+                    1 -> viewModel.event(PensionLottoTextOfImage(imagePath = imagePath))
                 }
             }
         }
@@ -129,10 +123,9 @@ fun MyNumberScreen(
 
     val imagePickerLauncher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri ->
-            uri?.let {
-                val cropOptions = CropImageContractOptions(it, imageCropperOptions)
-                imageCropLauncher.launch(cropOptions)
-            }
+            uri ?: return@rememberLauncherForActivityResult
+            val cropOptions = CropImageContractOptions(uri, imageCropperOptions)
+            imageCropLauncher.launch(cropOptions)
         }
 
     LaunchedEffect(viewModel.effect) {
@@ -143,9 +136,36 @@ fun MyNumberScreen(
         }
     }
 
-    val coroutineScope = rememberCoroutineScope()
+    MyNumberContent(
+        tabs = tabs,
+        pagerState = pagerState,
+        lotteryGetContent = state.lotteryFlow,
+        pensionLotteryGetContent = state.pensionLotteryFlow,
+        onGalleryClicked = { viewModel.event(PickedImage) },
+        onLotterySaveClicked = { lottery -> viewModel.event(InsertLottery(lottery)) },
+        onPensionLotterySaveClicked = { pensionLottery ->
+            viewModel.event(InsertPensionLottery(pensionLottery))
+        },
+    )
+}
 
-    Column(modifier = Modifier.fillMaxSize()) {
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
+@Composable
+fun MyNumberContent(
+    tabs: List<Int>,
+    pagerState: PagerState,
+    lotteryGetContent: Flow<PagingData<LotteryGetContent>>,
+    pensionLotteryGetContent: Flow<PagingData<PensionLotteryGetContent>>,
+    modifier: Modifier = Modifier,
+    onGalleryClicked: () -> Unit,
+    onLotterySaveClicked: (List<String>) -> Unit,
+    onPensionLotterySaveClicked: (List<String>) -> Unit,
+) {
+    val coroutineScope = rememberCoroutineScope()
+    var isSheetOpen by remember { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState()
+
+    Column(modifier = modifier.fillMaxSize()) {
         TabRow(selectedTabIndex = pagerState.currentPage) {
             tabs.forEachIndexed { index, title ->
                 Tab(
@@ -159,33 +179,93 @@ fun MyNumberScreen(
         HorizontalPager(state = pagerState) { page ->
             when (page) {
                 0 ->
-                    MyLotteryContent(
-                        uiState = uiState,
-                        viewModel = viewModel,
+                    MyLotteryContentScreen(
+                        lotteryGetContent = lotteryGetContent,
+                        onEditClicked = { isSheetOpen = true },
+                        onGalleryClicked = onGalleryClicked,
                     )
 
                 1 ->
-                    MyPensionLotteryContent(
-                        uiState = uiState,
-                        viewModel = viewModel,
+                    MyPensionLotteryContentScreen(
+                        pensionLotteryGetContent = pensionLotteryGetContent,
+                        onEditClicked = { isSheetOpen = true },
+                        onGalleryClicked = onGalleryClicked,
                     )
+            }
+        }
+
+        if (isSheetOpen) {
+            ModalBottomSheet(
+                modifier = Modifier.wrapContentHeight(),
+                onDismissRequest = { isSheetOpen = false },
+                sheetState = sheetState,
+            ) {
+                when (pagerState.currentPage) {
+                    0 ->
+                        LottoNumberEntry(
+                            onSaveClicked = { lottery ->
+                                isSheetOpen = false
+                                onLotterySaveClicked(lottery)
+                            },
+                        )
+
+                    1 ->
+                        PensionLotteryNumberEntry(
+                            onSaveClicked = { pensionLottery ->
+                                isSheetOpen = false
+                                onPensionLotterySaveClicked(pensionLottery)
+                            },
+                        )
+                }
             }
         }
     }
 }
 
 @Composable
-fun MyPensionLotteryContent(
-    uiState: MyNumberState,
-    viewModel: MyNumberViewModel,
+fun MyLotteryContentScreen(
+    lotteryGetContent: Flow<PagingData<LotteryGetContent>>,
+    onEditClicked: () -> Unit,
+    onGalleryClicked: () -> Unit,
 ) {
-    val pensionLotteryGetContent = uiState.pensionLotteryGetContent.collectAsLazyPagingItems()
+    val contents = lotteryGetContent.collectAsLazyPagingItems()
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    when (contents.loadState.refresh) {
+        is LoadState.Error -> {}
+        is LoadState.Loading -> LoadingDialog(modifier = Modifier.fillMaxSize())
+        else -> {
+            MyLotteryContent(
+                contents = contents,
+                onEditClicked = onEditClicked,
+                onGalleryClicked = onGalleryClicked,
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun MyLotteryContent(
+    contents: LazyPagingItems<LotteryGetContent>,
+    onEditClicked: () -> Unit,
+    onGalleryClicked: () -> Unit,
+) {
+    val refreshState =
+        rememberPullRefreshState(
+            refreshing = contents.loadState.refresh is LoadState.Loading,
+            onRefresh = { contents.refresh() },
+        )
+
+    Box(
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .pullRefresh(refreshState),
+    ) {
         LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            items(pensionLotteryGetContent.itemCount) {
+            items(contents.itemCount) {
                 Spacer(modifier = Modifier.height(20.dp))
                 Card(
                     modifier = Modifier.padding(8.dp),
@@ -196,7 +276,112 @@ fun MyPensionLotteryContent(
                         modifier = Modifier.padding(8.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
-                        pensionLotteryGetContent[it]?.let { pensionLotteryGetContent ->
+                        contents[it]?.let { lotteryGetContent ->
+                            LottoContentTitle(
+                                title = stringResource(R.string.lotto_645_title),
+                                round = lotteryGetContent.round,
+                                winningDate = lotteryGetContent.winningDate,
+                            )
+                            lotteryGetContent.winningLotteryNumbers?.let { winningLotteryNumbers ->
+                                Lotto645Content(winningLotteryNumbers = winningLotteryNumbers)
+                            }
+
+                            Spacer(modifier = Modifier.height(8.dp))
+                            MyLotteryNumber(lotteryGetNumbers = lotteryGetContent.lotteryGetNumbers)
+                        }
+                    }
+                }
+            }
+        }
+
+        PullRefreshIndicator(
+            refreshing = contents.loadState.refresh is LoadState.Loading,
+            state = refreshState,
+            modifier = Modifier.align(Alignment.TopCenter),
+        )
+
+        ExpandableActionButton(
+            modifier =
+                Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(bottom = 15.dp, end = 15.dp),
+            onEditClicked = onEditClicked,
+            onGalleryClicked = onGalleryClicked,
+        )
+    }
+}
+
+@Composable
+fun MyLotteryNumber(lotteryGetNumbers: List<LotteryGetNumbers>) {
+    lotteryGetNumbers.forEach { lotteryGetNumber ->
+        Row(Modifier.fillMaxWidth()) {
+            TableCell(
+                rank = lotteryGetNumber.rank,
+                weight = 2f,
+            )
+            TableCell(
+                lottoNumbers = lotteryGetNumber,
+                weight = 8f,
+            )
+        }
+    }
+}
+
+@Composable
+fun MyPensionLotteryContentScreen(
+    pensionLotteryGetContent: Flow<PagingData<PensionLotteryGetContent>>,
+    onEditClicked: () -> Unit,
+    onGalleryClicked: () -> Unit,
+) {
+    val contents = pensionLotteryGetContent.collectAsLazyPagingItems()
+
+    when (contents.loadState.refresh) {
+        is LoadState.Error -> {}
+        is LoadState.Loading -> LoadingDialog(modifier = Modifier.fillMaxSize())
+        else -> {
+            MyPensionLotteryContent(
+                contents = contents,
+                onEditClicked = onEditClicked,
+                onGalleryClicked = onGalleryClicked,
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun MyPensionLotteryContent(
+    contents: LazyPagingItems<PensionLotteryGetContent>,
+    onEditClicked: () -> Unit,
+    onGalleryClicked: () -> Unit,
+) {
+    val refreshState =
+        rememberPullRefreshState(
+            refreshing = contents.loadState.refresh is LoadState.Loading,
+            onRefresh = { contents.refresh() },
+        )
+
+    Box(
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .pullRefresh(refreshState),
+    ) {
+        LazyColumn(
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            items(contents.itemCount) {
+                Spacer(modifier = Modifier.height(20.dp))
+                Card(
+                    modifier = Modifier.padding(8.dp),
+                    colors = CardDefaults.cardColors(containerColor = LottoTheme.colors.gray200),
+                    shape = RoundedCornerShape(size = 8.dp),
+                ) {
+                    Column(
+                        modifier = Modifier.padding(8.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        contents[it]?.let { pensionLotteryGetContent ->
                             LottoContentTitle(
                                 title = stringResource(R.string.lotto_720_title),
                                 round = pensionLotteryGetContent.round,
@@ -222,93 +407,14 @@ fun MyPensionLotteryContent(
             }
         }
 
-        FloatingActionButton(
+        ExpandableActionButton(
             modifier =
                 Modifier
                     .align(Alignment.BottomEnd)
                     .padding(bottom = 15.dp, end = 15.dp),
-            containerColor = LottoTheme.colors.green,
-            onClick = { viewModel.onPickedImage() },
-        ) {
-            Icon(
-                imageVector = Icons.Filled.Edit,
-                contentDescription = null,
-                tint = LottoTheme.colors.white,
-            )
-        }
-    }
-}
-
-@Composable
-fun MyLotteryContent(
-    uiState: MyNumberState,
-    viewModel: MyNumberViewModel,
-) {
-    val lotteryGetContent = uiState.lotteryGetContent.collectAsLazyPagingItems()
-
-    Box(modifier = Modifier.fillMaxSize()) {
-        LazyColumn(
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            items(lotteryGetContent.itemCount) {
-                Spacer(modifier = Modifier.height(20.dp))
-                Card(
-                    modifier = Modifier.padding(8.dp),
-                    colors = CardDefaults.cardColors(containerColor = LottoTheme.colors.gray200),
-                    shape = RoundedCornerShape(size = 8.dp),
-                ) {
-                    Column(
-                        modifier = Modifier.padding(8.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                    ) {
-                        lotteryGetContent[it]?.let { lotteryGetContent ->
-                            LottoContentTitle(
-                                title = stringResource(R.string.lotto_645_title),
-                                round = lotteryGetContent.round,
-                                winningDate = lotteryGetContent.winningDate,
-                            )
-                            lotteryGetContent.winningLotteryNumbers?.let { winningLotteryNumbers ->
-                                Lotto645Content(winningLotteryNumbers = winningLotteryNumbers)
-                            }
-
-                            Spacer(modifier = Modifier.height(8.dp))
-                            MyLotteryNumber(lotteryGetNumbers = lotteryGetContent.lotteryGetNumbers)
-                        }
-                    }
-                }
-            }
-        }
-
-        FloatingActionButton(
-            modifier =
-                Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(bottom = 15.dp, end = 15.dp),
-            containerColor = LottoTheme.colors.green,
-            onClick = { viewModel.onPickedImage() },
-        ) {
-            Icon(
-                imageVector = Icons.Filled.Edit,
-                contentDescription = null,
-                tint = LottoTheme.colors.white,
-            )
-        }
-    }
-}
-
-@Composable
-fun MyLotteryNumber(lotteryGetNumbers: List<LotteryGetNumbers>) {
-    lotteryGetNumbers.forEach { lotteryGetNumber ->
-        Row(Modifier.fillMaxWidth()) {
-            TableCell(
-                rank = lotteryGetNumber.rank,
-                weight = 2f,
-            )
-            TableCell(
-                lottoNumbers = lotteryGetNumber,
-                weight = 8f,
-            )
-        }
+            onEditClicked = onEditClicked,
+            onGalleryClicked = onGalleryClicked,
+        )
     }
 }
 
@@ -337,19 +443,6 @@ fun RowScope.TableCell(
     rank: String?,
     weight: Float,
 ) {
-    val title =
-        when (rank) {
-            "FIRST" -> "1등"
-            "SECOND" -> "2등"
-            "THIRD" -> "3등"
-            "FOURTH" -> "4등"
-            "FIFTH" -> "5등"
-            "SIXTH" -> "6등"
-            "SEVENTH" -> "7등"
-            "NONE" -> "꽝"
-            else -> "미발표"
-        }
-
     Text(
         modifier =
             Modifier
@@ -357,7 +450,7 @@ fun RowScope.TableCell(
                 .fillMaxHeight()
                 .weight(weight)
                 .padding(8.8.dp),
-        text = title,
+        text = rank.toRankTitle(),
         style = LottoTheme.typography.body3,
         textAlign = TextAlign.Center,
     )
@@ -447,15 +540,7 @@ fun RowScope.TableCell(
             )
 
         lottoNumbersContent.forEachIndexed { index, item ->
-            val color =
-                when (item) {
-                    in 1..10 -> LottoTheme.colors.lottoYellow
-                    in 11..20 -> LottoTheme.colors.lottoBlue
-                    in 21..30 -> LottoTheme.colors.lottoError
-                    in 31..40 -> LottoTheme.colors.gray400
-                    in 41..45 -> LottoTheme.colors.lottoGreen
-                    else -> LottoTheme.colors.lottoPurple
-                }
+            val color = item.toLotteryColor()
 
             MyLotteryBall(
                 isSuccess = if (lottoNumbers.correctNumbers == null) false else lottoNumbers.correctNumbers!![index],
@@ -505,17 +590,6 @@ fun MyPensionLotteryBall(
     lottoTitle: String,
     index: Int? = null,
 ) {
-    val lotteryColors =
-        listOf(
-            LottoTheme.colors.gray600,
-            LottoTheme.colors.lottoError,
-            LottoTheme.colors.lottoOrange,
-            LottoTheme.colors.lottoYellow,
-            LottoTheme.colors.lottoBlue,
-            LottoTheme.colors.lottoPurple,
-            LottoTheme.colors.lottoBlack,
-        )
-
     val borderColor =
         if (isSuccess) {
             BorderStroke(

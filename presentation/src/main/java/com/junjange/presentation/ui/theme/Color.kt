@@ -48,6 +48,27 @@ val MaterialColors =
         surface = LottoWhite,
     )
 
+val lotteryColors =
+    listOf(
+        Gray600,
+        LottoError,
+        LottoOrange,
+        LottoYellow,
+        LottoBlue,
+        LottoPurple,
+        LottoBlack,
+    )
+
+fun Int?.toLotteryColor(): Color =
+    when (this) {
+        in 1..10 -> LottoYellow
+        in 11..20 -> LottoBlue
+        in 21..30 -> LottoError
+        in 31..40 -> Gray400
+        in 41..45 -> LottoGreen
+        else -> White
+    }
+
 @Stable
 class LottoColors(
     lottoBlack: Color,

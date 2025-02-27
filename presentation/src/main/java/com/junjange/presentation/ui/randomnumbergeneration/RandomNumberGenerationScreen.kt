@@ -28,6 +28,8 @@ import com.junjange.presentation.component.LottoBall
 import com.junjange.presentation.component.LottoRoundedCornerButton
 import com.junjange.presentation.component.LottoType
 import com.junjange.presentation.ui.theme.LottoTheme
+import com.junjange.presentation.ui.theme.lotteryColors
+import com.junjange.presentation.ui.theme.toLotteryColor
 
 @Composable
 fun RandomNumberGenerationScreen(viewModel: RandomNumberGenerationViewModel) {
@@ -69,17 +71,6 @@ fun RandomNumberGenerationContent(
     onCreateClicked: () -> Unit,
     onSaveClicked: () -> Unit,
 ) {
-    val pensionLotteryColors =
-        listOf(
-            LottoTheme.colors.gray600,
-            LottoTheme.colors.lottoError,
-            LottoTheme.colors.lottoOrange,
-            LottoTheme.colors.lottoYellow,
-            LottoTheme.colors.lottoBlue,
-            LottoTheme.colors.lottoPurple,
-            LottoTheme.colors.lottoBlack,
-        )
-
     Image(
         modifier = Modifier.size(140.dp),
         painter = painterResource(id = R.drawable.ic_random_poster),
@@ -109,15 +100,7 @@ fun RandomNumberGenerationContent(
                     it.fifthNum,
                     it.sixthNum,
                 ).forEach { number ->
-                    val color =
-                        when (number) {
-                            in 1..10 -> LottoTheme.colors.lottoYellow
-                            in 11..20 -> LottoTheme.colors.lottoBlue
-                            in 21..30 -> LottoTheme.colors.lottoError
-                            in 31..40 -> LottoTheme.colors.gray400
-                            in 41..45 -> LottoTheme.colors.lottoGreen
-                            else -> LottoTheme.colors.lottoPurple
-                        }
+                    val color = number.toLotteryColor()
 
                     LottoBall(
                         lottoType = LottoType.LOTTO645,
@@ -157,7 +140,7 @@ fun RandomNumberGenerationContent(
                     }
                     LottoBall(
                         lottoType = LottoType.LOTTO720,
-                        lottoColor = pensionLotteryColors[index],
+                        lottoColor = lotteryColors[index],
                         lottoTitle = s.toString(),
                     )
                     Spacer(modifier = Modifier.width(4.dp))
@@ -174,7 +157,7 @@ fun RandomNumberGenerationContent(
                     }
                     LottoBall(
                         lottoType = LottoType.LOTTO720,
-                        lottoColor = pensionLotteryColors[index],
+                        lottoColor = lotteryColors[index],
                         lottoTitle = s.toString(),
                     )
                     Spacer(modifier = Modifier.width(4.dp))
