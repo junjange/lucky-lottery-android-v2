@@ -155,7 +155,6 @@ fun LottoContentTitle(
     winningDate: String?,
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Spacer(modifier = Modifier.height(20.dp))
         Text(
             text = title,
             style = LottoTheme.typography.headline3,

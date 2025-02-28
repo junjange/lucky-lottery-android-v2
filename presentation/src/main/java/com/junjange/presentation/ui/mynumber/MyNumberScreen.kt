@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
@@ -41,6 +42,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -250,11 +252,16 @@ fun MyLotteryContent(
     onEditClicked: () -> Unit,
     onGalleryClicked: () -> Unit,
 ) {
+    val lazyListState = rememberLazyListState()
+
     val refreshState =
         rememberPullRefreshState(
             refreshing = contents.loadState.refresh is LoadState.Loading,
             onRefresh = { contents.refresh() },
         )
+
+    val firstVisibleItemScrollOffset =
+        remember { derivedStateOf { lazyListState.firstVisibleItemScrollOffset } }
 
     Box(
         modifier =
@@ -263,17 +270,20 @@ fun MyLotteryContent(
                 .pullRefresh(refreshState),
     ) {
         LazyColumn(
+            state = lazyListState,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             items(contents.itemCount) {
-                Spacer(modifier = Modifier.height(20.dp))
                 Card(
-                    modifier = Modifier.padding(8.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 18.dp, vertical = 12.dp),
                     colors = CardDefaults.cardColors(containerColor = LottoTheme.colors.gray200),
                     shape = RoundedCornerShape(size = 8.dp),
                 ) {
                     Column(
-                        modifier = Modifier.padding(8.dp),
+                        modifier = Modifier.padding(18.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         contents[it]?.let { lotteryGetContent ->
@@ -292,6 +302,10 @@ fun MyLotteryContent(
                     }
                 }
             }
+
+            item {
+                Spacer(modifier = Modifier.height(80.dp))
+            }
         }
 
         PullRefreshIndicator(
@@ -307,6 +321,7 @@ fun MyLotteryContent(
                     .padding(bottom = 15.dp, end = 15.dp),
             onEditClicked = onEditClicked,
             onGalleryClicked = onGalleryClicked,
+            isFabExpanded = firstVisibleItemScrollOffset.value == 0,
         )
     }
 }
@@ -355,11 +370,16 @@ fun MyPensionLotteryContent(
     onEditClicked: () -> Unit,
     onGalleryClicked: () -> Unit,
 ) {
+    val lazyListState = rememberLazyListState()
+
     val refreshState =
         rememberPullRefreshState(
             refreshing = contents.loadState.refresh is LoadState.Loading,
             onRefresh = { contents.refresh() },
         )
+
+    val firstVisibleItemScrollOffset =
+        remember { derivedStateOf { lazyListState.firstVisibleItemScrollOffset } }
 
     Box(
         modifier =
@@ -368,17 +388,20 @@ fun MyPensionLotteryContent(
                 .pullRefresh(refreshState),
     ) {
         LazyColumn(
+            state = lazyListState,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             items(contents.itemCount) {
-                Spacer(modifier = Modifier.height(20.dp))
                 Card(
-                    modifier = Modifier.padding(8.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 18.dp, vertical = 12.dp),
                     colors = CardDefaults.cardColors(containerColor = LottoTheme.colors.gray200),
                     shape = RoundedCornerShape(size = 8.dp),
                 ) {
                     Column(
-                        modifier = Modifier.padding(8.dp),
+                        modifier = Modifier.padding(18.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         contents[it]?.let { pensionLotteryGetContent ->
@@ -405,6 +428,10 @@ fun MyPensionLotteryContent(
                     }
                 }
             }
+
+            item {
+                Spacer(modifier = Modifier.height(80.dp))
+            }
         }
 
         PullRefreshIndicator(
@@ -420,6 +447,7 @@ fun MyPensionLotteryContent(
                     .padding(bottom = 15.dp, end = 15.dp),
             onEditClicked = onEditClicked,
             onGalleryClicked = onGalleryClicked,
+            isFabExpanded = firstVisibleItemScrollOffset.value == 0,
         )
     }
 }

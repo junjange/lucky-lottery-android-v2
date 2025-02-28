@@ -43,22 +43,23 @@ fun ExpandableActionButton(
     modifier: Modifier = Modifier,
     onEditClicked: () -> Unit,
     onGalleryClicked: () -> Unit,
+    isFabExpanded: Boolean,
 ) {
-    var expanded by remember { mutableStateOf(false) }
+    var isFabClicked by remember { mutableStateOf(false) }
 
-    if (expanded) {
+    if (isFabClicked) {
         Box(
             modifier =
                 Modifier
                     .fillMaxSize()
                     .background(LottoTheme.colors.black.copy(alpha = 0.5f))
-                    .clickable { expanded = false },
+                    .clickable { isFabClicked = false },
         )
     }
 
     Column(modifier = modifier, horizontalAlignment = Alignment.End) {
         AnimatedVisibility(
-            visible = expanded,
+            visible = isFabClicked,
             enter = fadeIn() + slideInVertically(initialOffsetY = { it }) + expandVertically(),
             exit = fadeOut() + slideOutVertically(targetOffsetY = { it }) + shrinkVertically(),
         ) {
@@ -67,7 +68,7 @@ fun ExpandableActionButton(
                     icon = painterResource(R.drawable.baseline_edit_24),
                     title = "직접 작성하기",
                     onClick = {
-                        expanded = false
+                        isFabClicked = false
                         onEditClicked()
                     },
                 )
@@ -76,7 +77,7 @@ fun ExpandableActionButton(
                     icon = painterResource(R.drawable.ic_photo),
                     title = "사진 불러오기",
                     onClick = {
-                        expanded = false
+                        isFabClicked = false
                         onGalleryClicked()
                     },
                 )
@@ -84,11 +85,14 @@ fun ExpandableActionButton(
             }
         }
 
-        val rotation by animateFloatAsState(targetValue = if (expanded) 45f else 0f, label = "")
+        val rotation by animateFloatAsState(
+            targetValue = if (isFabClicked) 45f else 0f,
+            label = "",
+        )
 
         FloatingActionButton(
-            onClick = { expanded = !expanded },
-            containerColor = if (expanded) LottoTheme.colors.white else LottoTheme.colors.green,
+            onClick = { isFabClicked = !isFabClicked },
+            containerColor = if (isFabClicked) LottoTheme.colors.white else LottoTheme.colors.green,
             shape = CircleShape,
         ) {
             Row(
@@ -98,13 +102,13 @@ fun ExpandableActionButton(
                 Icon(
                     imageVector = Icons.Filled.Add,
                     contentDescription = "Close",
-                    tint = if (expanded) LottoTheme.colors.black else LottoTheme.colors.white,
+                    tint = if (isFabClicked) LottoTheme.colors.black else LottoTheme.colors.white,
                     modifier = Modifier.rotate(rotation),
                 )
 
-                if (!expanded) Spacer(modifier = Modifier.width(8.dp))
+                if (isFabExpanded && !isFabClicked) Spacer(modifier = Modifier.width(8.dp))
 
-                AnimatedVisibility(visible = !expanded) {
+                AnimatedVisibility(visible = isFabExpanded && !isFabClicked) {
                     Text(
                         text = "추가하기",
                         style = LottoTheme.typography.caption1,
