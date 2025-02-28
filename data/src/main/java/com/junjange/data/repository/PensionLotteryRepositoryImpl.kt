@@ -109,7 +109,7 @@ internal class PensionLotteryRepositoryImpl
             size: Int,
         ): Result<List<PensionLotteryGetContent>> {
             val pagedRounds =
-                pensionLotteryRoomDataSource.getPagedRounds(size, page).getOrDefault(emptyList())
+                pensionLotteryRoomDataSource.getPagedRounds(limit = size, offset = page * size).getOrDefault(emptyList())
 
             if (pagedRounds.isEmpty()) return Result.failure(Exception("No rounds available"))
 

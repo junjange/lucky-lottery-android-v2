@@ -22,7 +22,8 @@ fun createLotteryPagingSource(loadLotteryRoundsUseCase: LoadLotteryRoundsUseCase
 class LotteryPagingSource(
     private val loadLotteryRoundsUseCase: LoadLotteryRoundsUseCase,
 ) : PagingSource<Int, LotteryGetContent>() {
-    override fun getRefreshKey(state: PagingState<Int, LotteryGetContent>): Int? = state.anchorPosition
+    override fun getRefreshKey(state: PagingState<Int, LotteryGetContent>): Int? =
+        state.anchorPosition?.let { state.closestPageToPosition(it)?.prevKey?.plus(1) }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, LotteryGetContent> {
         val pageIndex = params.key ?: 0

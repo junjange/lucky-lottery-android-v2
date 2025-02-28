@@ -24,7 +24,8 @@ fun createPensionLotteryPagingSource(
 class PensionLotteryPagingSource(
     private val loadPensionLotteryRoundsUseCase: LoadPensionLotteryRoundsUseCase,
 ) : PagingSource<Int, PensionLotteryGetContent>() {
-    override fun getRefreshKey(state: PagingState<Int, PensionLotteryGetContent>): Int? = state.anchorPosition
+    override fun getRefreshKey(state: PagingState<Int, PensionLotteryGetContent>): Int? =
+        state.anchorPosition?.let { state.closestPageToPosition(it)?.prevKey?.plus(1) }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PensionLotteryGetContent> {
         val pageIndex = params.key ?: 0
