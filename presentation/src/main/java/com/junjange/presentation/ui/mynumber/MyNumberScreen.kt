@@ -407,6 +407,12 @@ fun MyPensionLotteryContent(
             }
         }
 
+        PullRefreshIndicator(
+            refreshing = contents.loadState.refresh is LoadState.Loading,
+            state = refreshState,
+            modifier = Modifier.align(Alignment.TopCenter),
+        )
+
         ExpandableActionButton(
             modifier =
                 Modifier
