@@ -16,25 +16,17 @@ internal fun WinningPensionLotteryNumbersEntity.toDomain() =
     )
 
 fun WinningPensionLotteryNumbers.toCorrectNumbers(pensionLotteryNumberDto: PensionLotteryNumberDto): List<Boolean> {
-    val correctNumbers = MutableList(6) { false }
-    if (pensionLotteryNumberDto.firstNum == firstNum) {
-        correctNumbers[0] = true
-    }
-    if (pensionLotteryNumberDto.secondNum == secondNum) {
-        correctNumbers[1] = true
-    }
-    if (pensionLotteryNumberDto.thirdNum == thirdNum) {
-        correctNumbers[2] = true
-    }
-    if (pensionLotteryNumberDto.fourthNum == fourthNum) {
-        correctNumbers[3] = true
-    }
-    if (pensionLotteryNumberDto.fifthNum == fifthNum) {
-        correctNumbers[4] = true
-    }
-    if (pensionLotteryNumberDto.sixthNum == sixthNum) {
-        correctNumbers[5] = true
-    }
+    val userNumbers =
+        listOf(
+            pensionLotteryNumberDto.firstNum,
+            pensionLotteryNumberDto.secondNum,
+            pensionLotteryNumberDto.thirdNum,
+            pensionLotteryNumberDto.fourthNum,
+            pensionLotteryNumberDto.fifthNum,
+            pensionLotteryNumberDto.sixthNum,
+        )
 
-    return correctNumbers
+    val winningNumbers = listOf(firstNum, secondNum, thirdNum, fourthNum, fifthNum, sixthNum)
+
+    return listOf(pensionLotteryNumberDto.group == group) + userNumbers.zip(winningNumbers) { user, winning -> user == winning }
 }

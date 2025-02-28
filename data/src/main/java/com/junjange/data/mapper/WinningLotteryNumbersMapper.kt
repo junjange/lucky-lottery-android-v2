@@ -29,32 +29,22 @@ internal fun PensionLotteryHome.toWinningPensionLotteryNumbers(): WinningPension
     )
 
 fun WinningLotteryNumbers.toCorrectNumbers(lotteryNumberDto: LotteryNumberDto): Pair<List<Boolean>, Boolean> {
-    val correctNumbers = MutableList(6) { false }
-    var checkWinningBonus = false
-    if (lotteryNumberDto.firstNum == firstNum || lotteryNumberDto.firstNum == bonusNum) {
-        if (lotteryNumberDto.firstNum == bonusNum) checkWinningBonus = true
-        correctNumbers[0] = true
-    }
-    if (lotteryNumberDto.secondNum == secondNum || lotteryNumberDto.secondNum == bonusNum) {
-        if (lotteryNumberDto.secondNum == bonusNum) checkWinningBonus = true
-        correctNumbers[1] = true
-    }
-    if (lotteryNumberDto.thirdNum == thirdNum || lotteryNumberDto.thirdNum == bonusNum) {
-        if (lotteryNumberDto.thirdNum == bonusNum) checkWinningBonus = true
-        correctNumbers[2] = true
-    }
-    if (lotteryNumberDto.fourthNum == fourthNum || lotteryNumberDto.fourthNum == bonusNum) {
-        if (lotteryNumberDto.fourthNum == bonusNum) checkWinningBonus = true
-        correctNumbers[3] = true
-    }
-    if (lotteryNumberDto.fifthNum == fifthNum || lotteryNumberDto.fifthNum == bonusNum) {
-        if (lotteryNumberDto.fifthNum == bonusNum) checkWinningBonus = true
-        correctNumbers[4] = true
-    }
-    if (lotteryNumberDto.sixthNum == sixthNum || lotteryNumberDto.sixthNum == bonusNum) {
-        if (lotteryNumberDto.sixthNum == bonusNum) checkWinningBonus = true
-        correctNumbers[5] = true
-    }
+    val winningNumbers = listOf(firstNum, secondNum, thirdNum, fourthNum, fifthNum, sixthNum, bonusNum)
+    val userNumbers =
+        listOf(
+            lotteryNumberDto.firstNum,
+            lotteryNumberDto.secondNum,
+            lotteryNumberDto.thirdNum,
+            lotteryNumberDto.fourthNum,
+            lotteryNumberDto.fifthNum,
+            lotteryNumberDto.sixthNum,
+        )
 
-    return Pair(correctNumbers, checkWinningBonus)
+    var checkWinningBonus = false
+    val correctNumbers =
+        userNumbers.map { num ->
+            (num in winningNumbers).also { if (num == bonusNum) checkWinningBonus = true }
+        }
+
+    return correctNumbers to checkWinningBonus
 }
