@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.lang)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.compose.compiler)
 }
 
 val localPropertiesFile = rootProject.file("local.properties")
