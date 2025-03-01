@@ -1,5 +1,11 @@
 package com.junjange.presentation.ui.randomnumber
 
-data class RandomNumberState(
-    val isLoading: Boolean = false,
-)
+sealed interface RandomNumberContract {
+    sealed interface Event {
+        data object Back : Event
+    }
+
+    sealed interface Effect {
+        data object Finish : Effect
+    }
+}

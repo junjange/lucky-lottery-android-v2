@@ -14,9 +14,14 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -25,14 +30,45 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.junjange.presentation.R
 import com.junjange.presentation.component.LottoType
+import com.junjange.presentation.ui.randomnumber.RandomNumberContract.*
 import com.junjange.presentation.ui.theme.LottoTheme
+import kotlinx.coroutines.flow.collectLatest
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RandomNumberScreen(
     viewModel: RandomNumberViewModel,
     navigateRandomNumberGeneration: (lottoType: LottoType) -> Unit,
+    onBack: () -> Unit,
 ) {
-    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+    LaunchedEffect(viewModel.effect) {
+        viewModel.effect.collectLatest { effect ->
+            when (effect) {
+                Effect.Finish -> onBack()
+            }
+        }
+    }
+
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        topBar = {
+            TopAppBar(title = {
+                Text(
+                    text = stringResource(R.string.random_number_generation),
+                    style = LottoTheme.typography.headline3,
+                )
+            }, navigationIcon = {
+                IconButton(
+                    onClick = { viewModel.event(Event.Back) },
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_chevron_left),
+                        contentDescription = null,
+                    )
+                }
+            })
+        },
+    ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
             RandomNumberCard(
                 modifier =

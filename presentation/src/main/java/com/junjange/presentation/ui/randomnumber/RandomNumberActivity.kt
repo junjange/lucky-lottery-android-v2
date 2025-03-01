@@ -22,6 +22,7 @@ class RandomNumberActivity : BaseActivity() {
                 RandomNumberScreen(
                     viewModel = viewModel,
                     navigateRandomNumberGeneration = ::startRandomNumberGenerationActivity,
+                    onBack = ::finish,
                 )
             }
         }
