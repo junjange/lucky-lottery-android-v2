@@ -44,16 +44,6 @@ fun LottoContent(
     changePensionLottery: (offset: Int) -> Unit,
 ) {
     lotteryNumbers?.let {
-        Spacer(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .height(0.5.dp)
-                    .padding(
-                        start = 20.dp,
-                        end = 20.dp,
-                    ).background(color = LottoTheme.colors.gray400),
-        )
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -71,6 +61,7 @@ fun LottoContent(
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
+                Spacer(modifier = Modifier.height(20.dp))
                 LottoContentTitle(
                     title = stringResource(R.string.lotto_645_title),
                     round = lotteryNumbers.round,
@@ -126,6 +117,7 @@ fun LottoContent(
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
+                Spacer(modifier = Modifier.height(20.dp))
                 LottoContentTitle(
                     title = stringResource(R.string.lotto_720_title),
                     round = pensionLotteryHome.round,

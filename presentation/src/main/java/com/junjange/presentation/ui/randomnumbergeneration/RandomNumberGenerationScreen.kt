@@ -2,17 +2,23 @@ package com.junjange.presentation.ui.randomnumbergeneration
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -24,6 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.junjange.presentation.R
+import com.junjange.presentation.component.AdmobBanner
 import com.junjange.presentation.component.LottoBall
 import com.junjange.presentation.component.LottoRoundedCornerButton
 import com.junjange.presentation.component.LottoType
@@ -31,36 +38,68 @@ import com.junjange.presentation.ui.theme.LottoTheme
 import com.junjange.presentation.ui.theme.lotteryColors
 import com.junjange.presentation.ui.theme.toLotteryColor
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RandomNumberGenerationScreen(viewModel: RandomNumberGenerationViewModel) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    Scaffold { innerPadding ->
-        Column(
+    val title =
+        if (uiState.isLotto645) {
+            stringResource(R.string.lotto_645_random_title)
+        } else {
+            stringResource(
+                R.string.lotto_720_title,
+            )
+        }
+    Scaffold(
+        topBar = {
+            TopAppBar(title = {
+                Text(
+                    text = title,
+                    style = LottoTheme.typography.headline3,
+                )
+            }, navigationIcon = {
+                IconButton(
+                    onClick = { },
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_chevron_left),
+                        contentDescription = null,
+                    )
+                }
+            })
+        },
+    ) { innerPadding ->
+        Box(
             modifier =
                 Modifier
                     .fillMaxSize()
                     .padding(innerPadding),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            RandomNumberGenerationContent(
-                uiState = uiState,
-                onCreateClicked = {
-                    if (uiState.isLotto645) {
-                        viewModel.generate645RandomNumbers()
-                    } else {
-                        viewModel.generate720RandomNumbers()
-                    }
-                },
-                onSaveClicked = {
-                    if (uiState.isLotto645) {
-                        viewModel.postLotterySave()
-                    } else {
-                        viewModel.postPensionLotterySave()
-                    }
-                },
-            )
+            AdmobBanner(modifier = Modifier.fillMaxWidth())
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                RandomNumberGenerationContent(
+                    uiState = uiState,
+                    onCreateClicked = {
+                        if (uiState.isLotto645) {
+                            viewModel.generate645RandomNumbers()
+                        } else {
+                            viewModel.generate720RandomNumbers()
+                        }
+                    },
+                    onSaveClicked = {
+                        if (uiState.isLotto645) {
+                            viewModel.postLotterySave()
+                        } else {
+                            viewModel.postPensionLotterySave()
+                        }
+                    },
+                )
+            }
         }
     }
 }

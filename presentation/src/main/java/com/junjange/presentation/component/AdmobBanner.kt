@@ -12,7 +12,7 @@ import com.junjange.presentation.BuildConfig
 fun AdmobBanner(modifier: Modifier = Modifier) {
     val adUnitId =
         if (BuildConfig.DEBUG) {
-            "ca-app-pub-3940256099942544/1033173712"
+            "ca-app-pub-3940256099942544/6300978111"
         } else {
             BuildConfig.BANNER_AD_UNIT_ID
         }

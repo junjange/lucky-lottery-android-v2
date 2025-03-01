@@ -2,9 +2,13 @@ package com.junjange.presentation.ui.home
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.runtime.Composable
@@ -32,7 +36,9 @@ fun HomeScreen(
         modifier = Modifier.fillMaxSize(),
     ) {
         Column(
-            Modifier.fillMaxSize(),
+            Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             LottoHomeTopBar()
@@ -47,6 +53,7 @@ fun HomeScreen(
                     viewModel.event(HomeContract.Event.ChangePensionLottery(offset = offset))
                 },
             )
+            Spacer(modifier = Modifier.height(50.dp))
         }
 
         FloatingActionButton(
