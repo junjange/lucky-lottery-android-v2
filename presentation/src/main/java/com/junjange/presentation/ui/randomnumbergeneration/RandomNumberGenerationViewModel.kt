@@ -7,11 +7,14 @@ import com.junjange.domain.usecase.InsertLotteryUseCase
 import com.junjange.domain.usecase.InsertPensionLotteryUseCase
 import com.junjange.presentation.base.BaseViewModel
 import com.junjange.presentation.component.LottoType
+import com.junjange.presentation.ui.randomnumbergeneration.RandomNumberGenerationContract.*
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
@@ -25,25 +28,43 @@ class RandomNumberGenerationViewModel
         private val getPensionLotteryRandomUseCase: GetPensionLotteryRandomUseCase,
         private val insertPensionLotteryUseCase: InsertPensionLotteryUseCase,
     ) : BaseViewModel() {
-        private val _uiState = MutableStateFlow(RandomNumberGenerationState())
-        val uiState: StateFlow<RandomNumberGenerationState> = _uiState.asStateFlow()
+        private val _state = MutableStateFlow(State())
+        val state: StateFlow<State> = _state.asStateFlow()
+
+        private val _effect = Channel<Effect>(Channel.BUFFERED)
+        val effect get() = _effect.receiveAsFlow()
 
         init {
-            savedStateHandle.get<String>(RandomNumberGenerationActivity.LOTTO_TYPE)?.let { lottoType ->
-                _uiState.update { state ->
-                    state.copy(isLotto645 = lottoType == LottoType.LOTTO645.name)
-                }
-            } ?: run {
-                // TODO : 예외 처리
+            val lottoType =
+                savedStateHandle.get<String>(RandomNumberGenerationActivity.LOTTO_TYPE) ?: finish()
+
+            _state.update { state ->
+                state.copy(isLotto645 = lottoType == LottoType.LOTTO645.name)
             }
         }
 
-        fun generate645RandomNumbers() {
+        fun event(event: Event) {
+            when (event) {
+                is Event.Back -> finish()
+                is Event.GenerateRandomLottery -> generateRandomLottery()
+                is Event.GenerateRandomPensionLottery -> generateRandomPensionLottery()
+                is Event.SaveLottery -> postLotterySave()
+                is Event.SavePensionLottery -> postPensionLotterySave()
+            }
+        }
+
+        private fun finish() {
+            launch {
+                _effect.send(Effect.Finish)
+            }
+        }
+
+        private fun generateRandomLottery() {
             launch {
                 repeat(6) {
                     getLotteryRandomUseCase()
                         .onSuccess {
-                            _uiState.update { state ->
+                            _state.update { state ->
                                 state.copy(saveIsEnabled = false, lotteryRandomNumbers = it)
                             }
                         }.onFailure {
@@ -52,18 +73,18 @@ class RandomNumberGenerationViewModel
 
                     delay(500)
                 }
-                _uiState.update { state ->
+                _state.update { state ->
                     state.copy(saveIsEnabled = true)
                 }
             }
         }
 
-        fun generate720RandomNumbers() {
+        private fun generateRandomPensionLottery() {
             launch {
                 repeat(6) {
                     getPensionLotteryRandomUseCase()
                         .onSuccess {
-                            _uiState.update { state ->
+                            _state.update { state ->
                                 state.copy(saveIsEnabled = false, pensionLotteryRandom = it)
                             }
                         }.onFailure {
@@ -72,15 +93,15 @@ class RandomNumberGenerationViewModel
 
                     delay(500)
                 }
-                _uiState.update { state ->
+                _state.update { state ->
                     state.copy(saveIsEnabled = true)
                 }
             }
         }
 
-        fun postLotterySave() {
+        private fun postLotterySave() {
             launch {
-                val lotteryNumbers = _uiState.value.lotteryRandomNumbers ?: return@launch
+                val lotteryNumbers = _state.value.lotteryRandomNumbers ?: return@launch
                 insertLotteryUseCase(
                     firstNum = lotteryNumbers.firstNum,
                     secondNum = lotteryNumbers.secondNum,
@@ -95,9 +116,9 @@ class RandomNumberGenerationViewModel
             }
         }
 
-        fun postPensionLotterySave() {
+        private fun postPensionLotterySave() {
             launch {
-                val lotteryNumbers = _uiState.value.pensionLotteryRandom ?: return@launch
+                val lotteryNumbers = _state.value.pensionLotteryRandom ?: return@launch
                 insertPensionLotteryUseCase(
                     group = lotteryNumbers.pensionGroup,
                     firstNum = lotteryNumbers.pensionFirstNum,

@@ -20,6 +20,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,17 +35,30 @@ import com.junjange.presentation.component.AdmobBanner
 import com.junjange.presentation.component.LottoBall
 import com.junjange.presentation.component.LottoRoundedCornerButton
 import com.junjange.presentation.component.LottoType
+import com.junjange.presentation.ui.randomnumbergeneration.RandomNumberGenerationContract.*
 import com.junjange.presentation.ui.theme.LottoTheme
 import com.junjange.presentation.ui.theme.lotteryColors
 import com.junjange.presentation.ui.theme.toLotteryColor
+import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RandomNumberGenerationScreen(viewModel: RandomNumberGenerationViewModel) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+fun RandomNumberGenerationScreen(
+    viewModel: RandomNumberGenerationViewModel,
+    onBack: () -> Unit,
+) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+    LaunchedEffect(viewModel.effect) {
+        viewModel.effect.collectLatest { effect ->
+            when (effect) {
+                Effect.Finish -> onBack()
+            }
+        }
+    }
 
     val title =
-        if (uiState.isLotto645) {
+        if (state.isLotto645) {
             stringResource(R.string.lotto_645_random_title)
         } else {
             stringResource(
@@ -60,7 +74,9 @@ fun RandomNumberGenerationScreen(viewModel: RandomNumberGenerationViewModel) {
                 )
             }, navigationIcon = {
                 IconButton(
-                    onClick = { },
+                    onClick = {
+                        viewModel.event(Event.Back)
+                    },
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_chevron_left),
@@ -83,19 +99,19 @@ fun RandomNumberGenerationScreen(viewModel: RandomNumberGenerationViewModel) {
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 RandomNumberGenerationContent(
-                    uiState = uiState,
+                    state = state,
                     onCreateClicked = {
-                        if (uiState.isLotto645) {
-                            viewModel.generate645RandomNumbers()
+                        if (state.isLotto645) {
+                            viewModel.event(Event.GenerateRandomLottery)
                         } else {
-                            viewModel.generate720RandomNumbers()
+                            viewModel.event(Event.GenerateRandomPensionLottery)
                         }
                     },
                     onSaveClicked = {
-                        if (uiState.isLotto645) {
-                            viewModel.postLotterySave()
+                        if (state.isLotto645) {
+                            viewModel.event(Event.SaveLottery)
                         } else {
-                            viewModel.postPensionLotterySave()
+                            viewModel.event(Event.SavePensionLottery)
                         }
                     },
                 )
@@ -106,7 +122,7 @@ fun RandomNumberGenerationScreen(viewModel: RandomNumberGenerationViewModel) {
 
 @Composable
 fun RandomNumberGenerationContent(
-    uiState: RandomNumberGenerationState,
+    state: State,
     onCreateClicked: () -> Unit,
     onSaveClicked: () -> Unit,
 ) {
@@ -119,7 +135,7 @@ fun RandomNumberGenerationContent(
     Spacer(modifier = Modifier.height(10.dp))
 
     Text(
-        text = stringResource(id = if (uiState.isLotto645) R.string.lotto_645_title else R.string.lotto_720_title),
+        text = stringResource(id = if (state.isLotto645) R.string.lotto_645_title else R.string.lotto_720_title),
         style = LottoTheme.typography.body1.copy(fontWeight = FontWeight.Bold),
     )
 
@@ -129,8 +145,8 @@ fun RandomNumberGenerationContent(
         modifier = Modifier.padding(horizontal = 4.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        if (uiState.isLotto645) {
-            uiState.lotteryRandomNumbers?.let {
+        if (state.isLotto645) {
+            state.lotteryRandomNumbers?.let {
                 listOf(
                     it.firstNum,
                     it.secondNum,
@@ -159,7 +175,7 @@ fun RandomNumberGenerationContent(
                 }
             }
         } else {
-            uiState.pensionLotteryRandom?.let {
+            state.pensionLotteryRandom?.let {
                 listOf(
                     it.pensionGroup,
                     it.pensionFirstNum,
@@ -231,7 +247,7 @@ fun RandomNumberGenerationContent(
                     .width(160.dp),
             buttonText = stringResource(R.string.save_title),
             backgroundColor = LottoTheme.colors.lottoGreen,
-            isEnabled = uiState.saveIsEnabled,
+            isEnabled = state.saveIsEnabled,
             onClick = { onSaveClicked() },
         )
     }

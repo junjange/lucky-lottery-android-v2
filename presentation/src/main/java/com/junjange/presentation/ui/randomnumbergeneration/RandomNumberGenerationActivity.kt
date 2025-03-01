@@ -18,7 +18,10 @@ class RandomNumberGenerationActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             LottoTheme {
-                RandomNumberGenerationScreen(viewModel = viewModel)
+                RandomNumberGenerationScreen(
+                    viewModel = viewModel,
+                    onBack = ::finish,
+                )
             }
         }
     }
