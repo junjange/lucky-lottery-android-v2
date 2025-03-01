@@ -11,7 +11,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.junjange.presentation.component.LottoBottomBar
 import com.junjange.presentation.ui.home.HomeScreen
-import com.junjange.presentation.ui.my.MyScreen
 import com.junjange.presentation.ui.my.OauthProvider
 import com.junjange.presentation.ui.mynumber.MyNumberScreen
 
@@ -46,14 +45,15 @@ fun MainScreen(
         ) {
             composable(Destination.HOME.route) { HomeScreen(navigateToQRScanner = navigateToQRScanner) }
             composable(Destination.MY_NUMBER.route) { MyNumberScreen() }
-            composable(Destination.MY.route) {
-                MyScreen(
-                    navigateToWithdrawal = navigateToWithdrawal,
-                    navigateToSplash = navigateToSplash,
-                    navigateToEditProfile = navigateToEditProfile,
-                    navigateToNotification = navigateToNotification,
-                )
-            }
+            // TODO 서버 로직 제거로 인해 내정보 탭바 임시 제거
+//            composable(Destination.MY.route) {
+//                MyScreen(
+//                    navigateToWithdrawal = navigateToWithdrawal,
+//                    navigateToSplash = navigateToSplash,
+//                    navigateToEditProfile = navigateToEditProfile,
+//                    navigateToNotification = navigateToNotification,
+//                )
+//            }
         }
     }
 }

@@ -28,12 +28,13 @@ enum class Destination(
         inSelectedIconRes = R.drawable.ic_plus,
         labelResId = R.string.navigation_random_number,
     ),
-    MY(
-        route = ROUTE_MY,
-        selectedIconRes = R.drawable.ic_my_page,
-        inSelectedIconRes = R.drawable.ic_my_page_outloned,
-        labelResId = R.string.navigation_my,
-    ),
+    // TODO 서버 로직 제거로 인해 내정보 탭바 주석
+//    MY(
+//        route = ROUTE_MY,
+//        selectedIconRes = R.drawable.ic_my_page,
+//        inSelectedIconRes = R.drawable.ic_my_page_outloned,
+//        labelResId = R.string.navigation_my,
+//    ),
 }
 
 private const val ROUTE_HOME = "home"

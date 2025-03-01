@@ -1,13 +1,9 @@
 package com.junjange.presentation.ui.splash
 
-data class SplashState(
-    val isLoading: Boolean = false,
-)
+sealed interface SplashContract {
+    sealed interface Effect {
+        data object AlreadyLoggedIn : Effect
 
-sealed class SplashEffect {
-    data object Loading : SplashEffect()
-
-    data object AlreadyLoggedIn : SplashEffect()
-
-    data object RequireLoginIn : SplashEffect()
+        data object RequireLoginIn : Effect
+    }
 }

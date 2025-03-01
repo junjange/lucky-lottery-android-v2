@@ -35,9 +35,8 @@ fun SplashScreen(
     LaunchedEffect(viewModel.effect) {
         viewModel.effect.collectLatest { effect ->
             when (effect) {
-                is SplashEffect.Loading -> {}
-                is SplashEffect.AlreadyLoggedIn -> navigateToMain()
-                is SplashEffect.RequireLoginIn -> navigateToMain()
+                SplashContract.Effect.AlreadyLoggedIn -> navigateToMain()
+                SplashContract.Effect.RequireLoginIn -> navigateToLogin()
             }
         }
     }
