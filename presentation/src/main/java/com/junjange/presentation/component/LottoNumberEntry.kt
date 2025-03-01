@@ -24,7 +24,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.text.isDigitsOnly
-import com.junjange.presentation.ui.theme.LottoTheme
+import com.junjange.presentation.theme.LottoTheme
 
 @Composable
 fun LottoNumberEntry(onSaveClicked: (List<String>) -> Unit) {

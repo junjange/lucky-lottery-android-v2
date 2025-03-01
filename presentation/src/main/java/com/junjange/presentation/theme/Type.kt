@@ -1,4 +1,4 @@
-package com.junjange.presentation.ui.theme
+package com.junjange.presentation.theme
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf

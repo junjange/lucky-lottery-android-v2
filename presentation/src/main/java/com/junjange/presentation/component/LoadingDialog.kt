@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.junjange.presentation.ui.theme.LottoTheme
+import com.junjange.presentation.theme.LottoTheme
 
 @Composable
 fun LoadingDialog(modifier: Modifier) {

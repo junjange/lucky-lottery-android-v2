@@ -35,10 +35,10 @@ import com.junjange.presentation.component.AdmobBanner
 import com.junjange.presentation.component.LottoBall
 import com.junjange.presentation.component.LottoRoundedCornerButton
 import com.junjange.presentation.component.LottoType
+import com.junjange.presentation.theme.LottoTheme
+import com.junjange.presentation.theme.lotteryColors
+import com.junjange.presentation.theme.toLotteryColor
 import com.junjange.presentation.ui.randomnumbergeneration.RandomNumberGenerationContract.*
-import com.junjange.presentation.ui.theme.LottoTheme
-import com.junjange.presentation.ui.theme.lotteryColors
-import com.junjange.presentation.ui.theme.toLotteryColor
 import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class)

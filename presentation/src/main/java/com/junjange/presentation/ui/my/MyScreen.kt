@@ -43,10 +43,10 @@ import com.junjange.presentation.R
 import com.junjange.presentation.component.LottoButtonBar
 import com.junjange.presentation.component.LottoSimpleTopBar
 import com.junjange.presentation.component.LottoTextBar
+import com.junjange.presentation.theme.LottoTheme
+import com.junjange.presentation.theme.White
 import com.junjange.presentation.ui.my.MyEffect.NavigateToEditProfile
 import com.junjange.presentation.ui.my.MyEffect.NavigateToUsageTerm
-import com.junjange.presentation.ui.theme.LottoTheme
-import com.junjange.presentation.ui.theme.White
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable

@@ -47,7 +47,7 @@ import com.junjange.presentation.component.EditProfileType.*
 import com.junjange.presentation.component.LottoButtonTopBar
 import com.junjange.presentation.component.LottoEditProfileBottomSheet
 import com.junjange.presentation.component.LottoProfileTextField
-import com.junjange.presentation.ui.theme.LottoTheme
+import com.junjange.presentation.theme.LottoTheme
 import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterialApi::class)

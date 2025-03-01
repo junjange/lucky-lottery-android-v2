@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.junjange.presentation.R
 import com.junjange.presentation.component.EditProfileType.ProfileDefaultImageSelect
 import com.junjange.presentation.component.EditProfileType.ProfileImageSelect
-import com.junjange.presentation.ui.theme.LottoTheme
+import com.junjange.presentation.theme.LottoTheme
 
 @Composable
 fun LottoEditProfileBottomSheet(callback: (editProfileType: EditProfileType) -> Unit) {

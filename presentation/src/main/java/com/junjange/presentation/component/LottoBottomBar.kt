@@ -18,8 +18,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
+import com.junjange.presentation.theme.LottoTheme
 import com.junjange.presentation.ui.main.Destination
-import com.junjange.presentation.ui.theme.LottoTheme
 
 @Composable
 fun LottoBottomBar(

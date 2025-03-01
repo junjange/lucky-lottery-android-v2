@@ -48,8 +48,8 @@ import com.junjange.presentation.component.EditProfileType.ProfileImageSelect
 import com.junjange.presentation.component.LottoButtonTopBar
 import com.junjange.presentation.component.LottoEditProfileBottomSheet
 import com.junjange.presentation.component.LottoProfileTextField
-import com.junjange.presentation.ui.theme.LottoTheme
-import com.junjange.presentation.ui.theme.White
+import com.junjange.presentation.theme.LottoTheme
+import com.junjange.presentation.theme.White
 import com.junjange.presentation.utils.saveBitmapToFile
 import kotlinx.coroutines.flow.collectLatest
 import okhttp3.MediaType.Companion.toMediaTypeOrNull

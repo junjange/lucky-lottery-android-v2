@@ -29,10 +29,10 @@ import com.junjange.domain.model.WinningLotteryNumbers
 import com.junjange.domain.model.WinningPensionLotteryBonusNumbers
 import com.junjange.domain.model.WinningPensionLotteryNumbers
 import com.junjange.presentation.R
+import com.junjange.presentation.theme.LottoTheme
+import com.junjange.presentation.theme.lotteryColors
+import com.junjange.presentation.theme.toLotteryColor
 import com.junjange.presentation.ui.home.formatPrizeAmount
-import com.junjange.presentation.ui.theme.LottoTheme
-import com.junjange.presentation.ui.theme.lotteryColors
-import com.junjange.presentation.ui.theme.toLotteryColor
 import java.text.SimpleDateFormat
 import java.util.Locale
 

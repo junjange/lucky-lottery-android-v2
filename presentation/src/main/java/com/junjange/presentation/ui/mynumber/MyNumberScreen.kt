@@ -77,11 +77,11 @@ import com.junjange.presentation.component.Lotto720Content
 import com.junjange.presentation.component.LottoContentTitle
 import com.junjange.presentation.component.LottoNumberEntry
 import com.junjange.presentation.component.PensionLotteryNumberEntry
+import com.junjange.presentation.theme.LottoTheme
+import com.junjange.presentation.theme.lotteryColors
+import com.junjange.presentation.theme.toLotteryColor
 import com.junjange.presentation.ui.mynumber.MyNumberContract.Effect.NavigateToGallery
 import com.junjange.presentation.ui.mynumber.MyNumberContract.Event.*
-import com.junjange.presentation.ui.theme.LottoTheme
-import com.junjange.presentation.ui.theme.lotteryColors
-import com.junjange.presentation.ui.theme.toLotteryColor
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch

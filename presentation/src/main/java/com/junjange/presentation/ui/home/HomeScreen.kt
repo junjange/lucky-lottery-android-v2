@@ -23,7 +23,7 @@ import com.junjange.presentation.R
 import com.junjange.presentation.component.AdmobBanner
 import com.junjange.presentation.component.LottoContent
 import com.junjange.presentation.component.LottoHomeTopBar
-import com.junjange.presentation.ui.theme.LottoTheme
+import com.junjange.presentation.theme.LottoTheme
 
 @Composable
 fun HomeScreen(
