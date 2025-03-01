@@ -9,12 +9,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -24,6 +27,8 @@ import com.junjange.presentation.component.AdmobBanner
 import com.junjange.presentation.component.LottoContent
 import com.junjange.presentation.component.LottoHomeTopBar
 import com.junjange.presentation.theme.LottoTheme
+import com.junjange.presentation.util.showToast
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun HomeScreen(
@@ -31,44 +36,63 @@ fun HomeScreen(
     navigateToQRScanner: () -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
-    Box(
-        modifier = Modifier.fillMaxSize(),
-    ) {
-        Column(
-            Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            LottoHomeTopBar()
-            AdmobBanner(modifier = Modifier.fillMaxWidth())
-            LottoContent(
-                lotteryNumbers = state.lotteryNumbers,
-                pensionLotteryHome = state.pensionLotteryHome,
-                changeLottery = { offset ->
-                    viewModel.event(HomeContract.Event.ChangeLottery(offset = offset))
-                },
-                changePensionLottery = { offset ->
-                    viewModel.event(HomeContract.Event.ChangePensionLottery(offset = offset))
-                },
-            )
-            Spacer(modifier = Modifier.height(50.dp))
+    LaunchedEffect(viewModel.effect) {
+        viewModel.effect.collectLatest { effect ->
+            when (effect) {
+                is HomeContract.Effect.ShowMessage -> {
+                    val message =
+                        when (effect.message) {
+                            HomeMessage.LOTTO_NUMBER_NOT_FOUND -> context.getString(R.string.lotto_number_not_found_message)
+                            HomeMessage.PENSION_NUMBER_NOT_FOUND -> context.getString(R.string.pension_number_not_found_message)
+                        }
+                    context.showToast(message)
+                }
+            }
         }
+    }
 
-        FloatingActionButton(
+    Scaffold(
+        floatingActionButton = {
+            FloatingActionButton(
+                containerColor = LottoTheme.colors.green,
+                onClick = navigateToQRScanner,
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_qr_code),
+                    contentDescription = null,
+                    tint = LottoTheme.colors.white,
+                )
+            }
+        },
+    ) { paddingValues ->
+        Box(
             modifier =
                 Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(bottom = 15.dp, end = 15.dp),
-            containerColor = LottoTheme.colors.green,
-            onClick = navigateToQRScanner,
+                    .fillMaxSize()
+                    .padding(paddingValues),
         ) {
-            Icon(
-                painter = painterResource(R.drawable.ic_qr_code),
-                contentDescription = null,
-                tint = LottoTheme.colors.white,
-            )
+            Column(
+                Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState()),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                LottoHomeTopBar()
+                AdmobBanner(modifier = Modifier.fillMaxWidth())
+                LottoContent(
+                    lotteryNumbers = state.lotteryNumbers,
+                    pensionLotteryHome = state.pensionLotteryHome,
+                    changeLottery = { offset ->
+                        viewModel.event(HomeContract.Event.ChangeLottery(offset = offset))
+                    },
+                    changePensionLottery = { offset ->
+                        viewModel.event(HomeContract.Event.ChangePensionLottery(offset = offset))
+                    },
+                )
+                Spacer(modifier = Modifier.height(50.dp))
+            }
         }
     }
 }

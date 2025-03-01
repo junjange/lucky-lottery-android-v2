@@ -67,7 +67,9 @@ class HomeViewModel
                             lotteryRound = round,
                         )
                     }
-                }.onFailure { }
+                }.onFailure {
+                    _effect.send(Effect.ShowMessage(HomeMessage.LOTTO_NUMBER_NOT_FOUND))
+                }
         }
 
         private suspend fun fetchPensionLotteryNumbers(round: Int) {
@@ -80,6 +82,7 @@ class HomeViewModel
                         )
                     }
                 }.onFailure {
+                    _effect.send(Effect.ShowMessage(HomeMessage.PENSION_NUMBER_NOT_FOUND))
                 }
         }
 

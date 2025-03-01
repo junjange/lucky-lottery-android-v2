@@ -77,4 +77,8 @@
     <string name="dialog_title">정말 행운복권을 탈퇴할까요?</string>
     <string name="dialog_description">짧은 기간 내 탈퇴와 재가입이 반복되면\n서비스 이용이 어려울 수 있어요.</string>
     <string name="qr_scanner_hint">QR 코드를 스캔하여 주세요:)</string>
+
+    <!--    message-->
+    <string name="lotto_number_not_found_message">해당 회차의 로또 당첨 번호를 찾을 수 없어요.</string>
+    <string name="pension_number_not_found_message">해당 회차의 연금복권 당첨 번호를 찾을 수 없어요.</string>
 </resources>

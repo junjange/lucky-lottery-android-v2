@@ -22,7 +22,11 @@ sealed interface HomeContract {
         ) : Event
     }
 
-    sealed interface Effect
+    sealed interface Effect {
+        data class ShowMessage(
+            val message: HomeMessage,
+        ) : Effect
+    }
 }
 
 fun Long.formatPrizeAmount(): String =

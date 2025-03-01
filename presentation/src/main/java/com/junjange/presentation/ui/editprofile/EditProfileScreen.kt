@@ -50,7 +50,7 @@ import com.junjange.presentation.component.LottoEditProfileBottomSheet
 import com.junjange.presentation.component.LottoProfileTextField
 import com.junjange.presentation.theme.LottoTheme
 import com.junjange.presentation.theme.White
-import com.junjange.presentation.utils.saveBitmapToFile
+import com.junjange.presentation.util.saveBitmapToFile
 import kotlinx.coroutines.flow.collectLatest
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
