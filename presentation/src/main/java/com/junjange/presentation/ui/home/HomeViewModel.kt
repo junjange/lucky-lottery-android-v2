@@ -7,6 +7,8 @@ import com.junjange.domain.usecase.GetPensionLotteryUseCase
 import com.junjange.presentation.base.BaseViewModel
 import com.junjange.presentation.ui.home.HomeContract.*
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -32,8 +34,12 @@ class HomeViewModel
 
         init {
             launch {
-                fetchLatestLotteryRound()
-                fetchLatestPensionLotteryRound()
+                loading(true)
+                val lotteryDeferred = async { fetchLatestLotteryRound() }
+                val pensionDeferred = async { fetchLatestPensionLotteryRound() }
+
+                awaitAll(lotteryDeferred, pensionDeferred)
+                loading(false)
             }
         }
 
@@ -97,6 +103,12 @@ class HomeViewModel
             launch {
                 val round = state.value.pensionLotteryRound
                 fetchPensionLotteryNumbers(round + offset)
+            }
+        }
+
+        private fun loading(isLoading: Boolean) {
+            _state.update { state ->
+                state.copy(isLoading = isLoading)
             }
         }
     }

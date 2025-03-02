@@ -24,6 +24,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.junjange.presentation.R
 import com.junjange.presentation.component.AdmobBanner
+import com.junjange.presentation.component.LoadingDialog
 import com.junjange.presentation.component.LottoContent
 import com.junjange.presentation.component.LottoHomeTopBar
 import com.junjange.presentation.theme.LottoTheme
@@ -67,6 +68,11 @@ fun HomeScreen(
             }
         },
     ) { paddingValues ->
+        if (state.isLoading) {
+            LoadingDialog(modifier = Modifier.fillMaxSize())
+            return@Scaffold
+        }
+
         Box(
             modifier =
                 Modifier
