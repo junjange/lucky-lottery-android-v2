@@ -25,6 +25,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -39,6 +40,7 @@ import com.junjange.presentation.theme.LottoTheme
 import com.junjange.presentation.theme.lotteryColors
 import com.junjange.presentation.theme.toLotteryColor
 import com.junjange.presentation.ui.randomnumbergeneration.RandomNumberGenerationContract.*
+import com.junjange.presentation.util.showToast
 import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,6 +50,7 @@ fun RandomNumberGenerationScreen(
     onBack: () -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     LaunchedEffect(viewModel.effect) {
         viewModel.effect.collectLatest { effect ->
@@ -110,8 +113,10 @@ fun RandomNumberGenerationScreen(
                     onSaveClicked = {
                         if (state.isLotto645) {
                             viewModel.event(Event.SaveLottery)
+                            context.showToast(R.string.lotto_number_submitted)
                         } else {
                             viewModel.event(Event.SavePensionLottery)
+                            context.showToast(R.string.pension_lottery_number_submitted)
                         }
                     },
                 )
@@ -234,7 +239,7 @@ fun RandomNumberGenerationContent(
                     .height(40.dp)
                     .width(160.dp),
             buttonText = stringResource(R.string.create_title),
-            backgroundColor = LottoTheme.colors.lottoGreen,
+            backgroundColor = LottoTheme.colors.green,
             isEnabled = true,
             onClick = { onCreateClicked() },
         )
@@ -246,9 +251,11 @@ fun RandomNumberGenerationContent(
                     .height(40.dp)
                     .width(160.dp),
             buttonText = stringResource(R.string.save_title),
-            backgroundColor = LottoTheme.colors.lottoGreen,
+            backgroundColor = LottoTheme.colors.green,
             isEnabled = state.saveIsEnabled,
-            onClick = { onSaveClicked() },
+            onClick = {
+                onSaveClicked()
+            },
         )
     }
 }

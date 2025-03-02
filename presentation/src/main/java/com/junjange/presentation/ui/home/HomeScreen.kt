@@ -44,8 +44,8 @@ fun HomeScreen(
                 is HomeContract.Effect.ShowMessage -> {
                     val message =
                         when (effect.message) {
-                            HomeMessage.LOTTO_NUMBER_NOT_FOUND -> context.getString(R.string.lotto_number_not_found_message)
-                            HomeMessage.PENSION_NUMBER_NOT_FOUND -> context.getString(R.string.pension_number_not_found_message)
+                            HomeMessage.LOTTO_NUMBER_NOT_FOUND -> R.string.lotto_number_not_found_message
+                            HomeMessage.PENSION_NUMBER_NOT_FOUND -> R.string.pension_number_not_found_message
                         }
                     context.showToast(message)
                 }

@@ -82,6 +82,7 @@ import com.junjange.presentation.theme.lotteryColors
 import com.junjange.presentation.theme.toLotteryColor
 import com.junjange.presentation.ui.mynumber.MyNumberContract.Effect.NavigateToGallery
 import com.junjange.presentation.ui.mynumber.MyNumberContract.Event.*
+import com.junjange.presentation.util.showToast
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -151,7 +152,7 @@ fun MyNumberScreen(viewModel: MyNumberViewModel = hiltViewModel()) {
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyNumberContent(
     tabs: List<Int>,
@@ -166,6 +167,7 @@ fun MyNumberContent(
     val coroutineScope = rememberCoroutineScope()
     var isSheetOpen by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState()
+    val context = LocalContext.current
 
     Column(modifier = modifier.fillMaxSize()) {
         TabRow(selectedTabIndex = pagerState.currentPage) {
@@ -205,17 +207,25 @@ fun MyNumberContent(
                 when (pagerState.currentPage) {
                     0 ->
                         LottoNumberEntry(
-                            onSaveClicked = { lottery ->
+                            onSubmit = { lottery ->
                                 isSheetOpen = false
                                 onLotterySaveClicked(lottery)
+                                context.showToast(R.string.lotto_number_submitted)
+                            },
+                            onDuplicateLottery = {
+                                context.showToast(R.string.lotto_duplicate_error)
                             },
                         )
 
                     1 ->
                         PensionLotteryNumberEntry(
-                            onSaveClicked = { pensionLottery ->
+                            onSubmit = { pensionLottery ->
                                 isSheetOpen = false
                                 onPensionLotterySaveClicked(pensionLottery)
+                                context.showToast(R.string.pension_lottery_number_submitted)
+                            },
+                            onInvalidGroup = {
+                                context.showToast(R.string.pension_lottery_invalid_group)
                             },
                         )
                 }
