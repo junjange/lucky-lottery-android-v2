@@ -3,7 +3,6 @@ package com.junjange.presentation.ui.randomnumber
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,6 +31,7 @@ import com.junjange.presentation.R
 import com.junjange.presentation.component.LottoType
 import com.junjange.presentation.theme.LottoTheme
 import com.junjange.presentation.ui.randomnumber.RandomNumberContract.*
+import com.junjange.presentation.util.singleClick
 import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -44,7 +44,8 @@ fun RandomNumberScreen(
     LaunchedEffect(viewModel.effect) {
         viewModel.effect.collectLatest { effect ->
             when (effect) {
-                Effect.Finish -> onBack()
+                is Effect.Finish -> onBack()
+                is Effect.NavigateToRandomNumberGeneration -> navigateRandomNumberGeneration(effect.lottoType)
             }
         }
     }
@@ -69,12 +70,17 @@ fun RandomNumberScreen(
             })
         },
     ) { innerPadding ->
-        Column(modifier = Modifier.padding(innerPadding)) {
+        Column(
+            modifier =
+                Modifier
+                    .padding(innerPadding)
+                    .padding(8.dp),
+        ) {
             RandomNumberCard(
                 modifier =
                     Modifier
                         .weight(0.5f)
-                        .clickable { navigateRandomNumberGeneration(LottoType.LOTTO645) },
+                        .singleClick { viewModel.event(Event.OnRandomNumberGenerationClick(LottoType.LOTTO645)) },
                 iconRes = R.drawable.ic_lotto645_random,
                 title = R.string.lotto_645_random_title,
                 description = R.string.lotto_645_random_description,
@@ -83,7 +89,7 @@ fun RandomNumberScreen(
                 modifier =
                     Modifier
                         .weight(0.5f)
-                        .clickable { navigateRandomNumberGeneration(LottoType.LOTTO720) },
+                        .singleClick { viewModel.event(Event.OnRandomNumberGenerationClick(LottoType.LOTTO720)) },
                 iconRes = R.drawable.ic_lotto720_random,
                 title = R.string.lotto_720_title,
                 description = R.string.lotto_720_random_description,
