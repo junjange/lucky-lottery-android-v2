@@ -154,9 +154,22 @@ class MainActivity : BaseActivity() {
     }
 
     companion object {
+        const val PUT_EXTRA_INITIAL_PAGE = "PUT_EXTRA_INITIAL_PAGE"
+        const val INITIAL_PAGE = "initialPage"
+
         fun startActivity(context: Context) {
             val intent = Intent(context, MainActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+            context.startActivity(intent)
+        }
+
+        fun startActivity(
+            context: Context,
+            initialPage: String,
+        ) {
+            val intent = Intent(context, MainActivity::class.java)
+            intent.putExtra(PUT_EXTRA_INITIAL_PAGE, initialPage)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             context.startActivity(intent)
         }
     }

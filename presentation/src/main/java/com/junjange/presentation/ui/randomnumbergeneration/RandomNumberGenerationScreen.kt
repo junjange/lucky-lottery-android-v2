@@ -17,11 +17,17 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,23 +45,48 @@ import com.junjange.presentation.component.LottoType
 import com.junjange.presentation.theme.LottoTheme
 import com.junjange.presentation.theme.lotteryColors
 import com.junjange.presentation.theme.toLotteryColor
+import com.junjange.presentation.ui.randomnumber.RandomNumberMessage
 import com.junjange.presentation.ui.randomnumbergeneration.RandomNumberGenerationContract.*
-import com.junjange.presentation.util.showToast
 import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RandomNumberGenerationScreen(
     viewModel: RandomNumberGenerationViewModel,
+    navigateToMain: (initialPage: String) -> Unit,
     onBack: () -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(viewModel.effect) {
         viewModel.effect.collectLatest { effect ->
             when (effect) {
-                Effect.Finish -> onBack()
+                is Effect.Finish -> onBack()
+                is Effect.ShowMessage -> {
+                    val (message, initialPage) =
+                        when (effect.message) {
+                            RandomNumberMessage.LOTTERY_NUMBER_SAVED ->
+                                Pair(R.string.lotto_number_submitted, "0")
+
+                            RandomNumberMessage.PENSION_LOTTERY_SAVED ->
+                                Pair(R.string.pension_lottery_number_submitted, "1")
+                        }
+                    val result =
+                        snackbarHostState.showSnackbar(
+                            message = context.getString(message),
+                            actionLabel = context.getString(R.string.action_check_number),
+                            duration = SnackbarDuration.Short,
+                        )
+
+                    when (result) {
+                        SnackbarResult.Dismissed -> {}
+                        SnackbarResult.ActionPerformed -> {
+                            navigateToMain(initialPage)
+                        }
+                    }
+                }
             }
         }
     }
@@ -88,6 +119,14 @@ fun RandomNumberGenerationScreen(
                 }
             })
         },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState) { data ->
+                Snackbar(
+                    snackbarData = data,
+                    actionColor = LottoTheme.colors.green,
+                )
+            }
+        },
     ) { innerPadding ->
         Box(
             modifier =
@@ -113,10 +152,8 @@ fun RandomNumberGenerationScreen(
                     onSaveClicked = {
                         if (state.isLotto645) {
                             viewModel.event(Event.SaveLottery)
-                            context.showToast(R.string.lotto_number_submitted)
                         } else {
                             viewModel.event(Event.SavePensionLottery)
-                            context.showToast(R.string.pension_lottery_number_submitted)
                         }
                     },
                 )
@@ -237,7 +274,7 @@ fun RandomNumberGenerationContent(
                 Modifier
                     .clip(shape = RoundedCornerShape(8.dp))
                     .height(40.dp)
-                    .width(160.dp),
+                    .width(140.dp),
             buttonText = stringResource(R.string.create_title),
             backgroundColor = LottoTheme.colors.green,
             isEnabled = true,
@@ -249,7 +286,7 @@ fun RandomNumberGenerationContent(
                 Modifier
                     .clip(shape = RoundedCornerShape(8.dp))
                     .height(40.dp)
-                    .width(160.dp),
+                    .width(140.dp),
             buttonText = stringResource(R.string.save_title),
             backgroundColor = LottoTheme.colors.green,
             isEnabled = state.saveIsEnabled,

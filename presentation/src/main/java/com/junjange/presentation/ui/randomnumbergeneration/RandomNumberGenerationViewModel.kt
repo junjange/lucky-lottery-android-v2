@@ -7,6 +7,8 @@ import com.junjange.domain.usecase.InsertLotteryUseCase
 import com.junjange.domain.usecase.InsertPensionLotteryUseCase
 import com.junjange.presentation.base.BaseViewModel
 import com.junjange.presentation.component.LottoType
+import com.junjange.presentation.ui.randomnumber.RandomNumberMessage.LOTTERY_NUMBER_SAVED
+import com.junjange.presentation.ui.randomnumber.RandomNumberMessage.PENSION_LOTTERY_SAVED
 import com.junjange.presentation.ui.randomnumbergeneration.RandomNumberGenerationContract.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -110,6 +112,7 @@ class RandomNumberGenerationViewModel
                     fifthNum = lotteryNumbers.fifthNum,
                     sixthNum = lotteryNumbers.sixthNum,
                 ).onSuccess {
+                    _effect.send(Effect.ShowMessage(LOTTERY_NUMBER_SAVED))
                 }.onFailure {
                     // TODO 예외 처리
                 }
@@ -127,7 +130,9 @@ class RandomNumberGenerationViewModel
                     fourthNum = lotteryNumbers.pensionFourthNum,
                     fifthNum = lotteryNumbers.pensionFifthNum,
                     sixthNum = lotteryNumbers.pensionSixthNum,
-                ).onSuccess { }.onFailure {
+                ).onSuccess {
+                    _effect.send(Effect.ShowMessage(PENSION_LOTTERY_SAVED))
+                }.onFailure {
                     // TODO 예외 처리
                 }
             }

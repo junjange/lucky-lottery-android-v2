@@ -38,6 +38,6 @@ enum class Destination(
 }
 
 private const val ROUTE_HOME = "home"
-private const val ROUTE_MY_NUMBER = "my_number"
+private const val ROUTE_MY_NUMBER = "my_number/{${MainActivity.INITIAL_PAGE}}"
 private const val ROUTE_RANDOM_NUMBER = "random_number"
 private const val ROUTE_MY = "my"

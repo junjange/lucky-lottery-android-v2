@@ -83,11 +83,14 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @Composable
-fun MyNumberScreen(viewModel: MyNumberViewModel = hiltViewModel()) {
+fun MyNumberScreen(
+    viewModel: MyNumberViewModel = hiltViewModel(),
+    initialPage: Int,
+) {
     val context = LocalContext.current
     val state by viewModel.state.collectAsStateWithLifecycle()
     val tabs = listOf(R.string.lotto_645_title, R.string.lotto_720_title)
-    val pagerState = rememberPagerState(pageCount = { tabs.size })
+    val pagerState = rememberPagerState(initialPage = initialPage, pageCount = { tabs.size })
 
     val imageCropLauncher =
         rememberLauncherForActivityResult(CropImageContract()) { result ->

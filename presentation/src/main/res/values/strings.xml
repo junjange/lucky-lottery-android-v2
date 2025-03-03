@@ -26,6 +26,7 @@
     <string name="addition">추가하기</string>
     <string name="write_directly">직접 작성하기</string>
     <string name="load_photo">사진 불러오기</string>
+    <string name="action_check_number">번호 확인</string>
 
     <!--    my-->
     <string name="my">내 정보</string>
@@ -85,9 +86,9 @@
     <string name="lotto_number_not_found_message">해당 회차의 로또 당첨 번호를 찾을 수 없어요.</string>
     <string name="pension_number_not_found_message">해당 회차의 연금복권 당첨 번호를 찾을 수 없어요.</string>
     <string name="enter_pension_lottery_number">연급복권 번호를 직접 입력해봐요</string>
-    <string name="pension_lottery_number_submitted">연금복권 번호가 생성되었습니다!</string>
+    <string name="pension_lottery_number_submitted">연금복권 번호가 추가되었습니다.</string>
     <string name="pension_lottery_invalid_group">조는 1부터 5 사이에 숫자중 하나를 입력해주세요</string>
     <string name="enter_lotto_numbers">로또 번호를 직접 입력해봐요</string>
-    <string name="lotto_number_submitted">로또 번호가 생성되었습니다!</string>
+    <string name="lotto_number_submitted">로또 번호가 추가되었습니다.</string>
     <string name="lotto_duplicate_error">로또 번호가 중복되었습니다!</string>
 </resources>
