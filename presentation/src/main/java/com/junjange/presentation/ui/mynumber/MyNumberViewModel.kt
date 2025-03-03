@@ -90,7 +90,7 @@ class MyNumberViewModel
                     fifthNum = lottery[4].toInt(),
                     sixthNum = lottery[5].toInt(),
                 ).onSuccess {
-                    loadLottery()
+                    _effect.send(Effect.LotteryRefresh)
                 }.onFailure {
                 }
                 loading(false)
@@ -109,7 +109,7 @@ class MyNumberViewModel
                     fifthNum = pensionLottery[5].toInt(),
                     sixthNum = pensionLottery[6].toInt(),
                 ).onSuccess {
-                    loadPensionLottery()
+                    _effect.send(Effect.PensionLotteryRefresh)
                 }.onFailure {
                 }
                 loading(false)

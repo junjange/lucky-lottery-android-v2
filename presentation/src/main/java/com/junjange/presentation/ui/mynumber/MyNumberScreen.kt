@@ -4,7 +4,6 @@ import android.graphics.Color
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,18 +26,17 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Surface
-import androidx.compose.material.pullrefresh.PullRefreshIndicator
-import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -58,7 +56,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
-import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.canhub.cropper.CropImageContract
@@ -71,7 +68,6 @@ import com.junjange.domain.model.PensionLotteryGetContent
 import com.junjange.domain.model.PensionLotteryNumbers
 import com.junjange.presentation.R
 import com.junjange.presentation.component.ExpandableActionButton
-import com.junjange.presentation.component.LoadingDialog
 import com.junjange.presentation.component.Lotto645Content
 import com.junjange.presentation.component.Lotto720Content
 import com.junjange.presentation.component.LottoContentTitle
@@ -80,14 +76,12 @@ import com.junjange.presentation.component.PensionLotteryNumberEntry
 import com.junjange.presentation.theme.LottoTheme
 import com.junjange.presentation.theme.lotteryColors
 import com.junjange.presentation.theme.toLotteryColor
-import com.junjange.presentation.ui.mynumber.MyNumberContract.Effect.NavigateToGallery
+import com.junjange.presentation.ui.mynumber.MyNumberContract.Effect.*
 import com.junjange.presentation.ui.mynumber.MyNumberContract.Event.*
 import com.junjange.presentation.util.showToast
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MyNumberScreen(viewModel: MyNumberViewModel = hiltViewModel()) {
     val context = LocalContext.current
@@ -131,10 +125,15 @@ fun MyNumberScreen(viewModel: MyNumberViewModel = hiltViewModel()) {
             imageCropLauncher.launch(cropOptions)
         }
 
+    val lotteryGetContent = state.lotteryFlow.collectAsLazyPagingItems()
+    val pensionLotteryGetContent = state.pensionLotteryFlow.collectAsLazyPagingItems()
+
     LaunchedEffect(viewModel.effect) {
         viewModel.effect.collectLatest { effect ->
             when (effect) {
                 is NavigateToGallery -> imagePickerLauncher.launch("image/*")
+                is LotteryRefresh -> lotteryGetContent.refresh()
+                is PensionLotteryRefresh -> pensionLotteryGetContent.refresh()
             }
         }
     }
@@ -142,8 +141,8 @@ fun MyNumberScreen(viewModel: MyNumberViewModel = hiltViewModel()) {
     MyNumberContent(
         tabs = tabs,
         pagerState = pagerState,
-        lotteryGetContent = state.lotteryFlow,
-        pensionLotteryGetContent = state.pensionLotteryFlow,
+        lotteryGetContent = lotteryGetContent,
+        pensionLotteryGetContent = pensionLotteryGetContent,
         onGalleryClicked = { viewModel.event(PickedImage) },
         onLotterySaveClicked = { lottery -> viewModel.event(InsertLottery(lottery)) },
         onPensionLotterySaveClicked = { pensionLottery ->
@@ -157,8 +156,8 @@ fun MyNumberScreen(viewModel: MyNumberViewModel = hiltViewModel()) {
 fun MyNumberContent(
     tabs: List<Int>,
     pagerState: PagerState,
-    lotteryGetContent: Flow<PagingData<LotteryGetContent>>,
-    pensionLotteryGetContent: Flow<PagingData<PensionLotteryGetContent>>,
+    lotteryGetContent: LazyPagingItems<LotteryGetContent>,
+    pensionLotteryGetContent: LazyPagingItems<PensionLotteryGetContent>,
     modifier: Modifier = Modifier,
     onGalleryClicked: () -> Unit,
     onLotterySaveClicked: (List<String>) -> Unit,
@@ -183,15 +182,15 @@ fun MyNumberContent(
         HorizontalPager(state = pagerState) { page ->
             when (page) {
                 0 ->
-                    MyLotteryContentScreen(
-                        lotteryGetContent = lotteryGetContent,
+                    MyLotteryContent(
+                        contents = lotteryGetContent,
                         onEditClicked = { isSheetOpen = true },
                         onGalleryClicked = onGalleryClicked,
                     )
 
                 1 ->
-                    MyPensionLotteryContentScreen(
-                        pensionLotteryGetContent = pensionLotteryGetContent,
+                    MyPensionLotteryContent(
+                        contents = pensionLotteryGetContent,
                         onEditClicked = { isSheetOpen = true },
                         onGalleryClicked = onGalleryClicked,
                     )
@@ -202,6 +201,7 @@ fun MyNumberContent(
             ModalBottomSheet(
                 modifier = Modifier.wrapContentHeight(),
                 onDismissRequest = { isSheetOpen = false },
+                containerColor = LottoTheme.colors.lottoWhite,
                 sheetState = sheetState,
             ) {
                 when (pagerState.currentPage) {
@@ -234,28 +234,7 @@ fun MyNumberContent(
     }
 }
 
-@Composable
-fun MyLotteryContentScreen(
-    lotteryGetContent: Flow<PagingData<LotteryGetContent>>,
-    onEditClicked: () -> Unit,
-    onGalleryClicked: () -> Unit,
-) {
-    val contents = lotteryGetContent.collectAsLazyPagingItems()
-
-    when (contents.loadState.refresh) {
-        is LoadState.Error -> {}
-        is LoadState.Loading -> LoadingDialog(modifier = Modifier.fillMaxSize())
-        else -> {
-            MyLotteryContent(
-                contents = contents,
-                onEditClicked = onEditClicked,
-                onGalleryClicked = onGalleryClicked,
-            )
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyLotteryContent(
     contents: LazyPagingItems<LotteryGetContent>,
@@ -263,21 +242,24 @@ fun MyLotteryContent(
     onGalleryClicked: () -> Unit,
 ) {
     val lazyListState = rememberLazyListState()
-
-    val refreshState =
-        rememberPullRefreshState(
-            refreshing = contents.loadState.refresh is LoadState.Loading,
-            onRefresh = { contents.refresh() },
-        )
-
+    val refreshState = rememberPullToRefreshState()
     val firstVisibleItemScrollOffset =
         remember { derivedStateOf { lazyListState.firstVisibleItemScrollOffset } }
 
-    Box(
-        modifier =
-            Modifier
-                .fillMaxSize()
-                .pullRefresh(refreshState),
+    PullToRefreshBox(
+        isRefreshing = contents.loadState.refresh is LoadState.Loading,
+        onRefresh = { contents.refresh() },
+        state = refreshState,
+        modifier = Modifier.fillMaxSize(),
+        indicator = {
+            Indicator(
+                modifier = Modifier.align(Alignment.TopCenter),
+                isRefreshing = contents.loadState.refresh is LoadState.Loading,
+                containerColor = LottoTheme.colors.white,
+                color = LottoTheme.colors.black,
+                state = refreshState,
+            )
+        },
     ) {
         LazyColumn(
             state = lazyListState,
@@ -318,12 +300,6 @@ fun MyLotteryContent(
             }
         }
 
-        PullRefreshIndicator(
-            refreshing = contents.loadState.refresh is LoadState.Loading,
-            state = refreshState,
-            modifier = Modifier.align(Alignment.TopCenter),
-        )
-
         ExpandableActionButton(
             modifier =
                 Modifier
@@ -352,28 +328,7 @@ fun MyLotteryNumber(lotteryGetNumbers: List<LotteryGetNumbers>) {
     }
 }
 
-@Composable
-fun MyPensionLotteryContentScreen(
-    pensionLotteryGetContent: Flow<PagingData<PensionLotteryGetContent>>,
-    onEditClicked: () -> Unit,
-    onGalleryClicked: () -> Unit,
-) {
-    val contents = pensionLotteryGetContent.collectAsLazyPagingItems()
-
-    when (contents.loadState.refresh) {
-        is LoadState.Error -> {}
-        is LoadState.Loading -> LoadingDialog(modifier = Modifier.fillMaxSize())
-        else -> {
-            MyPensionLotteryContent(
-                contents = contents,
-                onEditClicked = onEditClicked,
-                onGalleryClicked = onGalleryClicked,
-            )
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyPensionLotteryContent(
     contents: LazyPagingItems<PensionLotteryGetContent>,
@@ -381,21 +336,24 @@ fun MyPensionLotteryContent(
     onGalleryClicked: () -> Unit,
 ) {
     val lazyListState = rememberLazyListState()
-
-    val refreshState =
-        rememberPullRefreshState(
-            refreshing = contents.loadState.refresh is LoadState.Loading,
-            onRefresh = { contents.refresh() },
-        )
-
+    val refreshState = rememberPullToRefreshState()
     val firstVisibleItemScrollOffset =
         remember { derivedStateOf { lazyListState.firstVisibleItemScrollOffset } }
 
-    Box(
-        modifier =
-            Modifier
-                .fillMaxSize()
-                .pullRefresh(refreshState),
+    PullToRefreshBox(
+        isRefreshing = contents.loadState.refresh is LoadState.Loading,
+        onRefresh = { contents.refresh() },
+        state = refreshState,
+        modifier = Modifier.fillMaxSize(),
+        indicator = {
+            Indicator(
+                modifier = Modifier.align(Alignment.TopCenter),
+                isRefreshing = contents.loadState.refresh is LoadState.Loading,
+                containerColor = LottoTheme.colors.white,
+                color = LottoTheme.colors.black,
+                state = refreshState,
+            )
+        },
     ) {
         LazyColumn(
             state = lazyListState,
@@ -443,12 +401,6 @@ fun MyPensionLotteryContent(
                 Spacer(modifier = Modifier.height(80.dp))
             }
         }
-
-        PullRefreshIndicator(
-            refreshing = contents.loadState.refresh is LoadState.Loading,
-            state = refreshState,
-            modifier = Modifier.align(Alignment.TopCenter),
-        )
 
         ExpandableActionButton(
             modifier =

@@ -50,7 +50,7 @@ val MaterialColors =
 
 val lotteryColors =
     listOf(
-        Gray600,
+        LottoGray,
         LottoError,
         LottoOrange,
         LottoYellow,
@@ -64,9 +64,9 @@ fun Int?.toLotteryColor(): Color =
         in 1..10 -> LottoYellow
         in 11..20 -> LottoBlue
         in 21..30 -> LottoError
-        in 31..40 -> Gray400
+        in 31..40 -> LottoGray
         in 41..45 -> LottoGreen
-        else -> White
+        else -> Gray200
     }
 
 @Stable

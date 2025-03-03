@@ -23,6 +23,9 @@
     <string name="create_title">생성</string>
     <string name="save_title">저장</string>
     <string name="group_title">조</string>
+    <string name="addition">추가하기</string>
+    <string name="write_directly">직접 작성하기</string>
+    <string name="load_photo">사진 불러오기</string>
 
     <!--    my-->
     <string name="my">내 정보</string>

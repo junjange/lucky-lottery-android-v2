@@ -9,7 +9,6 @@ import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,10 +18,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,9 +33,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.junjange.presentation.R
 import com.junjange.presentation.theme.LottoTheme
+import com.junjange.presentation.util.clickableWithoutRipple
 
 @Composable
 fun ExpandableActionButton(
@@ -53,7 +54,7 @@ fun ExpandableActionButton(
                 Modifier
                     .fillMaxSize()
                     .background(LottoTheme.colors.black.copy(alpha = 0.5f))
-                    .clickable { isFabClicked = false },
+                    .clickableWithoutRipple { isFabClicked = false },
         )
     }
 
@@ -66,7 +67,7 @@ fun ExpandableActionButton(
             Column(Modifier.padding(bottom = 8.dp), horizontalAlignment = Alignment.End) {
                 ActionItem(
                     icon = painterResource(R.drawable.baseline_edit_24),
-                    title = "직접 작성하기",
+                    title = stringResource(R.string.write_directly),
                     onClick = {
                         isFabClicked = false
                         onEditClicked()
@@ -75,7 +76,7 @@ fun ExpandableActionButton(
                 Spacer(modifier = Modifier.height(8.dp))
                 ActionItem(
                     icon = painterResource(R.drawable.ic_photo),
-                    title = "사진 불러오기",
+                    title = stringResource(R.string.load_photo),
                     onClick = {
                         isFabClicked = false
                         onGalleryClicked()
@@ -110,7 +111,7 @@ fun ExpandableActionButton(
 
                 AnimatedVisibility(visible = isFabExpanded && !isFabClicked) {
                     Text(
-                        text = "추가하기",
+                        text = stringResource(R.string.addition),
                         style = LottoTheme.typography.caption1,
                         color = LottoTheme.colors.white,
                     )

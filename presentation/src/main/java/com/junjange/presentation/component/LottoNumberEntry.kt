@@ -58,7 +58,7 @@ fun LottoNumberEntry(
                         if (newValue.isBlank() || (newValue.isDigitsOnly() && newValue.toIntOrNull() in 1..45)) {
                             lottery[i] = newValue
                         }
-                        if (lottery[i].length == 2 && i < 5) {
+                        if ((lottery[i].toIntOrNull() in 5..9 || lottery[i].length == 2) && i < 5) {
                             focusRequesters.getOrNull(i + 1)?.requestFocus()
                         }
                     },

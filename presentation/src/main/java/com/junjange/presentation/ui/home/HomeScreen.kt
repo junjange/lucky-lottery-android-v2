@@ -1,6 +1,5 @@
 package com.junjange.presentation.ui.home
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,12 +8,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -24,13 +28,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.junjange.presentation.R
 import com.junjange.presentation.component.AdmobBanner
-import com.junjange.presentation.component.LoadingDialog
 import com.junjange.presentation.component.LottoContent
 import com.junjange.presentation.component.LottoHomeTopBar
 import com.junjange.presentation.theme.LottoTheme
+import com.junjange.presentation.ui.home.HomeContract.*
 import com.junjange.presentation.util.showToast
 import kotlinx.coroutines.flow.collectLatest
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
@@ -38,11 +43,12 @@ fun HomeScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val refreshState = rememberPullToRefreshState()
 
     LaunchedEffect(viewModel.effect) {
         viewModel.effect.collectLatest { effect ->
             when (effect) {
-                is HomeContract.Effect.ShowMessage -> {
+                is Effect.ShowMessage -> {
                     val message =
                         when (effect.message) {
                             HomeMessage.LOTTO_NUMBER_NOT_FOUND -> R.string.lotto_number_not_found_message
@@ -68,16 +74,25 @@ fun HomeScreen(
             }
         },
     ) { paddingValues ->
-        if (state.isLoading) {
-            LoadingDialog(modifier = Modifier.fillMaxSize())
-            return@Scaffold
-        }
-
-        Box(
+        PullToRefreshBox(
+            isRefreshing = state.isLoading,
+            onRefresh = {
+                viewModel.event(Event.Refresh)
+            },
+            state = refreshState,
             modifier =
                 Modifier
                     .fillMaxSize()
                     .padding(paddingValues),
+            indicator = {
+                Indicator(
+                    modifier = Modifier.align(Alignment.TopCenter),
+                    isRefreshing = state.isLoading,
+                    containerColor = LottoTheme.colors.white,
+                    color = LottoTheme.colors.black,
+                    state = refreshState,
+                )
+            },
         ) {
             Column(
                 Modifier
@@ -91,10 +106,10 @@ fun HomeScreen(
                     lotteryNumbers = state.lotteryNumbers,
                     pensionLotteryHome = state.pensionLotteryHome,
                     changeLottery = { offset ->
-                        viewModel.event(HomeContract.Event.ChangeLottery(offset = offset))
+                        viewModel.event(Event.ChangeLottery(offset = offset))
                     },
                     changePensionLottery = { offset ->
-                        viewModel.event(HomeContract.Event.ChangePensionLottery(offset = offset))
+                        viewModel.event(Event.ChangePensionLottery(offset = offset))
                     },
                 )
                 Spacer(modifier = Modifier.height(50.dp))

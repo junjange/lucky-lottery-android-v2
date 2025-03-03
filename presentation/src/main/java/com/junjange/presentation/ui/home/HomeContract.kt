@@ -13,6 +13,8 @@ sealed interface HomeContract {
     )
 
     sealed interface Event {
+        data object Refresh : Event
+
         data class ChangeLottery(
             val offset: Int,
         ) : Event

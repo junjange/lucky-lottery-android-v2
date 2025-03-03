@@ -39,6 +39,10 @@ sealed interface MyNumberContract {
 
     sealed interface Effect {
         data object NavigateToGallery : Effect
+
+        data object LotteryRefresh : Effect
+
+        data object PensionLotteryRefresh : Effect
     }
 }
 

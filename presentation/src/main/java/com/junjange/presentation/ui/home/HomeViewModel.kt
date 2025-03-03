@@ -33,6 +33,18 @@ class HomeViewModel
         val effect get() = _effect.receiveAsFlow()
 
         init {
+            refreshLottery()
+        }
+
+        fun event(event: Event) {
+            when (event) {
+                is Event.Refresh -> refreshLottery()
+                is Event.ChangeLottery -> changeLottery(offset = event.offset)
+                is Event.ChangePensionLottery -> changePensionLottery(offset = event.offset)
+            }
+        }
+
+        private fun refreshLottery() {
             launch {
                 loading(true)
                 val lotteryDeferred = async { fetchLatestLotteryRound() }
@@ -40,13 +52,6 @@ class HomeViewModel
 
                 awaitAll(lotteryDeferred, pensionDeferred)
                 loading(false)
-            }
-        }
-
-        fun event(event: Event) {
-            when (event) {
-                is Event.ChangeLottery -> changeLottery(offset = event.offset)
-                is Event.ChangePensionLottery -> changePensionLottery(offset = event.offset)
             }
         }
 

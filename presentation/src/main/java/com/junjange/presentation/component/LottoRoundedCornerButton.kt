@@ -21,7 +21,7 @@ inline fun LottoRoundedCornerButton(
     Box(
         modifier =
             modifier
-                .background(if (isEnabled) backgroundColor else LottoTheme.colors.gray600)
+                .background(if (isEnabled) backgroundColor else LottoTheme.colors.gray400)
                 .clickable(enabled = isEnabled) {
                     onClick()
                 },

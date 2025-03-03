@@ -2,6 +2,7 @@ package com.junjange.presentation.util
 
 import android.os.SystemClock
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
@@ -14,8 +15,17 @@ fun Modifier.singleClick(onClick: () -> Unit): Modifier {
     return this.clickable {
         val currentTime = SystemClock.elapsedRealtime()
         if (currentTime - lastClickTime >= MIN_CLICK_INTERVAL) {
-            onClick() // 클릭 이벤트 실행
+            onClick()
             lastClickTime = currentTime
         }
     }
 }
+
+@Composable
+fun Modifier.clickableWithoutRipple(onClick: () -> Unit): Modifier =
+    this.clickable(
+        interactionSource = MutableInteractionSource(),
+        indication = null,
+    ) {
+        onClick()
+    }
