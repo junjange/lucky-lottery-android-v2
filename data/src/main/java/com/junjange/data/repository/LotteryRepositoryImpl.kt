@@ -107,7 +107,7 @@ internal class LotteryRepositoryImpl
                                         3 -> "FIFTH"
                                         2 -> "SIXTH"
                                         1 -> "SEVENTH"
-                                        0 -> "꽝"
+                                        0 -> "NONE"
                                         else -> "미발표"
                                     }
 
