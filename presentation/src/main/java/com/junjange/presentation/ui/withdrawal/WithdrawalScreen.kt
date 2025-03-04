@@ -24,10 +24,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.junjange.presentation.R
 import com.junjange.presentation.component.LottoButtonBar
 import com.junjange.presentation.component.LottoSimpleTopBar
+import com.junjange.presentation.theme.LottoTheme
 import com.junjange.presentation.ui.dialog.WithdrawalDialog
 import com.junjange.presentation.ui.login.GoogleSignInContract
 import com.junjange.presentation.ui.my.OauthProvider
-import com.junjange.presentation.ui.theme.LottoTheme
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable

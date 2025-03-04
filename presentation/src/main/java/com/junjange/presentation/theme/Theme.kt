@@ -1,4 +1,4 @@
-package com.junjange.presentation.ui.theme
+package com.junjange.presentation.theme
 
 import android.app.Activity
 import androidx.compose.material3.LocalContentColor
@@ -11,7 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.ViewCompat
-import com.junjange.presentation.ui.theme.LottoTheme.typography
+import com.junjange.presentation.theme.LottoTheme.typography
 
 @Composable
 fun LottoTheme(

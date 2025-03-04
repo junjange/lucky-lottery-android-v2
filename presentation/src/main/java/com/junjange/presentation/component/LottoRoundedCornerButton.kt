@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import com.junjange.presentation.ui.theme.LottoTheme
+import com.junjange.presentation.theme.LottoTheme
 
 @Composable
 inline fun LottoRoundedCornerButton(
@@ -21,18 +21,16 @@ inline fun LottoRoundedCornerButton(
     Box(
         modifier =
             modifier
-                .background(backgroundColor)
-                .clickable {
-                    if (isEnabled) {
-                        onClick()
-                    }
+                .background(if (isEnabled) backgroundColor else LottoTheme.colors.gray400)
+                .clickable(enabled = isEnabled) {
+                    onClick()
                 },
     ) {
         Text(
             modifier = Modifier.align(Alignment.Center),
             text = buttonText,
             style = LottoTheme.typography.body3,
-            color = if (isEnabled) LottoTheme.colors.white else LottoTheme.colors.gray200,
+            color = LottoTheme.colors.white,
         )
     }
 }

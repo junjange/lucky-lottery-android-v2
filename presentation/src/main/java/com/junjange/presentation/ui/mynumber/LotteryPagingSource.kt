@@ -5,9 +5,9 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.junjange.domain.model.LotteryGetContent
-import com.junjange.domain.usecase.GetLotteryGetUseCase
+import com.junjange.domain.usecase.LoadLotteryRoundsUseCase
 
-fun createLotteryPagingSource(getLotteryGetUseCase: GetLotteryGetUseCase): Pager<Int, LotteryGetContent> =
+fun createLotteryPagingSource(loadLotteryRoundsUseCase: LoadLotteryRoundsUseCase): Pager<Int, LotteryGetContent> =
     Pager(
         config =
             PagingConfig(
@@ -16,18 +16,20 @@ fun createLotteryPagingSource(getLotteryGetUseCase: GetLotteryGetUseCase): Pager
                 enablePlaceholders = true,
             ),
         initialKey = 0,
-        pagingSourceFactory = { LotteryPagingSource(getLotteryGetUseCase = getLotteryGetUseCase) },
+        pagingSourceFactory = { LotteryPagingSource(loadLotteryRoundsUseCase = loadLotteryRoundsUseCase) },
     )
 
-class LotteryPagingSource(private val getLotteryGetUseCase: GetLotteryGetUseCase) :
-    PagingSource<Int, LotteryGetContent>() {
-    override fun getRefreshKey(state: PagingState<Int, LotteryGetContent>): Int? = state.anchorPosition
+class LotteryPagingSource(
+    private val loadLotteryRoundsUseCase: LoadLotteryRoundsUseCase,
+) : PagingSource<Int, LotteryGetContent>() {
+    override fun getRefreshKey(state: PagingState<Int, LotteryGetContent>): Int? =
+        state.anchorPosition?.let { state.closestPageToPosition(it)?.prevKey?.plus(1) }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, LotteryGetContent> {
         val pageIndex = params.key ?: 0
 
         val result =
-            getLotteryGetUseCase(
+            loadLotteryRoundsUseCase(
                 page = pageIndex,
                 size = params.loadSize,
             )
@@ -35,9 +37,9 @@ class LotteryPagingSource(private val getLotteryGetUseCase: GetLotteryGetUseCase
         return result.fold(
             onSuccess = {
                 LoadResult.Page(
-                    data = it.content,
+                    data = it,
                     prevKey = null,
-                    nextKey = if (it.last) null else pageIndex + 1,
+                    nextKey = if (it.isEmpty()) null else pageIndex + 1,
                 )
             },
             onFailure = {

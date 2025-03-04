@@ -1,6 +1,7 @@
 package com.junjange.domain.model
 
 data class LotteryGetNumbers(
+    val id: Long,
     val firstNum: Int,
     val secondNum: Int,
     val thirdNum: Int,

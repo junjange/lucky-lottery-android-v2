@@ -2,6 +2,7 @@ package com.junjange.presentation.ui.register
 
 import android.graphics.Bitmap
 import androidx.lifecycle.SavedStateHandle
+import com.junjange.domain.model.JwtToken
 import com.junjange.domain.usecase.GetFCMTokenUseCase
 import com.junjange.domain.usecase.PostNotificationRegisterTokenUseCase
 import com.junjange.domain.usecase.PostRegisterUseCase
@@ -54,27 +55,38 @@ class RegisterViewModel
         fun onClickedRegister(deviceId: String) {
             launch {
                 if (_uiState.value.newNickname.isNotEmpty()) {
-                    postRegisterUseCase(
-                        idToken = idToken,
-                        provider = provider,
-                        nickName = _uiState.value.newNickname,
-                    ).onSuccess { jwtToken ->
-                        saveJwtTokenUseCase(jwtToken = jwtToken)
-                            .onSuccess {
-                                getFCMToken(deviceId = deviceId)
-                            }.onFailure {
-                                // TODO 예외 처리
-                            }
-                    }.onFailure {
-                        // TODO 예외 처리
-                    }
+                    postRegister(deviceId = deviceId)
                 }
             }
         }
 
-        private fun getFCMToken(deviceId: String) {
-            launch {
-                getFCMTokenUseCase().onSuccess { fcmToken ->
+        private suspend fun postRegister(deviceId: String) {
+            postRegisterUseCase(
+                idToken = idToken,
+                provider = provider,
+                nickName = _uiState.value.newNickname,
+            ).onSuccess { jwtToken ->
+                saveJwtToken(jwtToken = jwtToken, deviceId = deviceId)
+            }.onFailure {
+                // TODO 예외 처리
+            }
+        }
+
+        private suspend fun saveJwtToken(
+            jwtToken: JwtToken,
+            deviceId: String,
+        ) {
+            saveJwtTokenUseCase(jwtToken = jwtToken)
+                .onSuccess {
+                    getFCMToken(deviceId = deviceId)
+                }.onFailure {
+                    // TODO 예외 처리
+                }
+        }
+
+        private suspend fun getFCMToken(deviceId: String) {
+            getFCMTokenUseCase()
+                .onSuccess { fcmToken ->
                     postNotificationRegisterTokenUseCase(
                         deviceId = deviceId,
                         fcmToken = fcmToken,
@@ -86,7 +98,6 @@ class RegisterViewModel
                 }.onFailure {
                     // TODO 예외 처리
                 }
-            }
         }
 
         fun onPickImage(bitmap: Bitmap) {

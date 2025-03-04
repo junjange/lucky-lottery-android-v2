@@ -17,6 +17,24 @@ class Navigator(
             restoreState = true
         }
     }
+
+    fun navigateTo(
+        destination: Destination,
+        args: Map<String, Any>,
+    ) {
+        var routeWithArgs = destination.route
+        args.forEach { (key, value) ->
+            routeWithArgs = routeWithArgs.replace("{$key}", value.toString())
+        }
+
+        navController.navigate(routeWithArgs) {
+            popUpTo(navController.graph.findStartDestination().id) {
+                saveState = true
+            }
+            launchSingleTop = true
+            restoreState = true
+        }
+    }
 }
 
 @Composable

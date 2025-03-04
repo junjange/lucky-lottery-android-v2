@@ -25,4 +25,7 @@ internal fun LotteryNumbersResponse.toData(): LotteryNumbersEntity =
         fifthNum = fifthNum,
         sixthNum = sixthNum,
         bonusNum = bonusNum,
+        prizeAmount = 0L,
+        perPersonAmount = 0L,
+        winnerCount = 0,
     )

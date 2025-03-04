@@ -1,10 +1,10 @@
 package com.junjange.domain.model
 
 data class WinningPensionLotteryBonusNumbers(
-    val bonusFirstNum: Int,
-    val bonusSecondNum: Int,
-    val bonusThirdNum: Int,
-    val bonusFourthNum: Int,
-    val bonusFifthNum: Int,
-    val bonusSixthNum: Int,
+    val firstNum: Int,
+    val secondNum: Int,
+    val thirdNum: Int,
+    val fourthNum: Int,
+    val fifthNum: Int,
+    val sixthNum: Int,
 )

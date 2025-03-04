@@ -7,7 +7,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import com.junjange.presentation.base.BaseActivity
 import com.junjange.presentation.component.LottoType
-import com.junjange.presentation.ui.theme.LottoTheme
+import com.junjange.presentation.theme.LottoTheme
+import com.junjange.presentation.ui.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -18,7 +19,14 @@ class RandomNumberGenerationActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             LottoTheme {
-                RandomNumberGenerationScreen(viewModel = viewModel)
+                RandomNumberGenerationScreen(
+                    viewModel = viewModel,
+                    navigateToMain = { initialPage ->
+                        MainActivity.startActivity(context = this@RandomNumberGenerationActivity, initialPage = initialPage)
+                        finish()
+                    },
+                    onBack = ::finish,
+                )
             }
         }
     }

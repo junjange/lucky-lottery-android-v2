@@ -8,4 +8,4 @@ data class WinningLotteryNumbers(
     val fourthNum: Int,
     val fifthNum: Int,
     val sixthNum: Int,
-)
+) 

@@ -1,4 +1,5 @@
-import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+import java.io.FileInputStream
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
@@ -8,9 +9,14 @@ plugins {
     id("com.google.gms.google-services")
 }
 
-fun getApiKey(propertyKey: String): String {
-    return gradleLocalProperties(rootDir).getProperty(propertyKey)
-}
+val localPropertiesFile = rootProject.file("local.properties")
+val localProperties = Properties()
+localProperties.load(FileInputStream(localPropertiesFile))
+
+val baseUrl = localProperties.getProperty("BASE_URL") ?: ""
+val kakaoNativeAppKey = localProperties.getProperty("KAKAO_NATIVE_APP_KEY") ?: ""
+val kakaoOauthHost = localProperties.getProperty("KAKAO_OAUTH_HOST") ?: ""
+val adMobAppId = localProperties.getProperty("AD_MOB_APP_ID") ?: ""
 
 android {
     namespace = "com.junjange.lotto3"
@@ -23,9 +29,9 @@ android {
         versionCode = Versions.VERSION_CODE
         versionName = Versions.VERSION_NAME
 
-        buildConfigField("String", "BASE_URL", getApiKey("BASE_URL"))
-        buildConfigField("String", "KAKAO_NATIVE_APP_KEY", getApiKey("KAKAO_NATIVE_APP_KEY"))
-        resValue("string", "KAKAO_OAUTH_HOST", getApiKey("KAKAO_OAUTH_HOST"))
+        buildConfigField("String", "BASE_URL", baseUrl)
+        buildConfigField("String", "KAKAO_NATIVE_APP_KEY", kakaoNativeAppKey)
+        resValue("string", "KAKAO_OAUTH_HOST", kakaoOauthHost)
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -34,7 +40,11 @@ android {
     }
 
     buildTypes {
+        debug {
+            manifestPlaceholders["AD_MOB_APP_ID"] = "ca-app-pub-3940256099942544~3347511713"
+        }
         release {
+            manifestPlaceholders["AD_MOB_APP_ID"] = adMobAppId
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),

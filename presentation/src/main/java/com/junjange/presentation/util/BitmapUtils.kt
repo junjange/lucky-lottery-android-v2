@@ -1,4 +1,4 @@
-package com.junjange.presentation.utils
+package com.junjange.presentation.util
 
 import android.content.Context
 import android.graphics.Bitmap

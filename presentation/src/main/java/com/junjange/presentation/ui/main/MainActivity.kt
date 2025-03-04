@@ -15,14 +15,15 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.zxing.integration.android.IntentIntegrator
+import com.junjange.presentation.BuildConfig
 import com.junjange.presentation.R
 import com.junjange.presentation.base.BaseActivity
+import com.junjange.presentation.theme.LottoTheme
 import com.junjange.presentation.ui.editprofile.EditProfileActivity
 import com.junjange.presentation.ui.login.LoginActivity
 import com.junjange.presentation.ui.my.OauthProvider
 import com.junjange.presentation.ui.notification.NotificationActivity
 import com.junjange.presentation.ui.randomnumber.RandomNumberActivity
-import com.junjange.presentation.ui.theme.LottoTheme
 import com.junjange.presentation.ui.withdrawal.WithdrawalActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -99,9 +100,16 @@ class MainActivity : BaseActivity() {
     private fun setupInterstitialAd() {
         val adRequest = AdRequest.Builder().build()
 
+        val adUnitId =
+            if (BuildConfig.DEBUG) {
+                "ca-app-pub-3940256099942544/1033173712"
+            } else {
+                BuildConfig.FULL_SCREEN_AD_UNIT_ID
+            }
+
         InterstitialAd.load(
             this,
-            "ca-app-pub-3940256099942544/1033173712",
+            adUnitId,
             adRequest,
             object : InterstitialAdLoadCallback() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
@@ -146,9 +154,22 @@ class MainActivity : BaseActivity() {
     }
 
     companion object {
+        const val PUT_EXTRA_INITIAL_PAGE = "PUT_EXTRA_INITIAL_PAGE"
+        const val INITIAL_PAGE = "initialPage"
+
         fun startActivity(context: Context) {
             val intent = Intent(context, MainActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+            context.startActivity(intent)
+        }
+
+        fun startActivity(
+            context: Context,
+            initialPage: String,
+        ) {
+            val intent = Intent(context, MainActivity::class.java)
+            intent.putExtra(PUT_EXTRA_INITIAL_PAGE, initialPage)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             context.startActivity(intent)
         }
     }

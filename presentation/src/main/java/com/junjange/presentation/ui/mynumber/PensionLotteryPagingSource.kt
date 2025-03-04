@@ -5,9 +5,11 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.junjange.domain.model.PensionLotteryGetContent
-import com.junjange.domain.usecase.GetPensionLotteryGetUseCase
+import com.junjange.domain.usecase.LoadPensionLotteryRoundsUseCase
 
-fun createPensionLotteryPagingSource(getPensionLotteryGetUseCase: GetPensionLotteryGetUseCase): Pager<Int, PensionLotteryGetContent> =
+fun createPensionLotteryPagingSource(
+    loadPensionLotteryRoundsUseCase: LoadPensionLotteryRoundsUseCase,
+): Pager<Int, PensionLotteryGetContent> =
     Pager(
         config =
             PagingConfig(
@@ -16,18 +18,20 @@ fun createPensionLotteryPagingSource(getPensionLotteryGetUseCase: GetPensionLott
                 enablePlaceholders = true,
             ),
         initialKey = 0,
-        pagingSourceFactory = { PensionLotteryPagingSource(getPensionLotteryGetUseCase = getPensionLotteryGetUseCase) },
+        pagingSourceFactory = { PensionLotteryPagingSource(loadPensionLotteryRoundsUseCase = loadPensionLotteryRoundsUseCase) },
     )
 
-class PensionLotteryPagingSource(private val getPensionLotteryGetUseCase: GetPensionLotteryGetUseCase) :
-    PagingSource<Int, PensionLotteryGetContent>() {
-    override fun getRefreshKey(state: PagingState<Int, PensionLotteryGetContent>): Int? = state.anchorPosition
+class PensionLotteryPagingSource(
+    private val loadPensionLotteryRoundsUseCase: LoadPensionLotteryRoundsUseCase,
+) : PagingSource<Int, PensionLotteryGetContent>() {
+    override fun getRefreshKey(state: PagingState<Int, PensionLotteryGetContent>): Int? =
+        state.anchorPosition?.let { state.closestPageToPosition(it)?.prevKey?.plus(1) }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PensionLotteryGetContent> {
         val pageIndex = params.key ?: 0
 
         val result =
-            getPensionLotteryGetUseCase(
+            loadPensionLotteryRoundsUseCase(
                 page = pageIndex,
                 size = params.loadSize,
             )
@@ -35,9 +39,9 @@ class PensionLotteryPagingSource(private val getPensionLotteryGetUseCase: GetPen
         return result.fold(
             onSuccess = {
                 LoadResult.Page(
-                    data = it.content,
+                    data = it,
                     prevKey = null,
-                    nextKey = if (it.last) null else pageIndex + 1,
+                    nextKey = if (it.isEmpty()) null else pageIndex + 1,
                 )
             },
             onFailure = {

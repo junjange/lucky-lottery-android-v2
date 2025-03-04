@@ -3,14 +3,20 @@ package com.junjange.presentation.ui.randomnumbergeneration
 import androidx.lifecycle.SavedStateHandle
 import com.junjange.domain.usecase.GetLotteryRandomUseCase
 import com.junjange.domain.usecase.GetPensionLotteryRandomUseCase
-import com.junjange.domain.usecase.PostLotterySaveUseCase
-import com.junjange.domain.usecase.PostPensionLotterySaveUseCase
+import com.junjange.domain.usecase.InsertLotteryUseCase
+import com.junjange.domain.usecase.InsertPensionLotteryUseCase
 import com.junjange.presentation.base.BaseViewModel
 import com.junjange.presentation.component.LottoType
+import com.junjange.presentation.ui.randomnumber.RandomNumberMessage.LOTTERY_NUMBER_SAVED
+import com.junjange.presentation.ui.randomnumber.RandomNumberMessage.PENSION_LOTTERY_SAVED
+import com.junjange.presentation.ui.randomnumbergeneration.RandomNumberGenerationContract.*
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
@@ -20,83 +26,113 @@ class RandomNumberGenerationViewModel
     constructor(
         savedStateHandle: SavedStateHandle,
         private val getLotteryRandomUseCase: GetLotteryRandomUseCase,
-        private val postLotterySaveUseCase: PostLotterySaveUseCase,
+        private val insertLotteryUseCase: InsertLotteryUseCase,
         private val getPensionLotteryRandomUseCase: GetPensionLotteryRandomUseCase,
-        private val postPensionLotterySaveUseCase: PostPensionLotterySaveUseCase,
+        private val insertPensionLotteryUseCase: InsertPensionLotteryUseCase,
     ) : BaseViewModel() {
-        private val _uiState = MutableStateFlow(RandomNumberGenerationState())
-        val uiState: StateFlow<RandomNumberGenerationState> = _uiState.asStateFlow()
+        private val _state = MutableStateFlow(State())
+        val state: StateFlow<State> = _state.asStateFlow()
+
+        private val _effect = Channel<Effect>(Channel.BUFFERED)
+        val effect get() = _effect.receiveAsFlow()
 
         init {
-            savedStateHandle.get<String>(RandomNumberGenerationActivity.LOTTO_TYPE)?.let { lottoType ->
-                _uiState.update { state ->
-                    state.copy(isLotto645 = lottoType == LottoType.LOTTO645.name)
-                }
-            } ?: run {
-                // TODO : 예외 처리
+            val lottoType =
+                savedStateHandle.get<String>(RandomNumberGenerationActivity.LOTTO_TYPE) ?: finish()
+
+            _state.update { state ->
+                state.copy(isLotto645 = lottoType == LottoType.LOTTO645.name)
             }
         }
 
-        fun generate645RandomNumbers() {
+        fun event(event: Event) {
+            when (event) {
+                is Event.Back -> finish()
+                is Event.GenerateRandomLottery -> generateRandomLottery()
+                is Event.GenerateRandomPensionLottery -> generateRandomPensionLottery()
+                is Event.SaveLottery -> postLotterySave()
+                is Event.SavePensionLottery -> postPensionLotterySave()
+            }
+        }
+
+        private fun finish() {
             launch {
-                getLotteryRandomUseCase().onSuccess {
-                    _uiState.update { state ->
-                        state.copy(lotteryRandomNumbers = it)
-                    }
+                _effect.send(Effect.Finish)
+            }
+        }
+
+        private fun generateRandomLottery() {
+            launch {
+                repeat(6) {
+                    getLotteryRandomUseCase()
+                        .onSuccess {
+                            _state.update { state ->
+                                state.copy(saveIsEnabled = false, lotteryRandomNumbers = it)
+                            }
+                        }.onFailure {
+                            // TODO 예외 처리
+                        }
+
+                    delay(500)
+                }
+                _state.update { state ->
+                    state.copy(saveIsEnabled = true)
+                }
+            }
+        }
+
+        private fun generateRandomPensionLottery() {
+            launch {
+                repeat(6) {
+                    getPensionLotteryRandomUseCase()
+                        .onSuccess {
+                            _state.update { state ->
+                                state.copy(saveIsEnabled = false, pensionLotteryRandom = it)
+                            }
+                        }.onFailure {
+                            // TODO 예외 처리
+                        }
+
+                    delay(500)
+                }
+                _state.update { state ->
+                    state.copy(saveIsEnabled = true)
+                }
+            }
+        }
+
+        private fun postLotterySave() {
+            launch {
+                val lotteryNumbers = _state.value.lotteryRandomNumbers ?: return@launch
+                insertLotteryUseCase(
+                    firstNum = lotteryNumbers.firstNum,
+                    secondNum = lotteryNumbers.secondNum,
+                    thirdNum = lotteryNumbers.thirdNum,
+                    fourthNum = lotteryNumbers.fourthNum,
+                    fifthNum = lotteryNumbers.fifthNum,
+                    sixthNum = lotteryNumbers.sixthNum,
+                ).onSuccess {
+                    _effect.send(Effect.ShowMessage(LOTTERY_NUMBER_SAVED))
                 }.onFailure {
                     // TODO 예외 처리
                 }
             }
         }
 
-        fun generate720RandomNumbers() {
+        private fun postPensionLotterySave() {
             launch {
-                getPensionLotteryRandomUseCase().onSuccess {
-                    _uiState.update { state ->
-                        state.copy(pensionLotteryRandom = it)
-                    }
+                val lotteryNumbers = _state.value.pensionLotteryRandom ?: return@launch
+                insertPensionLotteryUseCase(
+                    group = lotteryNumbers.pensionGroup,
+                    firstNum = lotteryNumbers.pensionFirstNum,
+                    secondNum = lotteryNumbers.pensionSecondNum,
+                    thirdNum = lotteryNumbers.pensionThirdNum,
+                    fourthNum = lotteryNumbers.pensionFourthNum,
+                    fifthNum = lotteryNumbers.pensionFifthNum,
+                    sixthNum = lotteryNumbers.pensionSixthNum,
+                ).onSuccess {
+                    _effect.send(Effect.ShowMessage(PENSION_LOTTERY_SAVED))
                 }.onFailure {
-                    // TODO 예외 처리
-                }
-            }
-        }
-
-        fun postLotterySave() {
-            launch {
-                val lotteryNumbers = _uiState.value.lotteryRandomNumbers
-                lotteryNumbers?.let {
-                    postLotterySaveUseCase(
-                        firstNum = it.firstNum,
-                        secondNum = it.secondNum,
-                        thirdNum = it.thirdNum,
-                        fourthNum = it.fourthNum,
-                        fifthNum = it.fifthNum,
-                        sixthNum = it.sixthNum,
-                    ).onSuccess { }.onFailure {
-                        // TODO 예외 처리
-                    }
-                } ?: run {
-                    // TODO 예외 처리
-                }
-            }
-        }
-
-        fun postPensionLotterySave() {
-            launch {
-                val lotteryNumbers = _uiState.value.pensionLotteryRandom
-                lotteryNumbers?.let {
-                    postPensionLotterySaveUseCase(
-                        pensionGroup = it.pensionGroup,
-                        pensionFirstNum = it.pensionFirstNum,
-                        pensionSecondNum = it.pensionSecondNum,
-                        pensionThirdNum = it.pensionThirdNum,
-                        pensionFourthNum = it.pensionFourthNum,
-                        pensionFifthNum = it.pensionFifthNum,
-                        pensionSixthNum = it.pensionSixthNum,
-                    ).onSuccess { }.onFailure {
-                        // TODO 예외 처리
-                    }
-                } ?: run {
                     // TODO 예외 처리
                 }
             }

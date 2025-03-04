@@ -1,13 +1,14 @@
 package com.junjange.domain.model
 
 data class PensionLotteryNumbers(
-    val pensionGroup: Int,
-    val pensionFirstNum: Int,
-    val pensionSecondNum: Int,
-    val pensionThirdNum: Int,
-    val pensionFourthNum: Int,
-    val pensionFifthNum: Int,
-    val pensionSixthNum: Int,
+    val id: Long,
+    val group: Int,
+    val firstNum: Int,
+    val secondNum: Int,
+    val thirdNum: Int,
+    val fourthNum: Int,
+    val fifthNum: Int,
+    val sixthNum: Int,
     val rank: String?,
     val checkWinningBonus: Boolean,
     val correctNumbers: List<Boolean>?,

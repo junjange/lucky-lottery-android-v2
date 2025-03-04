@@ -6,6 +6,7 @@ import com.junjange.remote.api.ApiService
 import com.junjange.remote.api.AuthenticationListener
 import com.junjange.remote.api.Authenticator
 import com.junjange.remote.api.BaseUrl
+import com.junjange.remote.api.LotteryService
 import com.junjange.remote.api.baseUrl
 import com.junjange.remote.interceptor.AccessTokenInterceptor
 import com.junjange.remote.interceptor.ErrorResponseInterceptor
@@ -39,7 +40,8 @@ internal object RemoteModule {
                 authenticationListener = authenticationListener,
             )
 
-        return Retrofit.Builder()
+        return Retrofit
+            .Builder()
             .baseUrl(baseUrl)
             .client(
                 createOkHttpClient(interceptors) {
@@ -47,8 +49,7 @@ internal object RemoteModule {
                     authenticator(authenticator)
                     addInterceptor(ErrorResponseInterceptor())
                 },
-            )
-            .addConverterFactory(GsonConverterFactory.create())
+            ).addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(ApiService::class.java)
     }
@@ -57,20 +58,35 @@ internal object RemoteModule {
         baseUrl: BaseUrl,
         interceptors: Interceptors,
     ): ApiService =
-        Retrofit.Builder()
+        Retrofit
+            .Builder()
             .baseUrl(baseUrl)
             .client(createOkHttpClient(interceptors))
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(ApiService::class.java)
 
+    @Provides
+    @Singleton
+    fun provideLotteryService(interceptors: Interceptors): LotteryService =
+        Retrofit
+            .Builder()
+            .baseUrl(BaseUrl("https://dhlottery.co.kr"))
+            .client(
+                createOkHttpClient(interceptors) {
+                    addInterceptor(ErrorResponseInterceptor())
+                },
+            ).addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(LotteryService::class.java)
+
     private fun createOkHttpClient(
         interceptors: Interceptors,
         apply: OkHttpClient.Builder.() -> Unit = { },
-    ) = OkHttpClient.Builder()
+    ) = OkHttpClient
+        .Builder()
         .apply {
             interceptors.interceptors.forEach(::addInterceptor)
-        }
-        .apply(apply)
+        }.apply(apply)
         .build()
 }

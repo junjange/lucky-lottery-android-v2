@@ -2,84 +2,172 @@ package com.junjange.presentation.ui.randomnumbergeneration
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.junjange.presentation.R
+import com.junjange.presentation.component.AdmobBanner
 import com.junjange.presentation.component.LottoBall
 import com.junjange.presentation.component.LottoRoundedCornerButton
 import com.junjange.presentation.component.LottoType
-import com.junjange.presentation.ui.theme.LottoTheme
+import com.junjange.presentation.theme.LottoTheme
+import com.junjange.presentation.theme.lotteryColors
+import com.junjange.presentation.theme.toLotteryColor
+import com.junjange.presentation.ui.randomnumber.RandomNumberMessage
+import com.junjange.presentation.ui.randomnumbergeneration.RandomNumberGenerationContract.*
+import kotlinx.coroutines.flow.collectLatest
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RandomNumberGenerationScreen(viewModel: RandomNumberGenerationViewModel) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+fun RandomNumberGenerationScreen(
+    viewModel: RandomNumberGenerationViewModel,
+    navigateToMain: (initialPage: String) -> Unit,
+    onBack: () -> Unit,
+) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    val snackbarHostState = remember { SnackbarHostState() }
 
-    Scaffold { innerPadding ->
-        Column(
+    LaunchedEffect(viewModel.effect) {
+        viewModel.effect.collectLatest { effect ->
+            when (effect) {
+                is Effect.Finish -> onBack()
+                is Effect.ShowMessage -> {
+                    val (message, initialPage) =
+                        when (effect.message) {
+                            RandomNumberMessage.LOTTERY_NUMBER_SAVED ->
+                                Pair(R.string.lotto_number_submitted, "0")
+
+                            RandomNumberMessage.PENSION_LOTTERY_SAVED ->
+                                Pair(R.string.pension_lottery_number_submitted, "1")
+                        }
+                    val result =
+                        snackbarHostState.showSnackbar(
+                            message = context.getString(message),
+                            actionLabel = context.getString(R.string.action_check_number),
+                            duration = SnackbarDuration.Short,
+                        )
+
+                    when (result) {
+                        SnackbarResult.Dismissed -> {}
+                        SnackbarResult.ActionPerformed -> {
+                            navigateToMain(initialPage)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    val title =
+        if (state.isLotto645) {
+            stringResource(R.string.lotto_645_random_title)
+        } else {
+            stringResource(
+                R.string.lotto_720_title,
+            )
+        }
+    Scaffold(
+        topBar = {
+            TopAppBar(title = {
+                Text(
+                    text = title,
+                    style = LottoTheme.typography.headline3,
+                )
+            }, navigationIcon = {
+                IconButton(
+                    onClick = {
+                        viewModel.event(Event.Back)
+                    },
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_chevron_left),
+                        contentDescription = null,
+                    )
+                }
+            })
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState) { data ->
+                Snackbar(
+                    snackbarData = data,
+                    actionColor = LottoTheme.colors.green,
+                )
+            }
+        },
+    ) { innerPadding ->
+        Box(
             modifier =
                 Modifier
                     .fillMaxSize()
                     .padding(innerPadding),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            RandomNumberGenerationContent(
-                uiState = uiState,
-                onCreateClicked = {
-                    if (uiState.isLotto645) {
-                        viewModel.generate645RandomNumbers()
-                    } else {
-                        viewModel.generate720RandomNumbers()
-                    }
-                },
-                onSaveClicked = {
-                    if (uiState.isLotto645) {
-                        viewModel.postLotterySave()
-                    } else {
-                        viewModel.postPensionLotterySave()
-                    }
-                },
-            )
+            AdmobBanner(modifier = Modifier.fillMaxWidth())
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                RandomNumberGenerationContent(
+                    state = state,
+                    onCreateClicked = {
+                        if (state.isLotto645) {
+                            viewModel.event(Event.GenerateRandomLottery)
+                        } else {
+                            viewModel.event(Event.GenerateRandomPensionLottery)
+                        }
+                    },
+                    onSaveClicked = {
+                        if (state.isLotto645) {
+                            viewModel.event(Event.SaveLottery)
+                        } else {
+                            viewModel.event(Event.SavePensionLottery)
+                        }
+                    },
+                )
+            }
         }
     }
 }
 
 @Composable
 fun RandomNumberGenerationContent(
-    uiState: RandomNumberGenerationState,
+    state: State,
     onCreateClicked: () -> Unit,
     onSaveClicked: () -> Unit,
 ) {
-    val pensionLotteryColors =
-        listOf(
-            LottoTheme.colors.gray600,
-            LottoTheme.colors.lottoError,
-            LottoTheme.colors.lottoOrange,
-            LottoTheme.colors.lottoYellow,
-            LottoTheme.colors.lottoBlue,
-            LottoTheme.colors.lottoPurple,
-            LottoTheme.colors.lottoBlack,
-        )
-
     Image(
         modifier = Modifier.size(140.dp),
         painter = painterResource(id = R.drawable.ic_random_poster),
@@ -89,7 +177,7 @@ fun RandomNumberGenerationContent(
     Spacer(modifier = Modifier.height(10.dp))
 
     Text(
-        text = stringResource(id = if (uiState.isLotto645) R.string.lotto_645_title else R.string.lotto_720_title),
+        text = stringResource(id = if (state.isLotto645) R.string.lotto_645_title else R.string.lotto_720_title),
         style = LottoTheme.typography.body1.copy(fontWeight = FontWeight.Bold),
     )
 
@@ -99,8 +187,8 @@ fun RandomNumberGenerationContent(
         modifier = Modifier.padding(horizontal = 4.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        if (uiState.isLotto645) {
-            uiState.lotteryRandomNumbers?.let {
+        if (state.isLotto645) {
+            state.lotteryRandomNumbers?.let {
                 listOf(
                     it.firstNum,
                     it.secondNum,
@@ -109,15 +197,7 @@ fun RandomNumberGenerationContent(
                     it.fifthNum,
                     it.sixthNum,
                 ).forEach { number ->
-                    val color =
-                        when (number) {
-                            in 1..10 -> LottoTheme.colors.lottoYellow
-                            in 11..20 -> LottoTheme.colors.lottoBlue
-                            in 21..30 -> LottoTheme.colors.lottoError
-                            in 31..40 -> LottoTheme.colors.gray400
-                            in 41..45 -> LottoTheme.colors.lottoGreen
-                            else -> LottoTheme.colors.lottoPurple
-                        }
+                    val color = number.toLotteryColor()
 
                     LottoBall(
                         lottoType = LottoType.LOTTO645,
@@ -137,7 +217,7 @@ fun RandomNumberGenerationContent(
                 }
             }
         } else {
-            uiState.pensionLotteryRandom?.let {
+            state.pensionLotteryRandom?.let {
                 listOf(
                     it.pensionGroup,
                     it.pensionFirstNum,
@@ -157,7 +237,7 @@ fun RandomNumberGenerationContent(
                     }
                     LottoBall(
                         lottoType = LottoType.LOTTO720,
-                        lottoColor = pensionLotteryColors[index],
+                        lottoColor = lotteryColors[index],
                         lottoTitle = s.toString(),
                     )
                     Spacer(modifier = Modifier.width(4.dp))
@@ -174,7 +254,7 @@ fun RandomNumberGenerationContent(
                     }
                     LottoBall(
                         lottoType = LottoType.LOTTO720,
-                        lottoColor = pensionLotteryColors[index],
+                        lottoColor = lotteryColors[index],
                         lottoTitle = s.toString(),
                     )
                     Spacer(modifier = Modifier.width(4.dp))
@@ -194,9 +274,9 @@ fun RandomNumberGenerationContent(
                 Modifier
                     .clip(shape = RoundedCornerShape(8.dp))
                     .height(40.dp)
-                    .width(160.dp),
+                    .width(140.dp),
             buttonText = stringResource(R.string.create_title),
-            backgroundColor = LottoTheme.colors.lottoGreen,
+            backgroundColor = LottoTheme.colors.green,
             isEnabled = true,
             onClick = { onCreateClicked() },
         )
@@ -206,11 +286,13 @@ fun RandomNumberGenerationContent(
                 Modifier
                     .clip(shape = RoundedCornerShape(8.dp))
                     .height(40.dp)
-                    .width(160.dp),
+                    .width(140.dp),
             buttonText = stringResource(R.string.save_title),
-            backgroundColor = LottoTheme.colors.lottoGreen,
-            isEnabled = true,
-            onClick = { onSaveClicked() },
+            backgroundColor = LottoTheme.colors.green,
+            isEnabled = state.saveIsEnabled,
+            onClick = {
+                onSaveClicked()
+            },
         )
     }
 }

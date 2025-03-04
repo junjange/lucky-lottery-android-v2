@@ -37,9 +37,12 @@ android {
 dependencies {
     implementation(project(Modules.DATA))
 
+    implementation(libs.bundles.kotlin)
     implementation(libs.bundles.common)
+    implementation(libs.bundles.room)
     implementation(libs.junit.ktx)
 
-    // ksp
     ksp(libs.ksp.hilt)
+    ksp(libs.room.compiler)
+    annotationProcessor(libs.room.compiler)
 }

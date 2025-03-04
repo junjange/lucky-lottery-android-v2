@@ -1,15 +1,23 @@
-import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+import java.io.FileInputStream
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.lang)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.parcelize)
 }
 
-fun getApiKey(propertyKey: String): String {
-    return gradleLocalProperties(rootDir).getProperty(propertyKey)
-}
+val localPropertiesFile = rootProject.file("local.properties")
+val localProperties = Properties()
+localProperties.load(FileInputStream(localPropertiesFile))
+
+val googleClientId = localProperties.getProperty("GOOGLE_CLIENT_ID") ?: ""
+val googleClientSecret = localProperties.getProperty("GOOGLE_CLIENT_SECRET") ?: ""
+val fullScreenAdUnitId = localProperties.getProperty("FULL_SCREEN_AD_UNIT_ID") ?: ""
+val bannerAdUnitId = localProperties.getProperty("BANNER_AD_UNIT_ID") ?: ""
 
 android {
     namespace = "com.junjange.presentation"
@@ -18,8 +26,10 @@ android {
     defaultConfig {
         minSdk = Versions.MIN_SDK
 
-        buildConfigField("String", "GOOGLE_CLIENT_ID", getApiKey("GOOGLE_CLIENT_ID"))
-        buildConfigField("String", "GOOGLE_CLIENT_SECRET", getApiKey("GOOGLE_CLIENT_SECRET"))
+        buildConfigField("String", "GOOGLE_CLIENT_ID", googleClientId)
+        buildConfigField("String", "GOOGLE_CLIENT_SECRET", googleClientSecret)
+        buildConfigField("String", "FULL_SCREEN_AD_UNIT_ID", fullScreenAdUnitId)
+        buildConfigField("String", "BANNER_AD_UNIT_ID", bannerAdUnitId)
     }
 
     buildTypes {
@@ -43,7 +53,9 @@ android {
         buildConfig = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
+        kotlinCompilerExtensionVersion =
+            libs.versions.compose.compiler
+                .get()
     }
 }
 
