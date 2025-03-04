@@ -39,4 +39,9 @@ interface LotteryRepository {
         fifthNum: Int,
         sixthNum: Int,
     ): Result<Unit>
+
+    suspend fun deleteLotteryByRoundAndId(
+        round: Int,
+        id: Long,
+    ): Result<Unit>
 }

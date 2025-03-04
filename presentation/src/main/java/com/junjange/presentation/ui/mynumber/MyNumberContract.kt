@@ -1,17 +1,26 @@
 package com.junjange.presentation.ui.mynumber
 
+import android.os.Parcelable
 import androidx.paging.PagingData
 import com.junjange.domain.model.LotteryGetContent
 import com.junjange.domain.model.PensionLotteryGetContent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.parcelize.Parcelize
 
 sealed interface MyNumberContract {
     data class State(
         val isLoading: Boolean = false,
+        val isDeleteLotteryDialogShowing: Boolean = false,
         val lotteryFlow: Flow<PagingData<LotteryGetContent>> = emptyFlow(),
         val pensionLotteryFlow: Flow<PagingData<PensionLotteryGetContent>> = emptyFlow(),
     )
+
+    @Parcelize
+    data class UserRoundId(
+        val round: Int,
+        val id: Long,
+    ) : Parcelable
 
     sealed interface Event {
         data object PickedImage : Event
@@ -34,6 +43,18 @@ sealed interface MyNumberContract {
 
         data class PensionLottoTextOfImage(
             val imagePath: String,
+        ) : Event
+
+        data class ShowDialog(
+            val isDialogShowing: Boolean,
+        ) : Event
+
+        data class DeleteLottery(
+            val userRoundIds: List<UserRoundId>,
+        ) : Event
+
+        data class DeletePensionLottery(
+            val userRoundIds: List<UserRoundId>,
         ) : Event
     }
 

@@ -1,6 +1,7 @@
 package com.junjange.data.model.local
 
 data class PensionLotteryNumberDto(
+    val id: Long = 0L,
     val round: Int,
     val group: Int,
     val firstNum: Int,

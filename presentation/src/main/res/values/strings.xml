@@ -23,7 +23,7 @@
     <string name="create_title">생성</string>
     <string name="save_title">저장</string>
     <string name="group_title">조</string>
-    <string name="addition">추가하기</string>
+    <string name="addition">번호 관리</string>
     <string name="write_directly">직접 작성하기</string>
     <string name="load_photo">사진 불러오기</string>
     <string name="action_check_number">번호 확인</string>
@@ -81,6 +81,10 @@
     <string name="dialog_title">정말 행운복권을 탈퇴할까요?</string>
     <string name="dialog_description">짧은 기간 내 탈퇴와 재가입이 반복되면\n서비스 이용이 어려울 수 있어요.</string>
     <string name="qr_scanner_hint">QR 코드를 스캔하여 주세요:)</string>
+    <string name="dialog_delete_title">정말 번호를 삭제할까요?</string>
+    <string name="dialog_delete_message">한 번 삭제한 번호는 복구할 수 없으니,\n삭제 전 다시 한 번 확인해 주세요."</string>
+    <string name="delete_close">취소</string>
+    <string name="delete">삭제</string>
 
     <!--    message-->
     <string name="lotto_number_not_found_message">해당 회차의 로또 당첨 번호를 찾을 수 없어요.</string>
@@ -91,4 +95,5 @@
     <string name="enter_lotto_numbers">로또 번호를 직접 입력해봐요</string>
     <string name="lotto_number_submitted">로또 번호가 추가되었습니다.</string>
     <string name="lotto_duplicate_error">로또 번호가 중복되었습니다!</string>
+    <string name="empty_delete_list">삭제할 번호가 없어요</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.junjange.domain.model
 
 data class PensionLotteryNumbers(
+    val id: Long,
     val group: Int,
     val firstNum: Int,
     val secondNum: Int,

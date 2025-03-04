@@ -43,6 +43,7 @@ fun List<LotteryEntity>.toData() = map { it.toData() }
 fun LotteryEntity.toData() =
     LotteryNumberDto(
         round = round,
+        id = id,
         firstNum = firstNum,
         secondNum = secondNum,
         thirdNum = thirdNum,

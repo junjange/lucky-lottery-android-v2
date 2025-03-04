@@ -6,6 +6,7 @@ import com.junjange.domain.model.PensionLotteryNumbers
 internal fun List<PensionLotteryNumbersEntity>.toDomain() =
     map {
         PensionLotteryNumbers(
+            id = it.id,
             group = it.pensionGroup,
             firstNum = it.pensionFirstNum,
             secondNum = it.pensionSecondNum,

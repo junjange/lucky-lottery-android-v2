@@ -2,6 +2,7 @@ package com.junjange.data.model.local
 
 data class LotteryNumberDto(
     val round: Int,
+    val id: Long = 0L,
     val firstNum: Int,
     val secondNum: Int,
     val thirdNum: Int,

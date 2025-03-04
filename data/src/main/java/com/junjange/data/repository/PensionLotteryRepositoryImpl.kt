@@ -109,7 +109,9 @@ internal class PensionLotteryRepositoryImpl
             size: Int,
         ): Result<List<PensionLotteryGetContent>> {
             val pagedRounds =
-                pensionLotteryRoomDataSource.getPagedRounds(limit = size, offset = page * size).getOrDefault(emptyList())
+                pensionLotteryRoomDataSource
+                    .getPagedRounds(limit = size, offset = page * size)
+                    .getOrDefault(emptyList())
 
             if (pagedRounds.isEmpty()) return Result.failure(Exception("No rounds available"))
 
@@ -143,6 +145,17 @@ internal class PensionLotteryRepositoryImpl
                 )
             return pensionLotteryRoomDataSource.insertPensionLottery(pensionLotteryNumberDto = pensionLotteryNumberDto)
         }
+
+        override suspend fun deletePensionLotteryByRoundAndId(
+            round: Int,
+            id: Long,
+        ): Result<Unit> =
+            runCatching {
+                pensionLotteryRoomDataSource.deletePensionLotteryByRoundAndId(
+                    round = round,
+                    id = id,
+                )
+            }
 
         private suspend fun getWinningPensionLotteries(
             pagedRounds: List<Int>,
@@ -193,6 +206,7 @@ internal class PensionLotteryRepositoryImpl
                                     }
 
                                 PensionLotteryNumbers(
+                                    id = pensionLottery.id,
                                     group = pensionLottery.group,
                                     firstNum = pensionLottery.firstNum,
                                     secondNum = pensionLottery.secondNum,

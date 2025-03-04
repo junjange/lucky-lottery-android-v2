@@ -6,6 +6,7 @@ import com.junjange.domain.model.LotteryGetNumbers
 internal fun List<LotteryGetNumbersEntity>.toDomain() =
     map {
         LotteryGetNumbers(
+            id = it.id,
             firstNum = it.firstNum,
             secondNum = it.secondNum,
             thirdNum = it.thirdNum,

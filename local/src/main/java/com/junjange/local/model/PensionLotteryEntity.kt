@@ -45,6 +45,7 @@ fun List<PensionLotteryEntity>.toData() = map { it.toData() }
 
 fun PensionLotteryEntity.toData() =
     PensionLotteryNumberDto(
+        id = id,
         round = round,
         group = group,
         firstNum = firstNum,

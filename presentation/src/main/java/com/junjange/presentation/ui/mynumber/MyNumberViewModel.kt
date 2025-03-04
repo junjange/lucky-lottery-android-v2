@@ -1,7 +1,10 @@
 package com.junjange.presentation.ui.mynumber
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
+import com.junjange.domain.usecase.DeleteLotteryByRoundAndIdUseCase
+import com.junjange.domain.usecase.DeletePensionLotteryByRoundAndIdUseCase
 import com.junjange.domain.usecase.InsertLotteryUseCase
 import com.junjange.domain.usecase.InsertPensionLotteryUseCase
 import com.junjange.domain.usecase.LoadLotteryRoundsUseCase
@@ -29,6 +32,8 @@ class MyNumberViewModel
         private val loadLotteryRoundsUseCase: LoadLotteryRoundsUseCase,
         private val insertPensionLotteryUseCase: InsertPensionLotteryUseCase,
         private val loadPensionLotteryRoundsUseCase: LoadPensionLotteryRoundsUseCase,
+        private val deleteLotteryByRoundAndIdUseCase: DeleteLotteryByRoundAndIdUseCase,
+        private val deletePensionLotteryByRoundAndIdUseCase: DeletePensionLotteryByRoundAndIdUseCase,
     ) : BaseViewModel() {
         private val _state = MutableStateFlow(State())
         val state: StateFlow<State> = _state.asStateFlow()
@@ -50,6 +55,19 @@ class MyNumberViewModel
                 is Event.InsertPensionLottery -> insertPensionLottery(pensionLottery = event.pensionLottery)
                 is Event.LottoTextOfImage -> getLottoTextOfImage(imagePath = event.imagePath)
                 is Event.PensionLottoTextOfImage -> getPensionLottoTextOfImage(imagePath = event.imagePath)
+                is Event.DeleteLottery -> deleteLottery(userRoundIds = event.userRoundIds)
+                is Event.DeletePensionLottery -> deletePensionLottery(userRoundIds = event.userRoundIds)
+                is Event.ShowDialog -> showDialog(isDialogShowing = event.isDialogShowing)
+            }
+        }
+
+        private fun showDialog(isDialogShowing: Boolean) {
+            launch {
+                _state.update {
+                    state.value.copy(
+                        isDeleteLotteryDialogShowing = isDialogShowing,
+                    )
+                }
             }
         }
 
@@ -143,6 +161,29 @@ class MyNumberViewModel
                 lottoNumbers.forEach { lottoNumber ->
                     insertPensionLottery(pensionLottery = lottoNumber)
                 }
+            }
+        }
+
+        private fun deleteLottery(userRoundIds: List<UserRoundId>) {
+            launch {
+                userRoundIds.forEach { (round, id) ->
+                    deleteLotteryByRoundAndIdUseCase(round = round, id = id)
+                }
+                _effect.send(Effect.LotteryRefresh)
+            }
+        }
+
+        private fun deletePensionLottery(userRoundIds: List<UserRoundId>) {
+            launch {
+                userRoundIds.forEach { (round, id) ->
+                    deletePensionLotteryByRoundAndIdUseCase(round = round, id = id)
+                        .onSuccess {
+                            Log.d("ttt onSuccess", it.toString())
+                        }.onFailure {
+                            Log.d("ttt onFailure", it.toString())
+                        }
+                }
+                _effect.send(Effect.PensionLotteryRefresh)
             }
         }
 

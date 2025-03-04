@@ -70,6 +70,11 @@ internal class LotteryRepositoryImpl
             return lotteryRoomDataSource.insertLottery(lotteryNumberDto = lotteryNumberDto)
         }
 
+        override suspend fun deleteLotteryByRoundAndId(
+            round: Int,
+            id: Long,
+        ): Result<Unit> = lotteryRoomDataSource.deleteLotteryByRoundAndId(round = round, id = id)
+
         private suspend fun getWinningLotteries(
             pagedRounds: List<Int>,
             lotteries: List<LotteryNumberDto>,
@@ -112,6 +117,7 @@ internal class LotteryRepositoryImpl
                                     }
 
                                 LotteryGetNumbers(
+                                    id = lottery.id,
                                     firstNum = lottery.firstNum,
                                     secondNum = lottery.secondNum,
                                     thirdNum = lottery.thirdNum,

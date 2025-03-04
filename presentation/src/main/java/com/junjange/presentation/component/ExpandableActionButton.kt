@@ -44,6 +44,7 @@ fun ExpandableActionButton(
     modifier: Modifier = Modifier,
     onEditClicked: () -> Unit,
     onGalleryClicked: () -> Unit,
+    onDeleteClicked: () -> Unit,
     isFabExpanded: Boolean,
 ) {
     var isFabClicked by remember { mutableStateOf(false) }
@@ -80,6 +81,16 @@ fun ExpandableActionButton(
                     onClick = {
                         isFabClicked = false
                         onGalleryClicked()
+                    },
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+
+                ActionItem(
+                    icon = painterResource(R.drawable.ic_delete),
+                    title = "번호 삭제하기",
+                    onClick = {
+                        isFabClicked = false
+                        onDeleteClicked()
                     },
                 )
                 Spacer(modifier = Modifier.height(8.dp))
