@@ -88,7 +88,7 @@
         
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="${AD_MOB_APP_ID}"  />
+            android:value="@string/AD_MOB_APP_ID"  />
 
     </application>
 
