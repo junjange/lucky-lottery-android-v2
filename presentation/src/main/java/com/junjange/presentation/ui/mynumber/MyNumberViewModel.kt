@@ -1,6 +1,5 @@
 package com.junjange.presentation.ui.mynumber
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.junjange.domain.usecase.DeleteLotteryByRoundAndIdUseCase
@@ -177,11 +176,6 @@ class MyNumberViewModel
             launch {
                 userRoundIds.forEach { (round, id) ->
                     deletePensionLotteryByRoundAndIdUseCase(round = round, id = id)
-                        .onSuccess {
-                            Log.d("ttt onSuccess", it.toString())
-                        }.onFailure {
-                            Log.d("ttt onFailure", it.toString())
-                        }
                 }
                 _effect.send(Effect.PensionLotteryRefresh)
             }
