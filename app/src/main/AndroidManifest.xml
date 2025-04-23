@@ -20,6 +20,7 @@
 
         <activity
             android:name="com.junjange.presentation.ui.randomnumber.RandomNumberActivity"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 
         <activity
@@ -85,10 +86,10 @@
                     android:scheme="@string/KAKAO_OAUTH_HOST" />
             </intent-filter>
         </activity>
-        
+
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="@string/AD_MOB_APP_ID"  />
+            android:value="@string/AD_MOB_APP_ID" />
 
     </application>
 
