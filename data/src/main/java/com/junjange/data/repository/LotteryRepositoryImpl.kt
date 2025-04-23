@@ -41,7 +41,7 @@ internal class LotteryRepositoryImpl
                     .getPagedRounds(limit = size, offset = page * size)
                     .getOrDefault(emptyList())
 
-            if (pagedRounds.isEmpty()) return Result.failure(Exception("No rounds available"))
+            if (pagedRounds.isEmpty()) return Result.success(emptyList())
 
             val lotteries =
                 lotteryRoomDataSource.getLotteriesByRound(pagedRounds).getOrDefault(emptyList())
