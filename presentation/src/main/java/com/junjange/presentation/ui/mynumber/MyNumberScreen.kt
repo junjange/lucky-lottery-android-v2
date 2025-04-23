@@ -162,7 +162,7 @@ fun MyNumberScreen(
             mutableStateListOf<UserRoundId>()
         }
 
-    LaunchedEffect(viewModel.effect) {
+    LaunchedEffect(Unit) {
         viewModel.effect.collectLatest { effect ->
             when (effect) {
                 is NavigateToGallery -> imagePickerLauncher.launch("image/*")
@@ -178,10 +178,12 @@ fun MyNumberScreen(
             okClick = {
                 if (deleteLottery.isNotEmpty()) {
                     viewModel.event(DeleteLottery(deleteLottery.toList()))
+                    deleteLottery.clear()
                 }
 
                 if (deletePensionLottery.isNotEmpty()) {
                     viewModel.event(DeletePensionLottery(deletePensionLottery.toList()))
+                    deletePensionLottery.clear()
                 }
 
                 viewModel.event(ShowDialog(isDialogShowing = false))
