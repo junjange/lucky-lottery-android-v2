@@ -269,7 +269,7 @@ fun MyNumberContent(
                     modifier =
                         Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 12.dp, horizontal = 24.dp),
+                            .padding(vertical = 11.dp, horizontal = 24.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Text(
@@ -426,7 +426,10 @@ fun MyLotteryContent(
                         shape = RoundedCornerShape(size = 8.dp),
                     ) {
                         Column(
-                            modifier = Modifier.padding(18.dp),
+                            modifier =
+                                Modifier
+                                    .padding(vertical = 18.dp)
+                                    .padding(end = 18.dp),
                             horizontalAlignment = Alignment.CenterHorizontally,
                         ) {
                             contents[it]?.let { lotteryGetContent ->
@@ -490,11 +493,14 @@ fun MyLotteryNumber(
         ) {
             if (isDeleteMode) {
                 Checkbox(
+                    modifier = Modifier.height(40.dp),
                     checked = deleteLottery.contains(userRoundId),
                     onCheckedChange = {
                         checkedLottery(userRoundId)
                     },
                 )
+            } else {
+                Spacer(modifier = Modifier.width(18.dp))
             }
             TableCell(
                 rank = lotteryGetNumber.rank,
@@ -560,7 +566,10 @@ fun MyPensionLotteryContent(
                         shape = RoundedCornerShape(size = 8.dp),
                     ) {
                         Column(
-                            modifier = Modifier.padding(18.dp),
+                            modifier =
+                                Modifier
+                                    .padding(vertical = 18.dp)
+                                    .padding(end = 18.dp),
                             horizontalAlignment = Alignment.CenterHorizontally,
                         ) {
                             contents[it]?.let { pensionLotteryGetContent ->
@@ -631,11 +640,14 @@ fun MyPensionLotteryNumber(
         ) {
             if (isDeleteMode) {
                 Checkbox(
+                    modifier = Modifier.height(40.dp),
                     checked = deletePensionLottery.contains(userRounds),
                     onCheckedChange = {
                         checkedPensionLottery(userRounds)
                     },
                 )
+            } else {
+                Spacer(modifier = Modifier.width(18.dp))
             }
 
             TableCell(
