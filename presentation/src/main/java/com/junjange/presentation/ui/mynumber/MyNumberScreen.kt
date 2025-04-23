@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -58,6 +57,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -269,7 +269,7 @@ fun MyNumberContent(
                     modifier =
                         Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 12.dp, horizontal = 24.dp),
+                            .padding(vertical = 11.dp, horizontal = 24.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Text(
@@ -426,7 +426,10 @@ fun MyLotteryContent(
                         shape = RoundedCornerShape(size = 8.dp),
                     ) {
                         Column(
-                            modifier = Modifier.padding(18.dp),
+                            modifier =
+                                Modifier
+                                    .padding(vertical = 18.dp)
+                                    .padding(end = 18.dp),
                             horizontalAlignment = Alignment.CenterHorizontally,
                         ) {
                             contents[it]?.let { lotteryGetContent ->
@@ -484,14 +487,20 @@ fun MyLotteryNumber(
     lotteryGetNumbers.forEach { lotteryGetNumber ->
         val userRoundId = UserRoundId(round = round, id = lotteryGetNumber.id)
 
-        Row(Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
             if (isDeleteMode) {
                 Checkbox(
+                    modifier = Modifier.height(40.dp),
                     checked = deleteLottery.contains(userRoundId),
                     onCheckedChange = {
                         checkedLottery(userRoundId)
                     },
                 )
+            } else {
+                Spacer(modifier = Modifier.width(18.dp))
             }
             TableCell(
                 rank = lotteryGetNumber.rank,
@@ -557,7 +566,10 @@ fun MyPensionLotteryContent(
                         shape = RoundedCornerShape(size = 8.dp),
                     ) {
                         Column(
-                            modifier = Modifier.padding(18.dp),
+                            modifier =
+                                Modifier
+                                    .padding(vertical = 18.dp)
+                                    .padding(end = 18.dp),
                             horizontalAlignment = Alignment.CenterHorizontally,
                         ) {
                             contents[it]?.let { pensionLotteryGetContent ->
@@ -622,14 +634,20 @@ fun MyPensionLotteryNumber(
     pensionLotteryNumbers.forEach { pensionLotteryNumber ->
         val userRounds = UserRoundId(round = round, id = pensionLotteryNumber.id)
 
-        Row(Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
             if (isDeleteMode) {
                 Checkbox(
+                    modifier = Modifier.height(40.dp),
                     checked = deletePensionLottery.contains(userRounds),
                     onCheckedChange = {
                         checkedPensionLottery(userRounds)
                     },
                 )
+            } else {
+                Spacer(modifier = Modifier.width(18.dp))
             }
 
             TableCell(
@@ -650,17 +668,58 @@ fun RowScope.TableCell(
     rank: String?,
     weight: Float,
 ) {
-    Text(
+    Box(
+        modifier =
+            Modifier
+                .weight(weight)
+                .height(40.dp)
+                .border(1.dp, LottoTheme.colors.gray400),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            text = rank.toRankTitle(),
+            style = LottoTheme.typography.body3,
+            textAlign = TextAlign.Center,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+    }
+}
+
+@Composable
+fun RowScope.TableCell(
+    lottoNumbers: LotteryGetNumbers,
+    weight: Float,
+) {
+    Row(
         modifier =
             Modifier
                 .border(width = 1.dp, color = LottoTheme.colors.gray400)
-                .fillMaxHeight()
                 .weight(weight)
-                .padding(8.8.dp),
-        text = rank.toRankTitle(),
-        style = LottoTheme.typography.body3,
-        textAlign = TextAlign.Center,
-    )
+                .height(40.dp),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        val lottoNumbersContent =
+            listOf(
+                lottoNumbers.firstNum,
+                lottoNumbers.secondNum,
+                lottoNumbers.thirdNum,
+                lottoNumbers.fourthNum,
+                lottoNumbers.fifthNum,
+                lottoNumbers.sixthNum,
+            )
+
+        lottoNumbersContent.forEachIndexed { index, item ->
+            val color = item.toLotteryColor()
+
+            MyLotteryBall(
+                isSuccess = if (lottoNumbers.correctNumbers == null) false else lottoNumbers.correctNumbers!![index],
+                lottoTitle = item.toString(),
+                color = color,
+            )
+        }
+    }
 }
 
 @Composable
@@ -674,8 +733,9 @@ fun RowScope.TableCell(
             Modifier
                 .border(width = 1.dp, color = LottoTheme.colors.gray400)
                 .weight(weight)
-                .padding(4.5.dp),
+                .height(40.dp),
         horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         val lottoTitle =
             listOf(
@@ -719,41 +779,6 @@ fun RowScope.TableCell(
                     index = index,
                 )
             }
-        }
-    }
-}
-
-@Composable
-fun RowScope.TableCell(
-    lottoNumbers: LotteryGetNumbers,
-    weight: Float,
-) {
-    Row(
-        modifier =
-            Modifier
-                .border(width = 1.dp, color = LottoTheme.colors.gray400)
-                .weight(weight)
-                .padding(4.5.dp),
-        horizontalArrangement = Arrangement.Center,
-    ) {
-        val lottoNumbersContent =
-            listOf(
-                lottoNumbers.firstNum,
-                lottoNumbers.secondNum,
-                lottoNumbers.thirdNum,
-                lottoNumbers.fourthNum,
-                lottoNumbers.fifthNum,
-                lottoNumbers.sixthNum,
-            )
-
-        lottoNumbersContent.forEachIndexed { index, item ->
-            val color = item.toLotteryColor()
-
-            MyLotteryBall(
-                isSuccess = if (lottoNumbers.correctNumbers == null) false else lottoNumbers.correctNumbers!![index],
-                lottoTitle = item.toString(),
-                color = color,
-            )
         }
     }
 }
