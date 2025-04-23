@@ -73,6 +73,7 @@ import com.junjange.domain.model.LotteryGetNumbers
 import com.junjange.domain.model.PensionLotteryGetContent
 import com.junjange.domain.model.PensionLotteryNumbers
 import com.junjange.presentation.R
+import com.junjange.presentation.component.EmptyScreen
 import com.junjange.presentation.component.ExpandableActionButton
 import com.junjange.presentation.component.Lotto645Content
 import com.junjange.presentation.component.Lotto720Content
@@ -162,7 +163,7 @@ fun MyNumberScreen(
             mutableStateListOf<UserRoundId>()
         }
 
-    LaunchedEffect(viewModel.effect) {
+    LaunchedEffect(Unit) {
         viewModel.effect.collectLatest { effect ->
             when (effect) {
                 is NavigateToGallery -> imagePickerLauncher.launch("image/*")
@@ -178,10 +179,12 @@ fun MyNumberScreen(
             okClick = {
                 if (deleteLottery.isNotEmpty()) {
                     viewModel.event(DeleteLottery(deleteLottery.toList()))
+                    deleteLottery.clear()
                 }
 
                 if (deletePensionLottery.isNotEmpty()) {
                     viewModel.event(DeletePensionLottery(deletePensionLottery.toList()))
+                    deletePensionLottery.clear()
                 }
 
                 viewModel.event(ShowDialog(isDialogShowing = false))
@@ -199,9 +202,7 @@ fun MyNumberScreen(
         deletePensionLottery = deletePensionLottery,
         isDeleteMode = isDeleteMode,
         onGalleryClicked = { viewModel.event(PickedImage) },
-        onDeleteClicked = { deleteMode ->
-            isDeleteMode = deleteMode
-        },
+        onDeleteClicked = { deleteMode -> isDeleteMode = deleteMode },
         onLotterySaveClicked = { lottery -> viewModel.event(InsertLottery(lottery)) },
         onPensionLotterySaveClicked = { pensionLottery ->
             viewModel.event(InsertPensionLottery(pensionLottery))
@@ -384,6 +385,7 @@ fun MyLotteryContent(
     onDeleteClicked: () -> Unit,
     checkedLottery: (userRoundId: UserRoundId) -> Unit,
 ) {
+    val context = LocalContext.current
     val lazyListState = rememberLazyListState()
     val refreshState = rememberPullToRefreshState()
     val firstVisibleItemScrollOffset =
@@ -404,48 +406,55 @@ fun MyLotteryContent(
             )
         },
     ) {
-        LazyColumn(
-            state = lazyListState,
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            items(contents.itemCount) {
-                Card(
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 18.dp, vertical = 12.dp),
-                    colors = CardDefaults.cardColors(containerColor = LottoTheme.colors.gray200),
-                    shape = RoundedCornerShape(size = 8.dp),
-                ) {
-                    Column(
-                        modifier = Modifier.padding(18.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
+        if (contents.itemCount == 0) {
+            EmptyScreen(
+                title = context.getString(R.string.empty_lotto_title),
+                description = context.getString(R.string.empty_lotto_description),
+            )
+        } else {
+            LazyColumn(
+                state = lazyListState,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                items(contents.itemCount) {
+                    Card(
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 18.dp, vertical = 12.dp),
+                        colors = CardDefaults.cardColors(containerColor = LottoTheme.colors.gray200),
+                        shape = RoundedCornerShape(size = 8.dp),
                     ) {
-                        contents[it]?.let { lotteryGetContent ->
-                            LottoContentTitle(
-                                title = stringResource(R.string.lotto_645_title),
-                                round = lotteryGetContent.round,
-                                winningDate = lotteryGetContent.winningDate,
-                            )
-                            lotteryGetContent.winningLotteryNumbers?.let { winningLotteryNumbers ->
-                                Lotto645Content(winningLotteryNumbers = winningLotteryNumbers)
-                            }
+                        Column(
+                            modifier = Modifier.padding(18.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                        ) {
+                            contents[it]?.let { lotteryGetContent ->
+                                LottoContentTitle(
+                                    title = stringResource(R.string.lotto_645_title),
+                                    round = lotteryGetContent.round,
+                                    winningDate = lotteryGetContent.winningDate,
+                                )
+                                lotteryGetContent.winningLotteryNumbers?.let { winningLotteryNumbers ->
+                                    Lotto645Content(winningLotteryNumbers = winningLotteryNumbers)
+                                }
 
-                            Spacer(modifier = Modifier.height(8.dp))
-                            MyLotteryNumber(
-                                round = lotteryGetContent.round,
-                                lotteryGetNumbers = lotteryGetContent.lotteryGetNumbers,
-                                isDeleteMode = isDeleteMode,
-                                deleteLottery = deleteLottery,
-                                checkedLottery = checkedLottery,
-                            )
+                                Spacer(modifier = Modifier.height(8.dp))
+                                MyLotteryNumber(
+                                    round = lotteryGetContent.round,
+                                    lotteryGetNumbers = lotteryGetContent.lotteryGetNumbers,
+                                    isDeleteMode = isDeleteMode,
+                                    deleteLottery = deleteLottery,
+                                    checkedLottery = checkedLottery,
+                                )
+                            }
                         }
                     }
                 }
-            }
 
-            item {
-                Spacer(modifier = Modifier.height(80.dp))
+                item {
+                    Spacer(modifier = Modifier.height(80.dp))
+                }
             }
         }
 
@@ -507,6 +516,7 @@ fun MyPensionLotteryContent(
     onGalleryClicked: () -> Unit,
     onDeleteClicked: () -> Unit,
 ) {
+    val context = LocalContext.current
     val lazyListState = rememberLazyListState()
     val refreshState = rememberPullToRefreshState()
     val firstVisibleItemScrollOffset =
@@ -527,54 +537,61 @@ fun MyPensionLotteryContent(
             )
         },
     ) {
-        LazyColumn(
-            state = lazyListState,
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            items(contents.itemCount) {
-                Card(
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 18.dp, vertical = 12.dp),
-                    colors = CardDefaults.cardColors(containerColor = LottoTheme.colors.gray200),
-                    shape = RoundedCornerShape(size = 8.dp),
-                ) {
-                    Column(
-                        modifier = Modifier.padding(18.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
+        if (contents.itemCount == 0) {
+            EmptyScreen(
+                title = context.getString(R.string.empty_pension_lotto_title),
+                description = context.getString(R.string.empty_pension_lotto_description),
+            )
+        } else {
+            LazyColumn(
+                state = lazyListState,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                items(contents.itemCount) {
+                    Card(
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 18.dp, vertical = 12.dp),
+                        colors = CardDefaults.cardColors(containerColor = LottoTheme.colors.gray200),
+                        shape = RoundedCornerShape(size = 8.dp),
                     ) {
-                        contents[it]?.let { pensionLotteryGetContent ->
-                            LottoContentTitle(
-                                title = stringResource(R.string.lotto_720_title),
-                                round = pensionLotteryGetContent.round,
-                                winningDate = pensionLotteryGetContent.winningDate,
-                            )
-                            pensionLotteryGetContent.winningPensionLotteryNumbers?.let { winningPensionLotteryNumbers ->
-                                pensionLotteryGetContent.winningPensionLotteryBonusNumbers?.let { winningPensionLotteryBonusNumbers ->
-                                    Lotto720Content(
-                                        winningPensionLotteryNumbers = winningPensionLotteryNumbers,
-                                        winningPensionLotteryBonusNumbers = winningPensionLotteryBonusNumbers,
-                                    )
+                        Column(
+                            modifier = Modifier.padding(18.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                        ) {
+                            contents[it]?.let { pensionLotteryGetContent ->
+                                LottoContentTitle(
+                                    title = stringResource(R.string.lotto_720_title),
+                                    round = pensionLotteryGetContent.round,
+                                    winningDate = pensionLotteryGetContent.winningDate,
+                                )
+                                pensionLotteryGetContent.winningPensionLotteryNumbers?.let { winningPensionLotteryNumbers ->
+                                    pensionLotteryGetContent.winningPensionLotteryBonusNumbers?.let { winningPensionLotteryBonusNumbers ->
+                                        Lotto720Content(
+                                            winningPensionLotteryNumbers = winningPensionLotteryNumbers,
+                                            winningPensionLotteryBonusNumbers = winningPensionLotteryBonusNumbers,
+                                        )
+                                    }
                                 }
-                            }
 
-                            Spacer(modifier = Modifier.height(8.dp))
-                            MyPensionLotteryNumber(
-                                pensionLotteryNumbers = pensionLotteryGetContent.pensionLotteryNumbers,
-                                checkWinningBonus = pensionLotteryGetContent.checkWinningBonus,
-                                deletePensionLottery = deletePensionLottery,
-                                isDeleteMode = isDeleteMode,
-                                checkedPensionLottery = checkedPensionLottery,
-                                round = pensionLotteryGetContent.round,
-                            )
+                                Spacer(modifier = Modifier.height(8.dp))
+                                MyPensionLotteryNumber(
+                                    pensionLotteryNumbers = pensionLotteryGetContent.pensionLotteryNumbers,
+                                    checkWinningBonus = pensionLotteryGetContent.checkWinningBonus,
+                                    deletePensionLottery = deletePensionLottery,
+                                    isDeleteMode = isDeleteMode,
+                                    checkedPensionLottery = checkedPensionLottery,
+                                    round = pensionLotteryGetContent.round,
+                                )
+                            }
                         }
                     }
                 }
-            }
 
-            item {
-                Spacer(modifier = Modifier.height(80.dp))
+                item {
+                    Spacer(modifier = Modifier.height(80.dp))
+                }
             }
         }
 

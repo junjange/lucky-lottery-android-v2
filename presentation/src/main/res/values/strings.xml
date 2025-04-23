@@ -39,6 +39,12 @@
     <string name="sign_out">로그아웃</string>
     <string name="withdraw_lotto">행운복권 탈퇴</string>
 
+    <!--    my number-->
+    <string name="empty_lotto_title">내 로또 번호가 비어있어요</string>
+    <string name="empty_lotto_description">지금 바로 나만의 행운 번호를 등록해보세요!</string>
+    <string name="empty_pension_lotto_title">내 연금복권 번호가 비어있어요</string>
+    <string name="empty_pension_lotto_description">지금 바로 나만의 행운 번호를 등록해보세요!</string>
+
     <!--    notification-->
     <string name="notification_title">알림 설정</string>
     <string name="lotto_notification_title">로또6/45 알림</string>
