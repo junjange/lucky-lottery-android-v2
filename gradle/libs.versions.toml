@@ -38,7 +38,7 @@ google-play-services-auth = "21.3.0"
 google-admob-ads = "24.0.0"
 appcompat = "1.7.0"
 compose-bom = "2025.02.00"
-tesseract = "4.6.0"
+tesseract = "4.9.0"
 
 # coroutines
 coroutines = "1.10.1"
