@@ -2,12 +2,11 @@ package com.junjange.presentation.ui.register
 
 import android.graphics.Bitmap
 import androidx.lifecycle.SavedStateHandle
-import com.junjange.domain.model.JwtToken
-import com.junjange.domain.usecase.GetFCMTokenUseCase
-import com.junjange.domain.usecase.PostNotificationRegisterTokenUseCase
-import com.junjange.domain.usecase.PostRegisterUseCase
-import com.junjange.domain.usecase.SaveJwtTokenUseCase
-import com.junjange.presentation.base.BaseViewModel
+import junjange.core.domain.model.JwtToken
+import junjange.core.domain.usecase.GetFCMTokenUseCase
+import junjange.core.domain.usecase.PostNotificationRegisterTokenUseCase
+import junjange.core.domain.usecase.PostRegisterUseCase
+import junjange.core.domain.usecase.SaveJwtTokenUseCase
 import com.junjange.presentation.ui.register.RegisterEffect.Back
 import com.junjange.presentation.ui.register.RegisterEffect.LaunchImagePicker
 import com.junjange.presentation.ui.register.RegisterEffect.NavigateToMain
@@ -20,6 +19,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
+import junjange.core.ui.base.BaseViewModel
 
 @HiltViewModel
 class RegisterViewModel

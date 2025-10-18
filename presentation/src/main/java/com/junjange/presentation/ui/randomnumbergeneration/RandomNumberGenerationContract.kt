@@ -1,7 +1,7 @@
 package com.junjange.presentation.ui.randomnumbergeneration
 
-import com.junjange.domain.model.LotteryRandomNumbers
-import com.junjange.domain.model.PensionLotteryRandom
+import junjange.core.domain.model.LotteryRandomNumbers
+import junjange.core.domain.model.PensionLotteryRandom
 import com.junjange.presentation.ui.randomnumber.RandomNumberMessage
 
 sealed interface RandomNumberGenerationContract {

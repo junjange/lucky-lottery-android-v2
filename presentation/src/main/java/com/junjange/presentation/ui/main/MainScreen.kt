@@ -12,10 +12,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.junjange.presentation.component.LottoBottomBar
 import com.junjange.presentation.ui.home.HomeScreen
 import com.junjange.presentation.ui.my.OauthProvider
 import com.junjange.presentation.ui.mynumber.MyNumberScreen
+import junjange.core.navigation.Destination
+import junjange.core.navigation.rememberNavigator
+import junjange.core.ui.component.LottoBottomBar
 
 @Composable
 fun MainScreen(
@@ -45,7 +47,7 @@ fun MainScreen(
         bottomBar = {
             LottoBottomBar(
                 currentDestination = currentDestination,
-                onNavigate = { navigator.navigateTo(it) },
+                onNavigate = { navigator.navigateTo(it)  },
                 navigateToActivity = navigateToRandomNumber,
             )
         },

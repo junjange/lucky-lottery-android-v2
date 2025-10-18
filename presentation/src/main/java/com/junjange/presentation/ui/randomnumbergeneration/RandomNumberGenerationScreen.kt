@@ -38,15 +38,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.junjange.presentation.R
-import com.junjange.presentation.component.AdmobBanner
-import com.junjange.presentation.component.LottoBall
-import com.junjange.presentation.component.LottoRoundedCornerButton
-import com.junjange.presentation.component.LottoType
-import com.junjange.presentation.theme.LottoTheme
-import com.junjange.presentation.theme.lotteryColors
-import com.junjange.presentation.theme.toLotteryColor
 import com.junjange.presentation.ui.randomnumber.RandomNumberMessage
 import com.junjange.presentation.ui.randomnumbergeneration.RandomNumberGenerationContract.*
+import junjange.core.designsystem.theme.LottoTheme
+import junjange.core.designsystem.theme.lotteryColors
+import junjange.core.designsystem.theme.toLotteryColor
+import junjange.core.ui.component.AdmobBanner
+import junjange.core.ui.component.LottoBall
+import junjange.core.ui.component.LottoRoundedCornerButton
+import junjange.core.ui.component.LottoType
 import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class)

@@ -3,11 +3,11 @@ package com.junjange.presentation.ui.splash
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import com.junjange.presentation.base.BaseActivity
-import com.junjange.presentation.theme.LottoTheme
 import com.junjange.presentation.ui.login.LoginActivity
 import com.junjange.presentation.ui.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
+import junjange.core.designsystem.theme.LottoTheme
+import junjange.core.ui.base.BaseActivity
 
 @AndroidEntryPoint
 class SplashActivity : BaseActivity() {

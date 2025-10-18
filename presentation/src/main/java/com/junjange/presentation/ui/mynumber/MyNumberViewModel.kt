@@ -2,14 +2,12 @@ package com.junjange.presentation.ui.mynumber
 
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import com.junjange.domain.usecase.DeleteLotteryByRoundAndIdUseCase
-import com.junjange.domain.usecase.DeletePensionLotteryByRoundAndIdUseCase
-import com.junjange.domain.usecase.InsertLotteryUseCase
-import com.junjange.domain.usecase.InsertPensionLotteryUseCase
-import com.junjange.domain.usecase.LoadLotteryRoundsUseCase
-import com.junjange.domain.usecase.LoadPensionLotteryRoundsUseCase
-import com.junjange.presentation.base.BaseViewModel
-import com.junjange.presentation.feature.ocr.OcrService
+import junjange.core.domain.usecase.DeleteLotteryByRoundAndIdUseCase
+import junjange.core.domain.usecase.DeletePensionLotteryByRoundAndIdUseCase
+import junjange.core.domain.usecase.InsertLotteryUseCase
+import junjange.core.domain.usecase.InsertPensionLotteryUseCase
+import junjange.core.domain.usecase.LoadLotteryRoundsUseCase
+import junjange.core.domain.usecase.LoadPensionLotteryRoundsUseCase
 import com.junjange.presentation.ui.mynumber.MyNumberContract.*
 import com.junjange.presentation.ui.mynumber.MyNumberContract.Effect.NavigateToGallery
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,6 +19,8 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import java.io.File
 import javax.inject.Inject
+import junjange.core.ocr.service.OcrService
+import junjange.core.ui.base.BaseViewModel
 
 @HiltViewModel
 class MyNumberViewModel

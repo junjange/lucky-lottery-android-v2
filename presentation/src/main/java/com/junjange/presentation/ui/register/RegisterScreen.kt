@@ -43,11 +43,11 @@ import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageContractOptions
 import com.canhub.cropper.CropImageOptions
 import com.junjange.presentation.R
-import com.junjange.presentation.component.EditProfileType.*
-import com.junjange.presentation.component.LottoButtonTopBar
-import com.junjange.presentation.component.LottoEditProfileBottomSheet
-import com.junjange.presentation.component.LottoProfileTextField
-import com.junjange.presentation.theme.LottoTheme
+import junjange.core.designsystem.theme.LottoTheme
+import junjange.core.ui.component.EditProfileType
+import junjange.core.ui.component.LottoButtonTopBar
+import junjange.core.ui.component.LottoEditProfileBottomSheet
+import junjange.core.ui.component.LottoProfileTextField
 import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -134,8 +134,8 @@ fun RegisterScreen(
         sheetContent = {
             LottoEditProfileBottomSheet { editProfileType ->
                 when (editProfileType) {
-                    is ProfileImageSelect -> viewModel.onClickedProfileImgSelect()
-                    is ProfileDefaultImageSelect -> viewModel.onClickedProfileDefaultImageSelect()
+                    is EditProfileType.ProfileImageSelect -> viewModel.onClickedProfileImgSelect()
+                    is EditProfileType.ProfileDefaultImageSelect -> viewModel.onClickedProfileDefaultImageSelect()
                 }
             }
         },

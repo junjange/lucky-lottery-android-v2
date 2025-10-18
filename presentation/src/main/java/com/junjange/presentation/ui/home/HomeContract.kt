@@ -1,7 +1,7 @@
 package com.junjange.presentation.ui.home
 
-import com.junjange.domain.model.LotteryNumbers
-import com.junjange.domain.model.PensionLotteryHome
+import junjange.core.domain.model.LotteryNumbers
+import junjange.core.domain.model.PensionLotteryHome
 
 sealed interface HomeContract {
     data class State(

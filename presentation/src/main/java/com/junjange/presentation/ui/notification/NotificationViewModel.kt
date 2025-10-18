@@ -1,15 +1,15 @@
 package com.junjange.presentation.ui.notification
 
 import androidx.lifecycle.SavedStateHandle
-import com.junjange.domain.usecase.PatchLotteryNotificationUseCase
-import com.junjange.domain.usecase.PatchPensionLotteryNotificationUseCase
-import com.junjange.presentation.base.BaseViewModel
+import junjange.core.domain.usecase.PatchLotteryNotificationUseCase
+import junjange.core.domain.usecase.PatchPensionLotteryNotificationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
+import junjange.core.ui.base.BaseViewModel
 
 @HiltViewModel
 class NotificationViewModel

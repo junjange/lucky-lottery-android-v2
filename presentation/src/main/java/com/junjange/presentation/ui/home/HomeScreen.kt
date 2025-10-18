@@ -27,12 +27,12 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.junjange.presentation.R
-import com.junjange.presentation.component.AdmobBanner
-import com.junjange.presentation.component.LottoContent
-import com.junjange.presentation.component.LottoHomeTopBar
-import com.junjange.presentation.theme.LottoTheme
 import com.junjange.presentation.ui.home.HomeContract.*
-import com.junjange.presentation.util.showToast
+import junjange.core.designsystem.theme.LottoTheme
+import junjange.core.ui.component.AdmobBanner
+import junjange.core.ui.component.LottoContent
+import junjange.core.ui.component.LottoHomeTopBar
+import junjange.core.ui.util.showToast
 import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class)

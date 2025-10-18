@@ -4,8 +4,8 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.junjange.domain.model.PensionLotteryGetContent
-import com.junjange.domain.usecase.LoadPensionLotteryRoundsUseCase
+import junjange.core.domain.model.PensionLotteryGetContent
+import junjange.core.domain.usecase.LoadPensionLotteryRoundsUseCase
 
 fun createPensionLotteryPagingSource(
     loadPensionLotteryRoundsUseCase: LoadPensionLotteryRoundsUseCase,

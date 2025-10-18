@@ -5,11 +5,11 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import com.junjange.presentation.base.BaseActivity
-import com.junjange.presentation.theme.LottoTheme
 import com.junjange.presentation.ui.main.MainActivity
 import com.junjange.presentation.ui.register.RegisterActivity
 import dagger.hilt.android.AndroidEntryPoint
+import junjange.core.designsystem.theme.LottoTheme
+import junjange.core.ui.base.BaseActivity
 
 @AndroidEntryPoint
 class LoginActivity : BaseActivity() {

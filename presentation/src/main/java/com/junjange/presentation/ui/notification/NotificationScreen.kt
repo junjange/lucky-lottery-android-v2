@@ -8,8 +8,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.junjange.presentation.R
-import com.junjange.presentation.component.LottoSimpleTopBar
-import com.junjange.presentation.component.LottoSwitchBar
+import junjange.core.ui.component.LottoSimpleTopBar
+import junjange.core.ui.component.LottoSwitchBar
 
 @Composable
 fun NotificationScreen(viewModel: NotificationViewModel) {

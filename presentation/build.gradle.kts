@@ -60,7 +60,11 @@ android {
 }
 
 dependencies {
-    implementation(project(Modules.DOMAIN))
+    implementation(project(Modules.CORE_DOMAIN))
+    implementation(project(Modules.CORE_UI))
+    implementation(project(Modules.CORE_DESIGNSYSTEM))
+    implementation(project(Modules.CORE_NAVIGATION))
+    implementation(project(Modules.CORE_OCR))
 
     implementation(libs.bundles.android)
     implementation(libs.bundles.compose)

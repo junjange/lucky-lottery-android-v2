@@ -3,13 +3,12 @@ package com.junjange.presentation.ui.login
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import com.junjange.domain.usecase.GetFCMTokenUseCase
-import com.junjange.domain.usecase.GetValidRegisterUseCase
-import com.junjange.domain.usecase.KakaoLoginUseCase
-import com.junjange.domain.usecase.PostLoginUseCase
-import com.junjange.domain.usecase.PostNotificationRegisterTokenUseCase
-import com.junjange.domain.usecase.SaveJwtTokenUseCase
-import com.junjange.presentation.base.BaseViewModel
+import junjange.core.domain.usecase.GetFCMTokenUseCase
+import junjange.core.domain.usecase.GetValidRegisterUseCase
+import junjange.core.domain.usecase.KakaoLoginUseCase
+import junjange.core.domain.usecase.PostLoginUseCase
+import junjange.core.domain.usecase.PostNotificationRegisterTokenUseCase
+import junjange.core.domain.usecase.SaveJwtTokenUseCase
 import com.junjange.presentation.ui.login.LoginEffect.NavigateToMain
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -19,6 +18,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
+import junjange.core.ui.base.BaseViewModel
 
 @HiltViewModel
 class LoginViewModel

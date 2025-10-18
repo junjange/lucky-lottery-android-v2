@@ -70,14 +70,17 @@ android {
 }
 
 dependencies {
-    implementation(project(Modules.DOMAIN))
+    implementation(project(Modules.CORE_DOMAIN))
     implementation(project(Modules.PRESENTATION))
-    implementation(project(Modules.DATA))
-    implementation(project(Modules.KAKAO))
-    implementation(project(Modules.FIREBASE))
-    implementation(project(Modules.LOCAL))
-    implementation(project(Modules.CORE_FEATURE))
-    implementation(project(Modules.REMOTE))
+    implementation(project(Modules.CORE_DATA))
+    implementation(project(Modules.CORE_KAKAO))
+    implementation(project(Modules.CORE_FIREBASE))
+    implementation(project(Modules.CORE_LOCAL))
+    implementation(project(Modules.CORE_OCR))
+    implementation(project(Modules.CORE_REMOTE))
+    implementation(project(Modules.CORE_UI))
+    implementation(project(Modules.CORE_DESIGNSYSTEM))
+    implementation(project(Modules.CORE_NAVIGATION))
 
     implementation(libs.bundles.android)
     implementation(libs.bundles.common)

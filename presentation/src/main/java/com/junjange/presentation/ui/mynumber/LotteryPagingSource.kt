@@ -4,8 +4,8 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.junjange.domain.model.LotteryGetContent
-import com.junjange.domain.usecase.LoadLotteryRoundsUseCase
+import junjange.core.domain.model.LotteryGetContent
+import junjange.core.domain.usecase.LoadLotteryRoundsUseCase
 
 fun createLotteryPagingSource(loadLotteryRoundsUseCase: LoadLotteryRoundsUseCase): Pager<Int, LotteryGetContent> =
     Pager(

@@ -1,12 +1,12 @@
 package com.junjange.presentation.ui.splash
 
-import com.junjange.domain.usecase.GetJwtTokenUseCase
-import com.junjange.presentation.base.BaseViewModel
+import junjange.core.domain.usecase.GetJwtTokenUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.receiveAsFlow
 import javax.inject.Inject
+import junjange.core.ui.base.BaseViewModel
 
 @HiltViewModel
 class SplashViewModel

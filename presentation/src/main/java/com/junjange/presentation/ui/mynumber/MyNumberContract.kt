@@ -2,8 +2,8 @@ package com.junjange.presentation.ui.mynumber
 
 import android.os.Parcelable
 import androidx.paging.PagingData
-import com.junjange.domain.model.LotteryGetContent
-import com.junjange.domain.model.PensionLotteryGetContent
+import junjange.core.domain.model.LotteryGetContent
+import junjange.core.domain.model.PensionLotteryGetContent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.parcelize.Parcelize

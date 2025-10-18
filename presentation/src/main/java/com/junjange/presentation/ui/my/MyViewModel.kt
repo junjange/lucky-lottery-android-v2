@@ -1,9 +1,8 @@
 package com.junjange.presentation.ui.my
 
-import com.junjange.domain.usecase.DeleteLocalDataUseCase
-import com.junjange.domain.usecase.GetUserMyInfoUseCase
-import com.junjange.domain.usecase.PostLogoutUseCase
-import com.junjange.presentation.base.BaseViewModel
+import junjange.core.domain.usecase.DeleteLocalDataUseCase
+import junjange.core.domain.usecase.GetUserMyInfoUseCase
+import junjange.core.domain.usecase.PostLogoutUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,6 +12,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
+import junjange.core.ui.base.BaseViewModel
 
 @HiltViewModel
 class MyViewModel

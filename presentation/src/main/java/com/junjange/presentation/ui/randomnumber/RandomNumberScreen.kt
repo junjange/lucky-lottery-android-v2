@@ -28,10 +28,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.junjange.presentation.R
-import com.junjange.presentation.component.LottoType
-import com.junjange.presentation.theme.LottoTheme
 import com.junjange.presentation.ui.randomnumber.RandomNumberContract.*
-import com.junjange.presentation.util.singleClick
+import junjange.core.designsystem.theme.LottoTheme
+import junjange.core.ui.component.LottoType
+import junjange.core.ui.util.singleClick
 import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class)

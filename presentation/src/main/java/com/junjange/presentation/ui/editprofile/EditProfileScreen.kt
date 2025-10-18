@@ -43,14 +43,13 @@ import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageContractOptions
 import com.canhub.cropper.CropImageOptions
 import com.junjange.presentation.R
-import com.junjange.presentation.component.EditProfileType.ProfileDefaultImageSelect
-import com.junjange.presentation.component.EditProfileType.ProfileImageSelect
-import com.junjange.presentation.component.LottoButtonTopBar
-import com.junjange.presentation.component.LottoEditProfileBottomSheet
-import com.junjange.presentation.component.LottoProfileTextField
-import com.junjange.presentation.theme.LottoTheme
-import com.junjange.presentation.theme.White
-import com.junjange.presentation.util.saveBitmapToFile
+import junjange.core.designsystem.theme.LottoTheme
+import junjange.core.designsystem.theme.White
+import junjange.core.ui.component.EditProfileType
+import junjange.core.ui.component.LottoButtonTopBar
+import junjange.core.ui.component.LottoEditProfileBottomSheet
+import junjange.core.ui.component.LottoProfileTextField
+import junjange.core.ui.util.saveBitmapToFile
 import kotlinx.coroutines.flow.collectLatest
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -144,8 +143,8 @@ fun EditProfileScreen(
         sheetContent = {
             LottoEditProfileBottomSheet { editProfileType ->
                 when (editProfileType) {
-                    is ProfileImageSelect -> viewModel.onClickedProfileImgSelect()
-                    is ProfileDefaultImageSelect -> viewModel.onClickedProfileDefaultImageSelect()
+                    is EditProfileType.ProfileImageSelect -> viewModel.onClickedProfileImgSelect()
+                    is EditProfileType.ProfileDefaultImageSelect -> viewModel.onClickedProfileDefaultImageSelect()
                 }
             }
         },

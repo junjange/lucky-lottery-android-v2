@@ -22,12 +22,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.junjange.presentation.R
-import com.junjange.presentation.component.LottoButtonBar
-import com.junjange.presentation.component.LottoSimpleTopBar
-import com.junjange.presentation.theme.LottoTheme
 import com.junjange.presentation.ui.dialog.WithdrawalDialog
 import com.junjange.presentation.ui.login.GoogleSignInContract
 import com.junjange.presentation.ui.my.OauthProvider
+import junjange.core.designsystem.theme.LottoTheme
+import junjange.core.ui.component.LottoButtonBar
+import junjange.core.ui.component.LottoSimpleTopBar
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -104,7 +104,7 @@ fun WithdrawalScreen(
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                     )
                     Spacer(modifier = Modifier.height(12.dp))
-                    WithdrawalOption.values().forEach {
+                    WithdrawalOption.entries.forEach {
                         LottoButtonBar(
                             textRes = it.textRes,
                             onClick = { viewModel.onClickedDialog(isWithdrawalDialogShowing = true) },

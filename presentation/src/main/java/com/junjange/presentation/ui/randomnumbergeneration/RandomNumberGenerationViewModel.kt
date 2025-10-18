@@ -1,12 +1,10 @@
 package com.junjange.presentation.ui.randomnumbergeneration
 
 import androidx.lifecycle.SavedStateHandle
-import com.junjange.domain.usecase.GetLotteryRandomUseCase
-import com.junjange.domain.usecase.GetPensionLotteryRandomUseCase
-import com.junjange.domain.usecase.InsertLotteryUseCase
-import com.junjange.domain.usecase.InsertPensionLotteryUseCase
-import com.junjange.presentation.base.BaseViewModel
-import com.junjange.presentation.component.LottoType
+import junjange.core.domain.usecase.GetLotteryRandomUseCase
+import junjange.core.domain.usecase.GetPensionLotteryRandomUseCase
+import junjange.core.domain.usecase.InsertLotteryUseCase
+import junjange.core.domain.usecase.InsertPensionLotteryUseCase
 import com.junjange.presentation.ui.randomnumber.RandomNumberMessage.LOTTERY_NUMBER_SAVED
 import com.junjange.presentation.ui.randomnumber.RandomNumberMessage.PENSION_LOTTERY_SAVED
 import com.junjange.presentation.ui.randomnumbergeneration.RandomNumberGenerationContract.*
@@ -19,6 +17,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
+import junjange.core.ui.base.BaseViewModel
+import junjange.core.ui.component.LottoType
 
 @HiltViewModel
 class RandomNumberGenerationViewModel

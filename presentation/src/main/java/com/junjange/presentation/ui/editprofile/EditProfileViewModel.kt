@@ -2,9 +2,8 @@ package com.junjange.presentation.ui.editprofile
 
 import android.graphics.Bitmap
 import androidx.lifecycle.SavedStateHandle
-import com.junjange.domain.usecase.ImagesUploadUseCase
-import com.junjange.domain.usecase.PatchUserProfileUseCase
-import com.junjange.presentation.base.BaseViewModel
+import junjange.core.domain.usecase.ImagesUploadUseCase
+import junjange.core.domain.usecase.PatchUserProfileUseCase
 import com.junjange.presentation.ui.editprofile.EditProfileEffect.LaunchImagePicker
 import com.junjange.presentation.ui.editprofile.EditProfileEffect.ProfileUpdateSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,6 +16,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import okhttp3.MultipartBody
 import javax.inject.Inject
+import junjange.core.ui.base.BaseViewModel
 
 @HiltViewModel
 class EditProfileViewModel
