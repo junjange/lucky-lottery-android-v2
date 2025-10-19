@@ -2,9 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -17,51 +14,6 @@
         android:theme="@style/Theme.Lotto3"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-
-        <activity
-            android:name="junjange.feature.randomnumber.RandomNumberActivity"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name="junjange.feature.randomnumbergeneration.RandomNumberGenerationActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name="junjange.feature.editprofile.EditProfileActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name="junjange.feature.withdrawal.WithdrawalActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name="junjange.feature.main.MainActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name="junjange.feature.login.LoginActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name="junjange.feature.register.RegisterActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name="junjange.feature.notification.NotificationActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name="junjange.feature.splash.SplashActivity"
-            android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.Lotto3.Splash">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
 
         <activity
             android:name="com.canhub.cropper.CropImageActivity"

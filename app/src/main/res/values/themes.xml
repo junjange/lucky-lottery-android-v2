@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <style name="Theme.Lotto3" parent="android:Theme.Material.Light.NoActionBar" >
-        <item name="android:windowIsTranslucent">true</item>
-    </style>
-
-    <style name="Theme.Lotto3.Splash" parent="Theme.Lotto3">
-        <item name="android:statusBarColor">@android:color/transparent</item>
-    </style>
-
     <style name="Theme.ImageCropper" parent="Theme.AppCompat">
         <item name="android:statusBarColor">@color/white</item>
         <item name="android:actionMenuTextColor">@color/black</item>
