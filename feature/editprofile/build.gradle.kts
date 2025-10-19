@@ -38,11 +38,6 @@ android {
         compose = true
         buildConfig = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion =
-            libs.versions.compose.compiler
-                .get()
-    }
 }
 
 dependencies {
@@ -51,6 +46,7 @@ dependencies {
     implementation(project(Modules.CORE_DESIGNSYSTEM))
     implementation(project(Modules.CORE_NAVIGATION))
 
+    implementation(platform(libs.compose.bom))
     implementation(libs.bundles.android)
     implementation(libs.bundles.compose)
     implementation(libs.bundles.common)

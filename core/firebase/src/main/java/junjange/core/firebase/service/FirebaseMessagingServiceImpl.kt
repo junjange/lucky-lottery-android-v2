@@ -11,9 +11,9 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.junjange.presentation.R.*
-import com.junjange.presentation.ui.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
+import junjange.feature.main.MainActivity
+import junjange.feature.main.R.*
 
 @AndroidEntryPoint
 internal class FirebaseMessagingServiceImpl : FirebaseMessagingService() {
@@ -37,7 +37,8 @@ internal class FirebaseMessagingServiceImpl : FirebaseMessagingService() {
         val channelId = "my_channel"
         val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationBuilder =
-            NotificationCompat.Builder(this, channelId)
+            NotificationCompat
+                .Builder(this, channelId)
                 .setLargeIcon(BitmapFactory.decodeResource(resources, drawable.app_icon))
                 .setSmallIcon(drawable.app_icon)
                 .setContentTitle(remoteMessage.data["title"].toString())
@@ -49,7 +50,8 @@ internal class FirebaseMessagingServiceImpl : FirebaseMessagingService() {
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setContentIntent(pendingIntent)
                 .setStyle(
-                    NotificationCompat.BigPictureStyle()
+                    NotificationCompat
+                        .BigPictureStyle()
                         .bigPicture(BitmapFactory.decodeResource(resources, drawable.app_icon)),
                 )
 

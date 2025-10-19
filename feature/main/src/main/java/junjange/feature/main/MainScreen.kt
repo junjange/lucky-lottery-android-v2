@@ -14,6 +14,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import junjange.core.domain.model.OauthProvider
 import junjange.core.navigation.Destination
+import junjange.core.navigation.INITIAL_PAGE
 import junjange.core.navigation.rememberNavigator
 import junjange.core.ui.component.LottoBottomBar
 import junjange.feature.home.HomeScreen
@@ -40,14 +41,14 @@ fun MainScreen(
         val initialPage =
             activity?.intent?.getStringExtra(MainActivity.PUT_EXTRA_INITIAL_PAGE)
                 ?: return@LaunchedEffect
-        navigator.navigateTo(Destination.MY_NUMBER, mapOf(MainActivity.INITIAL_PAGE to initialPage))
+        navigator.navigateTo(Destination.MY_NUMBER, mapOf(INITIAL_PAGE to initialPage))
     }
 
     Scaffold(
         bottomBar = {
             LottoBottomBar(
                 currentDestination = currentDestination,
-                onNavigate = { navigator.navigateTo(it)  },
+                onNavigate = { navigator.navigateTo(it) },
                 navigateToActivity = navigateToRandomNumber,
             )
         },
@@ -60,7 +61,7 @@ fun MainScreen(
             composable(Destination.HOME.route) { HomeScreen(navigateToQRScanner = navigateToQRScanner) }
             composable(Destination.MY_NUMBER.route) { backStackEntry ->
                 val bundle = backStackEntry.arguments
-                val initialPage = bundle?.getString(MainActivity.INITIAL_PAGE)?.toIntOrNull() ?: 0
+                val initialPage = bundle?.getString(INITIAL_PAGE)?.toIntOrNull() ?: 0
                 MyNumberScreen(initialPage = initialPage)
             }
             // TODO 서버 로직 제거로 인해 내정보 탭바 임시 제거

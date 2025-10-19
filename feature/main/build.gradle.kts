@@ -48,11 +48,6 @@ android {
         compose = true
         buildConfig = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion =
-            libs.versions.compose.compiler
-                .get()
-    }
 }
 
 dependencies {
@@ -63,6 +58,7 @@ dependencies {
     implementation(project(Modules.FEATURE_HOME))
     implementation(project(Modules.FEATURE_MYNUMBER))
 
+    implementation(platform(libs.compose.bom))
     implementation(libs.bundles.android)
     implementation(libs.bundles.compose)
     implementation(libs.bundles.common)

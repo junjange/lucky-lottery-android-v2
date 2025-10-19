@@ -34,11 +34,6 @@ android {
         compose = true
         buildConfig = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion =
-            libs.versions.compose.compiler
-                .get()
-    }
 }
 
 dependencies {

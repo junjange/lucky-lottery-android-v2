@@ -1,6 +1,7 @@
 package junjange.feature.mynumber
 
 import android.graphics.Color
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke

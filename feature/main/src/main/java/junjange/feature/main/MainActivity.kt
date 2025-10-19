@@ -160,7 +160,6 @@ class MainActivity : BaseActivity() {
 
     companion object {
         const val PUT_EXTRA_INITIAL_PAGE = "PUT_EXTRA_INITIAL_PAGE"
-        const val INITIAL_PAGE = "initialPage"
 
         fun startActivity(context: Context) {
             val intent = Intent(context, MainActivity::class.java)

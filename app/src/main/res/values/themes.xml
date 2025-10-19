@@ -9,4 +9,9 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
+    <style name="Theme.ImageCropper" parent="Theme.AppCompat">
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:actionMenuTextColor">@color/black</item>
+    </style>
+
 </resources>

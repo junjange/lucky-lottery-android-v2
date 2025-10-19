@@ -1,6 +1,5 @@
 object Modules {
     const val CORE_DOMAIN = ":core:domain"
-    const val PRESENTATION = ":presentation"
     const val CORE_DATA = ":core:data"
     const val CORE_KAKAO = ":core:kakao"
     const val CORE_FIREBASE = ":core:firebase"
@@ -13,7 +12,6 @@ object Modules {
     const val CORE_DESIGNSYSTEM = ":core:designsystem"
 
     const val CORE_NAVIGATION = ":core:navigation"
-
     const val CORE_GOOGLE = ":core:google"
 
     const val FEATURE_MAIN = ":feature:main"
@@ -28,5 +26,4 @@ object Modules {
     const val FEATURE_REGISTER = ":feature:register"
     const val FEATURE_SPLASH = ":feature:splash"
     const val FEATURE_WITHDRAWAL = ":feature:withdrawal"
-
 }

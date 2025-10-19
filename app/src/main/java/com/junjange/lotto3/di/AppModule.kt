@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.junjange.lotto3.BuildConfig
-import com.junjange.presentation.ui.login.LoginActivity
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,6 +12,7 @@ import dagger.hilt.components.SingletonComponent
 import junjange.core.remote.api.AuthenticationListener
 import junjange.core.remote.api.BaseUrl
 import junjange.core.remote.interceptor.Interceptors
+import junjange.feature.login.LoginActivity
 import okhttp3.logging.HttpLoggingInterceptor
 
 @Module

@@ -1,6 +1,3 @@
-import java.io.FileInputStream
-import java.util.Properties
-
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.lang)
@@ -36,12 +33,6 @@ android {
     }
     buildFeatures {
         compose = true
-        buildConfig = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion =
-            libs.versions.compose.compiler
-                .get()
     }
 }
 

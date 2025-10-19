@@ -1,6 +1,7 @@
 package com.junjange.lotto3.di
 
 import com.junjange.lotto3.navigation.MainNavigatorImpl
+import com.junjange.lotto3.navigation.RandomNumberGenerationNavigatorImpl
 import com.junjange.lotto3.navigation.RandomNumberNavigatorImpl
 import com.junjange.lotto3.navigation.RegisterNavigatorImpl
 import com.junjange.lotto3.navigation.SplashNavigatorImpl
@@ -9,6 +10,7 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import junjange.core.navigation.MainNavigator
+import junjange.core.navigation.RandomNumberGenerationNavigator
 import junjange.core.navigation.RandomNumberNavigator
 import junjange.core.navigation.RegisterNavigator
 import junjange.core.navigation.SplashNavigator
@@ -24,6 +26,10 @@ internal abstract class NavigatorModule {
     @Binds
     @Singleton
     abstract fun bindRandomNumberNavigator(impl: RandomNumberNavigatorImpl): RandomNumberNavigator
+
+    @Binds
+    @Singleton
+    abstract fun bindRandomNumberGenerationNavigator(impl: RandomNumberGenerationNavigatorImpl): RandomNumberGenerationNavigator
 
     @Binds
     @Singleton

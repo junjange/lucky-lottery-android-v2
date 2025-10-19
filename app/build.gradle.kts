@@ -71,7 +71,6 @@ android {
 
 dependencies {
     implementation(project(Modules.CORE_DOMAIN))
-    implementation(project(Modules.PRESENTATION))
     implementation(project(Modules.CORE_DATA))
     implementation(project(Modules.CORE_KAKAO))
     implementation(project(Modules.CORE_FIREBASE))

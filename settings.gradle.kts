@@ -19,7 +19,6 @@ rootProject.name = "Lotto3"
 include(":app")
 include(":core:domain")
 include(":core:data")
-include(":presentation")
 include(":core:kakao")
 include(":core:firebase")
 include(":core:local")

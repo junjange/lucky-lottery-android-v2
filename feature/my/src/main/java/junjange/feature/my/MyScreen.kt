@@ -39,14 +39,14 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
-import junjange.feature.my.MyEffect.NavigateToEditProfile
-import junjange.feature.my.MyEffect.NavigateToUsageTerm
 import junjange.core.designsystem.theme.LottoTheme
 import junjange.core.designsystem.theme.White
 import junjange.core.domain.model.OauthProvider
 import junjange.core.ui.component.LottoButtonBar
 import junjange.core.ui.component.LottoSimpleTopBar
 import junjange.core.ui.component.LottoTextBar
+import junjange.feature.my.MyEffect.NavigateToEditProfile
+import junjange.feature.my.MyEffect.NavigateToUsageTerm
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
