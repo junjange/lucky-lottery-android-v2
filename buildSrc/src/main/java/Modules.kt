@@ -13,4 +13,20 @@ object Modules {
     const val CORE_DESIGNSYSTEM = ":core:designsystem"
 
     const val CORE_NAVIGATION = ":core:navigation"
+
+    const val CORE_GOOGLE = ":core:google"
+
+    const val FEATURE_MAIN = ":feature:main"
+    const val FEATURE_EDITPROFILE = ":feature:editprofile"
+    const val FEATURE_HOME = ":feature:home"
+    const val FEATURE_LOGIN = ":feature:login"
+    const val FEATURE_MY = ":feature:my"
+    const val FEATURE_MYNUMBER = ":feature:mynumber"
+    const val FEATURE_NOTIFICATION = ":feature:notification"
+    const val FEATURE_RANDOMNUMBER = ":feature:randomnumber"
+    const val FEATURE_RANDOMNUMBERGENERATION = ":feature:randomnumbergeneration"
+    const val FEATURE_REGISTER = ":feature:register"
+    const val FEATURE_SPLASH = ":feature:splash"
+    const val FEATURE_WITHDRAWAL = ":feature:withdrawal"
+
 }

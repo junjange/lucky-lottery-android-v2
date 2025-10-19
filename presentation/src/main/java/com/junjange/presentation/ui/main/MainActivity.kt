@@ -19,12 +19,12 @@ import com.junjange.presentation.BuildConfig
 import com.junjange.presentation.R
 import com.junjange.presentation.ui.editprofile.EditProfileActivity
 import com.junjange.presentation.ui.login.LoginActivity
-import com.junjange.presentation.ui.my.OauthProvider
 import com.junjange.presentation.ui.notification.NotificationActivity
 import com.junjange.presentation.ui.randomnumber.RandomNumberActivity
 import com.junjange.presentation.ui.withdrawal.WithdrawalActivity
 import dagger.hilt.android.AndroidEntryPoint
 import junjange.core.designsystem.theme.LottoTheme
+import junjange.core.domain.model.OauthProvider
 import junjange.core.ui.base.BaseActivity
 
 @AndroidEntryPoint

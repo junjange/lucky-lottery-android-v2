@@ -7,14 +7,12 @@ plugins {
     alias(libs.plugins.parcelize)
 }
 
-
 android {
     namespace = "junjange.core.designsystem"
     compileSdk = Versions.COMPILE_SDK
 
     defaultConfig {
         minSdk = Versions.MIN_SDK
-
     }
 
     buildTypes {

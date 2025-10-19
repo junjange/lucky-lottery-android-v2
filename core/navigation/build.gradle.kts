@@ -4,7 +4,6 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
     alias(libs.plugins.compose.compiler)
-    alias(libs.plugins.parcelize)
 }
 
 android {
@@ -13,7 +12,6 @@ android {
 
     defaultConfig {
         minSdk = Versions.MIN_SDK
-
     }
 
     buildTypes {
@@ -44,6 +42,8 @@ android {
 }
 
 dependencies {
+    implementation(project(Modules.CORE_DOMAIN))
+
     implementation(libs.bundles.android)
     implementation(libs.bundles.compose)
     implementation(libs.bundles.common)

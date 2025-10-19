@@ -1,5 +1,7 @@
 package com.junjange.presentation.ui.my
 
+import junjange.core.domain.model.OauthProvider
+
 data class MyState(
     val isLoading: Boolean = false,
     val isNotificationAvailable: Boolean = false,

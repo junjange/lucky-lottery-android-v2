@@ -1,7 +1,6 @@
 package com.junjange.presentation.ui.randomnumber
 
-import junjange.core.ui.component.LottoType
-
+import junjange.core.domain.model.LottoType
 
 sealed interface RandomNumberContract {
     sealed interface Event {

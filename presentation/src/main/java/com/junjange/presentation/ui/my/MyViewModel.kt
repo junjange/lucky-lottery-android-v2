@@ -1,9 +1,11 @@
 package com.junjange.presentation.ui.my
 
+import dagger.hilt.android.lifecycle.HiltViewModel
+import junjange.core.domain.model.OauthProvider
 import junjange.core.domain.usecase.DeleteLocalDataUseCase
 import junjange.core.domain.usecase.GetUserMyInfoUseCase
 import junjange.core.domain.usecase.PostLogoutUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
+import junjange.core.ui.base.BaseViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -12,7 +14,6 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
-import junjange.core.ui.base.BaseViewModel
 
 @HiltViewModel
 class MyViewModel
@@ -34,19 +35,20 @@ class MyViewModel
 
         fun getUserMyInfo() {
             launch {
-                getUserMyInfoUseCase().onSuccess { userMyInfo ->
-                    _uiState.update {
-                        it.copy(
-                            nickname = userMyInfo.nickname,
-                            profilePath = userMyInfo.profilePath,
-                            oauthProvider = OauthProvider.from(userMyInfo.oauthProvider),
-                            lotteryNotificationStatus = userMyInfo.lotteryNotificationStatus,
-                            pensionLotteryNotificationStatus = userMyInfo.pensionLotteryNotificationStatus,
-                        )
+                getUserMyInfoUseCase()
+                    .onSuccess { userMyInfo ->
+                        _uiState.update {
+                            it.copy(
+                                nickname = userMyInfo.nickname,
+                                profilePath = userMyInfo.profilePath,
+                                oauthProvider = OauthProvider.from(userMyInfo.oauthProvider),
+                                lotteryNotificationStatus = userMyInfo.lotteryNotificationStatus,
+                                pensionLotteryNotificationStatus = userMyInfo.pensionLotteryNotificationStatus,
+                            )
+                        }
+                    }.onFailure {
+                        // TODO 예외 처리
                     }
-                }.onFailure {
-                    // TODO 예외 처리
-                }
             }
         }
 
@@ -80,21 +82,23 @@ class MyViewModel
 
         fun onClickedSignOut() {
             launch {
-                postLogoutUseCase().onSuccess {
-                    deleteLocalData()
-                }.onFailure {
-                    // TODO 예외 처리
-                }
+                postLogoutUseCase()
+                    .onSuccess {
+                        deleteLocalData()
+                    }.onFailure {
+                        // TODO 예외 처리
+                    }
             }
         }
 
         private fun deleteLocalData() {
             launch {
-                deleteLocalDataUseCase().onSuccess {
-                    _effect.emit(MyEffect.NavigateToSplash)
-                }.onFailure {
-                    // TODO 예외 처리
-                }
+                deleteLocalDataUseCase()
+                    .onSuccess {
+                        _effect.emit(MyEffect.NavigateToSplash)
+                    }.onFailure {
+                        // TODO 예외 처리
+                    }
             }
         }
 

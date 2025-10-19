@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.core.kakao"
+    namespace = "junjange.core.kakao"
     compileSdk = Versions.COMPILE_SDK
 
     defaultConfig {

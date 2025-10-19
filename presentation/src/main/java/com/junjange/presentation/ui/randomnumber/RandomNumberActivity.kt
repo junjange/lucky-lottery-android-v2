@@ -8,8 +8,8 @@ import androidx.activity.viewModels
 import com.junjange.presentation.ui.randomnumbergeneration.RandomNumberGenerationActivity
 import dagger.hilt.android.AndroidEntryPoint
 import junjange.core.designsystem.theme.LottoTheme
+import junjange.core.domain.model.LottoType
 import junjange.core.ui.base.BaseActivity
-import junjange.core.ui.component.LottoType
 
 @AndroidEntryPoint
 class RandomNumberActivity : BaseActivity() {

@@ -1,6 +1,6 @@
 package com.junjange.presentation.ui.withdrawal
 
-import com.junjange.presentation.ui.my.OauthProvider
+import junjange.core.domain.model.OauthProvider
 
 data class WithdrawalState(
     val step: Int = 1,

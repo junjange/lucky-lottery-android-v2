@@ -43,10 +43,10 @@ import com.junjange.presentation.ui.randomnumbergeneration.RandomNumberGeneratio
 import junjange.core.designsystem.theme.LottoTheme
 import junjange.core.designsystem.theme.lotteryColors
 import junjange.core.designsystem.theme.toLotteryColor
+import junjange.core.domain.model.LottoType
 import junjange.core.ui.component.AdmobBanner
 import junjange.core.ui.component.LottoBall
 import junjange.core.ui.component.LottoRoundedCornerButton
-import junjange.core.ui.component.LottoType
 import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class)

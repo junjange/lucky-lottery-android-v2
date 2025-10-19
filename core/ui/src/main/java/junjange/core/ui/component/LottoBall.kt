@@ -16,6 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import junjange.core.designsystem.theme.LottoTheme
+import junjange.core.domain.model.LottoType
 
 @Composable
 fun LottoBall(
@@ -54,9 +55,4 @@ fun LottoBall(
             )
         }
     }
-}
-
-enum class LottoType {
-    LOTTO645,
-    LOTTO720,
 }

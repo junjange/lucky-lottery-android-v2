@@ -23,17 +23,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import junjange.core.designsystem.theme.LottoTheme
+import junjange.core.designsystem.theme.lotteryColors
+import junjange.core.designsystem.theme.toLotteryColor
 import junjange.core.domain.model.LotteryNumbers
+import junjange.core.domain.model.LottoType
 import junjange.core.domain.model.PensionLotteryHome
 import junjange.core.domain.model.WinningLotteryNumbers
 import junjange.core.domain.model.WinningPensionLotteryBonusNumbers
 import junjange.core.domain.model.WinningPensionLotteryNumbers
+import junjange.core.ui.R
 import java.text.SimpleDateFormat
 import java.util.Locale
-import junjange.core.ui.R
-import junjange.core.designsystem.theme.LottoTheme
-import junjange.core.designsystem.theme.lotteryColors
-import junjange.core.designsystem.theme.toLotteryColor
 
 @Composable
 fun LottoContent(
@@ -96,8 +97,7 @@ fun LottoContent(
                     .padding(
                         start = 20.dp,
                         end = 20.dp,
-                    )
-                    .background(color = LottoTheme.colors.gray400),
+                    ).background(color = LottoTheme.colors.gray400),
         )
 
         Row(
@@ -451,7 +451,6 @@ fun Lotto720Content(
         style = LottoTheme.typography.body3,
     )
 }
-
 
 private fun Long.formatPrizeAmount(): String =
     when {

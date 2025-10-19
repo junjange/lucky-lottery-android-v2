@@ -1,0 +1,6 @@
+<resources>
+    <string name="lotto_number_not_found_message">해당 회차의 로또 당첨 번호를 찾을 수 없어요.</string>
+    <string name="pension_number_not_found_message">해당 회차의 연금복권 당첨 번호를 찾을 수 없어요.</string>
+
+
+</resources>

@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import com.junjange.presentation.R
 import com.junjange.presentation.ui.randomnumber.RandomNumberContract.*
 import junjange.core.designsystem.theme.LottoTheme
-import junjange.core.ui.component.LottoType
+import junjange.core.domain.model.LottoType
 import junjange.core.ui.util.singleClick
 import kotlinx.coroutines.flow.collectLatest
 

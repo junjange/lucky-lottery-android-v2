@@ -24,8 +24,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.junjange.presentation.R
 import com.junjange.presentation.ui.dialog.WithdrawalDialog
 import com.junjange.presentation.ui.login.GoogleSignInContract
-import com.junjange.presentation.ui.my.OauthProvider
 import junjange.core.designsystem.theme.LottoTheme
+import junjange.core.domain.model.OauthProvider
 import junjange.core.ui.component.LottoButtonBar
 import junjange.core.ui.component.LottoSimpleTopBar
 import kotlinx.coroutines.flow.collectLatest

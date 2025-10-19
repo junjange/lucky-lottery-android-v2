@@ -4,12 +4,13 @@ import androidx.lifecycle.SavedStateHandle
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
+import com.junjange.presentation.BuildConfig
+import dagger.hilt.android.lifecycle.HiltViewModel
+import junjange.core.domain.model.OauthProvider
 import junjange.core.domain.usecase.DeleteLocalDataUseCase
 import junjange.core.domain.usecase.DeleteMeUseCase
 import junjange.core.domain.usecase.PostGoogleOauthTokenUseCase
-import com.junjange.presentation.BuildConfig
-import com.junjange.presentation.ui.my.OauthProvider
-import dagger.hilt.android.lifecycle.HiltViewModel
+import junjange.core.ui.base.BaseViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -18,7 +19,6 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
-import junjange.core.ui.base.BaseViewModel
 
 @HiltViewModel
 class WithdrawViewModel
@@ -92,19 +92,21 @@ class WithdrawViewModel
 
         private fun deleteLocalData() {
             launch {
-                deleteLocalDataUseCase().onSuccess {
-                    _effect.emit(WithdrawalEffect.AddStep)
-                }.onFailure {
-                    // TODO 예외 처리
-                }
+                deleteLocalDataUseCase()
+                    .onSuccess {
+                        _effect.emit(WithdrawalEffect.AddStep)
+                    }.onFailure {
+                        // TODO 예외 처리
+                    }
             }
         }
 
         fun deleteMe(oauthAccessToken: String? = null) {
             launch {
-                deleteMeUseCase(oauthAccessToken = oauthAccessToken).onSuccess {
-                    deleteLocalData()
-                }.onFailure { }
+                deleteMeUseCase(oauthAccessToken = oauthAccessToken)
+                    .onSuccess {
+                        deleteLocalData()
+                    }.onFailure { }
             }
         }
 
