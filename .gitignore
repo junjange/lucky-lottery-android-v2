@@ -32,4 +32,13 @@ google-services.json
 # Android Profiling
 *.hprof
 
-/buildSrc/build/
+# Per-module builds
+**/build/
+**/.gradle/
+
+# buildSrc & build-logic
+buildSrc/build/
+**/.kotlin/
+buildSrc/.gradle/
+build-logic/build/
+build-logic/.gradle/

@@ -2,10 +2,7 @@ import java.io.FileInputStream
 import java.util.Properties
 
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.lang)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.hilt)
+    id("junjange.android.application")
     id("com.google.gms.google-services")
 }
 
@@ -70,14 +67,29 @@ android {
 }
 
 dependencies {
-    implementation(project(Modules.DOMAIN))
-    implementation(project(Modules.PRESENTATION))
-    implementation(project(Modules.DATA))
-    implementation(project(Modules.KAKAO))
-    implementation(project(Modules.FIREBASE))
-    implementation(project(Modules.LOCAL))
-    implementation(project(Modules.CORE_FEATURE))
-    implementation(project(Modules.REMOTE))
+    implementation(project(Modules.CORE_DOMAIN))
+    implementation(project(Modules.CORE_DATA))
+    implementation(project(Modules.CORE_KAKAO))
+    implementation(project(Modules.CORE_FIREBASE))
+    implementation(project(Modules.CORE_LOCAL))
+    implementation(project(Modules.CORE_OCR))
+    implementation(project(Modules.CORE_REMOTE))
+    implementation(project(Modules.CORE_UI))
+    implementation(project(Modules.CORE_DESIGNSYSTEM))
+    implementation(project(Modules.CORE_NAVIGATION))
+    implementation(project(Modules.CORE_GOOGLE))
+    implementation(project(Modules.FEATURE_MAIN))
+    implementation(project(Modules.FEATURE_EDITPROFILE))
+    implementation(project(Modules.FEATURE_HOME))
+    implementation(project(Modules.FEATURE_LOGIN))
+    implementation(project(Modules.FEATURE_MY))
+    implementation(project(Modules.FEATURE_MYNUMBER))
+    implementation(project(Modules.FEATURE_NOTIFICATION))
+    implementation(project(Modules.FEATURE_RANDOMNUMBER))
+    implementation(project(Modules.FEATURE_RANDOMNUMBERGENERATION))
+    implementation(project(Modules.FEATURE_REGISTER))
+    implementation(project(Modules.FEATURE_SPLASH))
+    implementation(project(Modules.FEATURE_WITHDRAWAL))
 
     implementation(libs.bundles.android)
     implementation(libs.bundles.common)
