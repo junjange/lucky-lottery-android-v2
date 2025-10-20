@@ -2,10 +2,7 @@ import java.io.FileInputStream
 import java.util.Properties
 
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.lang)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.hilt)
+    id("junjange.android.application")
     id("com.google.gms.google-services")
 }
 

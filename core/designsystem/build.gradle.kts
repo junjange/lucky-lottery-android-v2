@@ -1,9 +1,5 @@
 plugins {
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.lang)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.hilt)
-    alias(libs.plugins.compose.compiler)
+    id("junjange.core.module")
     alias(libs.plugins.parcelize)
 }
 
@@ -24,13 +20,7 @@ android {
             )
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
+    // Java/Kotlin options provided by convention plugin
     buildFeatures {
         compose = true
         buildConfig = true

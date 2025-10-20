@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm")
+    id("junjange.kotlin.jvm")
 }
 
 dependencies {

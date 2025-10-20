@@ -1,4 +1,5 @@
 pluginManagement {
+    includeBuild("build-logic")
     repositories {
         google()
         mavenCentral()
@@ -14,6 +15,7 @@ dependencyResolutionManagement {
         maven { url = uri("https://jitpack.io") }
     }
 }
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 rootProject.name = "Lotto3"
 include(":app")

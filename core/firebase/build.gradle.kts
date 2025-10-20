@@ -1,8 +1,5 @@
 plugins {
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.lang)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.hilt)
+    id("junjange.core.module")
     alias(libs.plugins.parcelize)
 }
 
@@ -26,25 +23,14 @@ android {
             )
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
+    // Java/Kotlin options are provided by convention plugin
 }
 dependencies {
     implementation(project(Modules.FEATURE_MAIN))
     implementation(project(Modules.CORE_DATA))
 
     implementation(libs.bundles.common)
-
-    // google
     implementation(libs.bundles.google)
-
-    // network
     implementation(libs.bundles.network)
-    // ksp
     ksp(libs.ksp.hilt)
 }

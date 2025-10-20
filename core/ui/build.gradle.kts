@@ -2,12 +2,7 @@ import java.io.FileInputStream
 import java.util.Properties
 
 plugins {
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.lang)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.hilt)
-    alias(libs.plugins.compose.compiler)
-    alias(libs.plugins.parcelize)
+    id("junjange.core.module")
 }
 
 val localPropertiesFile = rootProject.file("local.properties")

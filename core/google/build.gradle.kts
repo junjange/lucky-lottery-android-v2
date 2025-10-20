@@ -2,10 +2,7 @@ import java.io.FileInputStream
 import java.util.Properties
 
 plugins {
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.lang)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.hilt)
+    id("junjange.core.module")
     alias(libs.plugins.parcelize)
 }
 
@@ -40,13 +37,7 @@ android {
     buildFeatures {
         buildConfig = true
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
+    // Java/Kotlin options provided by convention plugin
 }
 dependencies {
     implementation(libs.bundles.common)
