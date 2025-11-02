@@ -32,6 +32,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -193,8 +194,8 @@ fun MyScreen(
                     onClick = { viewModel.onClickedNotification() },
                 )
                 LottoTextBar(
-                    textRes = R.string.version_info,
-                    subtextRes = R.string.newest_version,
+                    text = stringResource(R.string.version_info),
+                    subtext = stringResource(R.string.newest_version),
                 )
                 LottoButtonBar(
                     textRes = R.string.usage_term,

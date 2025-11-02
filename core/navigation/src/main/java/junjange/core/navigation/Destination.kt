@@ -27,6 +27,12 @@ enum class Destination(
         inSelectedIconRes = R.drawable.ic_plus,
         labelResId = R.string.navigation_random_number,
     ),
+    Setting(
+        route = ROUTE_SETTING,
+        selectedIconRes = R.drawable.ic_settings,
+        inSelectedIconRes = R.drawable.ic_settings_outlined,
+        labelResId = R.string.navigation_settings,
+    ),
     // TODO 서버 로직 제거로 인해 내정보 탭바 주석
 //    MY(
 //        route = ROUTE_MY,
@@ -41,3 +47,4 @@ const val INITIAL_PAGE = "initialPage"
 const val ROUTE_MY_NUMBER = "my_number?${INITIAL_PAGE}={$INITIAL_PAGE}"
 private const val ROUTE_RANDOM_NUMBER = "random_number"
 private const val ROUTE_MY = "my"
+private const val ROUTE_SETTING = "setting"

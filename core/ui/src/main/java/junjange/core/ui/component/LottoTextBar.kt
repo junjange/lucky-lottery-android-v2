@@ -1,6 +1,5 @@
 package junjange.core.ui.component
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,15 +8,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import junjange.core.designsystem.theme.LottoTheme
 
 @Composable
 fun LottoTextBar(
     modifier: Modifier = Modifier,
-    @StringRes textRes: Int,
-    @StringRes subtextRes: Int,
+    text: String,
+    subtext: String,
 ) {
     Row(
         modifier =
@@ -30,12 +28,12 @@ fun LottoTextBar(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
-            text = stringResource(id = textRes),
+            text = text,
             style = LottoTheme.typography.body1,
             color = LottoTheme.colors.lottoBlack,
         )
         Text(
-            text = stringResource(id = subtextRes),
+            text = subtext,
             style = LottoTheme.typography.caption1,
             color = LottoTheme.colors.gray600,
         )

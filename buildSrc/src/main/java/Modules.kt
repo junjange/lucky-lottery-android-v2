@@ -26,4 +26,5 @@ object Modules {
     const val FEATURE_REGISTER = ":feature:register"
     const val FEATURE_SPLASH = ":feature:splash"
     const val FEATURE_WITHDRAWAL = ":feature:withdrawal"
+    const val FEATURE_SETTING = ":feature:setting"
 }

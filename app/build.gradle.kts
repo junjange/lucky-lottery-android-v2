@@ -90,6 +90,7 @@ dependencies {
     implementation(project(Modules.FEATURE_REGISTER))
     implementation(project(Modules.FEATURE_SPLASH))
     implementation(project(Modules.FEATURE_WITHDRAWAL))
+    implementation(project(Modules.FEATURE_SETTING))
 
     implementation(libs.bundles.android)
     implementation(libs.bundles.common)

@@ -1,26 +1,19 @@
-import java.io.FileInputStream
-import java.util.Properties
-
 plugins {
     id("junjange.feature.module")
+    alias(libs.plugins.parcelize)
 }
 
-val localPropertiesFile = rootProject.file("local.properties")
-val localProperties = Properties()
-localProperties.load(FileInputStream(localPropertiesFile))
-
-val fullScreenAdUnitId = localProperties.getProperty("FULL_SCREEN_AD_UNIT_ID") ?: ""
-val bannerAdUnitId = localProperties.getProperty("BANNER_AD_UNIT_ID") ?: ""
-
 android {
-    namespace = "junjange.feature.main"
+    namespace = "junjange.feature.setting"
     compileSdk = Versions.COMPILE_SDK
 
     defaultConfig {
         minSdk = Versions.MIN_SDK
-
-        buildConfigField("String", "FULL_SCREEN_AD_UNIT_ID", fullScreenAdUnitId)
-        buildConfigField("String", "BANNER_AD_UNIT_ID", bannerAdUnitId)
+        buildConfigField(
+            "String",
+            "VERSION_NAME",
+            "\"${Versions.VERSION_NAME}\"",
+        )
     }
 
     buildTypes {
@@ -32,13 +25,7 @@ android {
             )
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
+    // Java/Kotlin options provided by convention plugin
     buildFeatures {
         compose = true
         buildConfig = true
@@ -50,11 +37,7 @@ dependencies {
     implementation(project(Modules.CORE_UI))
     implementation(project(Modules.CORE_DESIGNSYSTEM))
     implementation(project(Modules.CORE_NAVIGATION))
-    implementation(project(Modules.FEATURE_HOME))
-    implementation(project(Modules.FEATURE_MYNUMBER))
-    implementation(project(Modules.FEATURE_SETTING))
 
-    implementation(platform(libs.compose.bom))
     implementation(libs.bundles.android)
     implementation(libs.bundles.compose)
     implementation(libs.bundles.common)

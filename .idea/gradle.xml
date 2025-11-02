@@ -54,6 +54,7 @@
             <option value="$PROJECT_DIR$/feature/randomnumber" />
             <option value="$PROJECT_DIR$/feature/randomnumbergeneration" />
             <option value="$PROJECT_DIR$/feature/register" />
+            <option value="$PROJECT_DIR$/feature/setting" />
             <option value="$PROJECT_DIR$/feature/splash" />
             <option value="$PROJECT_DIR$/feature/withdrawal" />
           </set>

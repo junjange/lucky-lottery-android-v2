@@ -32,7 +32,7 @@ fun LottoButtonBar(
                 Modifier
                     .fillMaxWidth()
                     .clickable { onClick() }
-                    .padding(vertical = 8.dp, horizontal = 16.dp),
+                    .padding(vertical = 12.dp, horizontal = 16.dp),
             ),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
