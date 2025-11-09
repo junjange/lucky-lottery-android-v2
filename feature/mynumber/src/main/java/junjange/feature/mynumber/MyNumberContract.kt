@@ -64,6 +64,10 @@ sealed interface MyNumberContract {
         data object LotteryRefresh : Effect
 
         data object PensionLotteryRefresh : Effect
+
+        data class ShowMessage(
+            val message: MyNumberMessage,
+        ) : Effect
     }
 }
 

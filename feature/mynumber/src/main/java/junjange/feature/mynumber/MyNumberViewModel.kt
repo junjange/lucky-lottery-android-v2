@@ -2,15 +2,17 @@ package junjange.feature.mynumber
 
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
+import dagger.hilt.android.lifecycle.HiltViewModel
 import junjange.core.domain.usecase.DeleteLotteryByRoundAndIdUseCase
 import junjange.core.domain.usecase.DeletePensionLotteryByRoundAndIdUseCase
 import junjange.core.domain.usecase.InsertLotteryUseCase
 import junjange.core.domain.usecase.InsertPensionLotteryUseCase
 import junjange.core.domain.usecase.LoadLotteryRoundsUseCase
 import junjange.core.domain.usecase.LoadPensionLotteryRoundsUseCase
+import junjange.core.ocr.service.OcrService
+import junjange.core.ui.base.BaseViewModel
 import junjange.feature.mynumber.MyNumberContract.*
 import junjange.feature.mynumber.MyNumberContract.Effect.NavigateToGallery
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,8 +21,6 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import java.io.File
 import javax.inject.Inject
-import junjange.core.ocr.service.OcrService
-import junjange.core.ui.base.BaseViewModel
 
 @HiltViewModel
 class MyNumberViewModel
@@ -108,7 +108,9 @@ class MyNumberViewModel
                     sixthNum = lottery[5].toInt(),
                 ).onSuccess {
                     _effect.send(Effect.LotteryRefresh)
+                    _effect.send(Effect.ShowMessage(MyNumberMessage.LOTTERY_INSERT_SUCCESS))
                 }.onFailure {
+                    _effect.send(Effect.ShowMessage(MyNumberMessage.LOTTERY_INSERT_FAILED))
                 }
                 loading(false)
             }
@@ -127,7 +129,9 @@ class MyNumberViewModel
                     sixthNum = pensionLottery[6].toInt(),
                 ).onSuccess {
                     _effect.send(Effect.PensionLotteryRefresh)
+                    _effect.send(Effect.ShowMessage(MyNumberMessage.PENSION_LOTTERY_INSERT_SUCCESS))
                 }.onFailure {
+                    _effect.send(Effect.ShowMessage(MyNumberMessage.PENSION_LOTTERY_INSERT_FAILED))
                 }
                 loading(false)
             }

@@ -23,4 +23,8 @@
     <string name="pension_lottery_number_submitted">연금복권 번호가 추가되었습니다.</string>
 
     <string name="pension_lottery_invalid_group">조는 1부터 5 사이에 숫자중 하나를 입력해주세요</string>
+
+    <!-- Error Messages -->
+    <string name="lottery_insert_failed">로또 번호 추가에 실패했습니다.</string>
+    <string name="pension_lottery_insert_failed">연금복권 번호 추가에 실패했습니다.</string>
 </resources>

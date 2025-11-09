@@ -33,6 +33,8 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -69,6 +71,7 @@ import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageContractOptions
 import com.canhub.cropper.CropImageOptions
 import com.canhub.cropper.CropImageView
+import junjange.core.designsystem.components.ErrorRetryScreen
 import junjange.core.designsystem.theme.LottoTheme
 import junjange.core.designsystem.theme.lotteryColors
 import junjange.core.designsystem.theme.toLotteryColor
@@ -163,12 +166,24 @@ fun MyNumberScreen(
             mutableStateListOf<UserRoundId>()
         }
 
+    val snackbarHostState = remember { SnackbarHostState() }
+
     LaunchedEffect(Unit) {
         viewModel.effect.collectLatest { effect ->
             when (effect) {
                 is NavigateToGallery -> imagePickerLauncher.launch("image/*")
                 is LotteryRefresh -> lotteryGetContent.refresh()
                 is PensionLotteryRefresh -> pensionLotteryGetContent.refresh()
+                is ShowMessage -> {
+                    val message =
+                        when (effect.message) {
+                            MyNumberMessage.LOTTERY_INSERT_FAILED -> context.getString(R.string.lottery_insert_failed)
+                            MyNumberMessage.PENSION_LOTTERY_INSERT_FAILED -> context.getString(R.string.pension_lottery_insert_failed)
+                            MyNumberMessage.LOTTERY_INSERT_SUCCESS -> context.getString(R.string.lotto_number_submitted)
+                            MyNumberMessage.PENSION_LOTTERY_INSERT_SUCCESS -> context.getString(R.string.pension_lottery_number_submitted)
+                        }
+                    snackbarHostState.showSnackbar(message)
+                }
             }
         }
     }
@@ -201,6 +216,7 @@ fun MyNumberScreen(
         deleteLottery = deleteLottery,
         deletePensionLottery = deletePensionLottery,
         isDeleteMode = isDeleteMode,
+        snackbarHostState = snackbarHostState,
         onGalleryClicked = { viewModel.event(PickedImage) },
         onDeleteClicked = { deleteMode -> isDeleteMode = deleteMode },
         onLotterySaveClicked = { lottery -> viewModel.event(InsertLottery(lottery)) },
@@ -246,6 +262,7 @@ fun MyNumberContent(
     deleteLottery: List<UserRoundId>,
     deletePensionLottery: List<UserRoundId>,
     isDeleteMode: Boolean,
+    snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
     onGalleryClicked: () -> Unit,
     onDeleteClicked: (isDeleteMode: Boolean) -> Unit,
@@ -263,6 +280,7 @@ fun MyNumberContent(
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
             if (isDeleteMode) {
                 Row(
@@ -349,7 +367,6 @@ fun MyNumberContent(
                                 onSubmit = { lottery ->
                                     isSheetOpen = false
                                     onLotterySaveClicked(lottery)
-                                    context.showToast(R.string.lotto_number_submitted)
                                 },
                                 onDuplicateLottery = {
                                     context.showToast(R.string.lotto_duplicate_error)
@@ -361,7 +378,7 @@ fun MyNumberContent(
                                 onSubmit = { pensionLottery ->
                                     isSheetOpen = false
                                     onPensionLotterySaveClicked(pensionLottery)
-                                    context.showToast(R.string.pension_lottery_number_submitted)
+//                                    context.showToast(R.string.pension_lottery_number_submitted)
                                 },
                                 onInvalidGroup = {
                                     context.showToast(R.string.pension_lottery_invalid_group)
@@ -406,6 +423,15 @@ fun MyLotteryContent(
             )
         },
     ) {
+        if (contents.loadState.refresh is LoadState.Error) {
+            ErrorRetryScreen(
+                title = "인터넷 연결이 불안정해요.",
+                description = "Wi-Fi나 셀룰러 데이터 연결 상태를\n확인하고 다시 시도해주세요.",
+                onRetry = { contents.refresh() },
+            )
+            return@PullToRefreshBox
+        }
+
         if (contents.itemCount == 0) {
             EmptyScreen(
                 title = context.getString(R.string.empty_lotto_title),
@@ -546,6 +572,14 @@ fun MyPensionLotteryContent(
             )
         },
     ) {
+        if (contents.loadState.refresh is LoadState.Error) {
+            ErrorRetryScreen(
+                title = "인터넷 연결이 불안정해요.",
+                description = "Wi-Fi나 셀룰러 데이터 연결 상태를\n확인하고 다시 시도해주세요.",
+                onRetry = { contents.refresh() },
+            )
+            return@PullToRefreshBox
+        }
         if (contents.itemCount == 0) {
             EmptyScreen(
                 title = context.getString(R.string.empty_pension_lotto_title),

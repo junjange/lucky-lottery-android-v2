@@ -27,10 +27,10 @@ internal class LotteryRepositoryImpl
         private val lottery: LinkedHashMap<Int, LotteryNumbers> = linkedMapOf()
 
         private val nextLotteryRound
-            get() = lottery.keys.first() + 1
+            get() = lottery.keys.firstOrNull()?.plus(1)
 
         private val nextLotteryWinningDate
-            get() = addDaysToDate(lottery.values.first().winningDate)
+            get() = addDaysToDate(lottery.values.firstOrNull()?.winningDate)
 
         override suspend fun loadLotteryRounds(
             page: Int,
@@ -39,12 +39,12 @@ internal class LotteryRepositoryImpl
             val pagedRounds =
                 lotteryRoomDataSource
                     .getPagedRounds(limit = size, offset = page * size)
-                    .getOrDefault(emptyList())
+                    .getOrThrow()
 
             if (pagedRounds.isEmpty()) return Result.success(emptyList())
 
             val lotteries =
-                lotteryRoomDataSource.getLotteriesByRound(pagedRounds).getOrDefault(emptyList())
+                lotteryRoomDataSource.getLotteriesByRound(pagedRounds).getOrThrow()
 
             return getWinningLotteries(pagedRounds, lotteries)
         }
@@ -57,9 +57,16 @@ internal class LotteryRepositoryImpl
             fifthNum: Int,
             sixthNum: Int,
         ): Result<Unit> {
+            val round =
+                nextLotteryRound ?: run {
+                    getLotteryRound()
+                        .map { it + 1 }
+                        .getOrElse { return Result.failure(it) }
+                }
+
             val lotteryNumberDto =
                 LotteryNumberDto(
-                    round = nextLotteryRound,
+                    round = round,
                     firstNum = firstNum,
                     secondNum = secondNum,
                     thirdNum = thirdNum,
@@ -163,9 +170,16 @@ internal class LotteryRepositoryImpl
 
         override suspend fun getLotteryRandom(): Result<LotteryRandomNumbers> =
             runCatching {
+                val round =
+                    nextLotteryRound ?: run {
+                        getLotteryRound()
+                            .map { it + 1 }
+                            .getOrElse { throw it }
+                    }
+
                 val randomNumbers = generateNumbers()
                 LotteryRandomNumbers(
-                    round = nextLotteryRound,
+                    round = round,
                     winningDate = nextLotteryWinningDate,
                     firstNum = randomNumbers[0],
                     secondNum = randomNumbers[1],
@@ -193,13 +207,18 @@ internal class LotteryRepositoryImpl
             return lotteryNumbers
         }
 
-        private fun addDaysToDate(dateStr: String): String {
+        private fun addDaysToDate(dateStr: String?): String {
             val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
-
             val calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"))
-            calendar.time = dateFormat.parse(dateStr)!!
 
-            calendar.add(Calendar.DATE, 7)
+            if (dateStr != null) {
+                calendar.time = dateFormat.parse(dateStr)
+                calendar.add(Calendar.DATE, 7)
+            } else {
+                val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
+                val daysUntilSaturday = (Calendar.SATURDAY - dayOfWeek + 7) % 7
+                calendar.add(Calendar.DAY_OF_YEAR, daysUntilSaturday)
+            }
 
             return dateFormat.format(calendar.time)
         }
