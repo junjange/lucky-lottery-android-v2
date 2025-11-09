@@ -62,13 +62,13 @@ fun SettingScreen(
                 textRes = R.string.app_notification,
                 onClick = { viewModel.onClickedNotification() },
             )
-            LottoTextBar(
-                text = stringResource(R.string.version_info),
-                subtext = BuildConfig.VERSION_NAME,
-            )
             LottoButtonBar(
                 textRes = R.string.usage_term,
                 onClick = { viewModel.onClickedUsageTerm() },
+            )
+            LottoTextBar(
+                text = stringResource(R.string.version_info),
+                subtext = BuildConfig.VERSION_NAME,
             )
             LottoButtonBar(
                 textRes = R.string.review_app,
