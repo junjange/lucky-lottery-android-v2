@@ -1,0 +1,11 @@
+<resources>
+    <!-- Notification Channel -->
+    <string name="lotto_notification_channel_name">로또 당첨 알림</string>
+    <string name="lotto_notification_channel_description">로또 당첨 번호 발표 알림을 받습니다</string>
+
+    <!-- Notification Content -->
+    <string name="lotto_notification_content_title">로또6/45 당첨번호가 발표되었어요!</string>
+    <string name="lotto_notification_content_text">지금 바로 당첨번호를 확인해보세요</string>
+    <string name="pension_lotto_notification_content_title">연금복권720+ 당첨번호가 발표되었어요!</string>
+    <string name="pension_lotto_notification_content_text">지금 바로 당첨번호를 확인해보세요</string>
+</resources>

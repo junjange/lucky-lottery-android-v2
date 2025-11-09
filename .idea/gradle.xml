@@ -40,6 +40,7 @@
             <option value="$PROJECT_DIR$/core/kakao" />
             <option value="$PROJECT_DIR$/core/local" />
             <option value="$PROJECT_DIR$/core/navigation" />
+            <option value="$PROJECT_DIR$/core/notification" />
             <option value="$PROJECT_DIR$/core/ocr" />
             <option value="$PROJECT_DIR$/core/remote" />
             <option value="$PROJECT_DIR$/core/ui" />
@@ -54,6 +55,7 @@
             <option value="$PROJECT_DIR$/feature/randomnumber" />
             <option value="$PROJECT_DIR$/feature/randomnumbergeneration" />
             <option value="$PROJECT_DIR$/feature/register" />
+            <option value="$PROJECT_DIR$/feature/setting" />
             <option value="$PROJECT_DIR$/feature/splash" />
             <option value="$PROJECT_DIR$/feature/withdrawal" />
           </set>

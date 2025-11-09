@@ -6,20 +6,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.LocalMinimumInteractiveComponentEnforcement
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import junjange.core.designsystem.theme.LottoTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LottoSwitchBar(
     modifier: Modifier = Modifier,
@@ -52,12 +48,16 @@ fun LottoSwitchBar(
             )
         }
 
-        CompositionLocalProvider(LocalMinimumInteractiveComponentEnforcement provides false) {
-            Switch(
-                checked = isSwitchedOn,
-                onCheckedChange = { if (it) onSwitchOn() else onSwitchOff() },
-                colors = SwitchDefaults.colors(checkedTrackColor = LottoTheme.colors.lottoGreen),
-            )
-        }
+        Switch(
+            checked = isSwitchedOn,
+            onCheckedChange = { if (it) onSwitchOn() else onSwitchOff() },
+            colors =
+                SwitchDefaults.colors(
+                    checkedThumbColor = LottoTheme.colors.white,
+                    checkedTrackColor = LottoTheme.colors.green,
+                    uncheckedThumbColor = LottoTheme.colors.gray500,
+                    uncheckedTrackColor = LottoTheme.colors.gray300,
+                ),
+        )
     }
 }

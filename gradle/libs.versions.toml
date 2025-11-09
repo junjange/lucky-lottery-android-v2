@@ -57,6 +57,10 @@ kotlinx-datetime = "0.4.0"
 # room
 room = "2.8.2"
 
+# workmanager
+work = "2.9.0"
+hilt-work = "1.1.0"
+
 [libraries]
 # default
 jsoup-jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup-version" }
@@ -140,6 +144,11 @@ room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 
+# workmanager
+work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "work" }
+hilt-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "hilt-work" }
+hilt-work-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hilt-work" }
+
 [bundles]
 android = ["core-ktx", "lifecycle-runtime-ktx", "material", "lifecycle-extensions", "coil", "image-cropper", "zxing-android-embedded", "zxing-core"]
 kotlin = ["coroutines-core", "kotlinx-serialization", "kotlinx-datetime"]
@@ -150,6 +159,7 @@ kakao = ["kakao-user"]
 network = ["retrofit-core", "retrofit-converter-gson", "okhttp-core", "okhttp-logging-interceptor"]
 datastore = ["datastore", "datastore-core"]
 room = ["room-runtime", "room-ktx"]
+workmanager = ["work-runtime-ktx", "hilt-work"]
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }

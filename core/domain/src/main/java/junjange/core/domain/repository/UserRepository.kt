@@ -1,5 +1,6 @@
 package junjange.core.domain.repository
 
+import junjange.core.domain.model.LuckyLotteryNotification
 import junjange.core.domain.model.UserMyInfo
 
 interface UserRepository {
@@ -13,4 +14,6 @@ interface UserRepository {
     ): Result<Unit>
 
     suspend fun getUserMyInfo(): Result<UserMyInfo>
+
+    suspend fun getNotification(): Result<LuckyLotteryNotification>
 }

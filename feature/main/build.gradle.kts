@@ -52,6 +52,7 @@ dependencies {
     implementation(project(Modules.CORE_NAVIGATION))
     implementation(project(Modules.FEATURE_HOME))
     implementation(project(Modules.FEATURE_MYNUMBER))
+    implementation(project(Modules.FEATURE_SETTING))
 
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.android)

@@ -78,6 +78,7 @@ dependencies {
     implementation(project(Modules.CORE_DESIGNSYSTEM))
     implementation(project(Modules.CORE_NAVIGATION))
     implementation(project(Modules.CORE_GOOGLE))
+    implementation(project(Modules.CORE_NOTIFICATION))
     implementation(project(Modules.FEATURE_MAIN))
     implementation(project(Modules.FEATURE_EDITPROFILE))
     implementation(project(Modules.FEATURE_HOME))
@@ -90,12 +91,15 @@ dependencies {
     implementation(project(Modules.FEATURE_REGISTER))
     implementation(project(Modules.FEATURE_SPLASH))
     implementation(project(Modules.FEATURE_WITHDRAWAL))
+    implementation(project(Modules.FEATURE_SETTING))
 
     implementation(libs.bundles.android)
     implementation(libs.bundles.common)
+    implementation(libs.bundles.workmanager)
 
     // ksp
     ksp(libs.ksp.hilt)
+    ksp(libs.hilt.work.compiler)
 
     // kakao
     implementation(libs.bundles.kakao)
