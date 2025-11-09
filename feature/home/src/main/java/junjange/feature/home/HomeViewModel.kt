@@ -1,11 +1,14 @@
 package junjange.feature.home
 
+import dagger.hilt.android.lifecycle.HiltViewModel
 import junjange.core.domain.usecase.GetLotteryRoundUseCase
 import junjange.core.domain.usecase.GetLotteryUseCase
 import junjange.core.domain.usecase.GetPensionLotteryRoundUseCase
 import junjange.core.domain.usecase.GetPensionLotteryUseCase
-import junjange.feature.home.HomeContract.*
-import dagger.hilt.android.lifecycle.HiltViewModel
+import junjange.core.ui.base.BaseViewModel
+import junjange.feature.home.HomeContract.Effect
+import junjange.feature.home.HomeContract.Event
+import junjange.feature.home.HomeContract.State
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.channels.Channel
@@ -15,7 +18,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
-import junjange.core.ui.base.BaseViewModel
 
 @HiltViewModel
 class HomeViewModel
@@ -47,27 +49,29 @@ class HomeViewModel
         private fun refreshLottery() {
             launch {
                 loading(true)
+                setError(false)
                 val lotteryDeferred = async { fetchLatestLotteryRound() }
                 val pensionDeferred = async { fetchLatestPensionLotteryRound() }
 
-                awaitAll(lotteryDeferred, pensionDeferred)
+                val results = awaitAll(lotteryDeferred, pensionDeferred)
+                val hasError = results.all { !it }
+
                 loading(false)
+                setError(hasError)
             }
         }
 
-        private suspend fun fetchLatestLotteryRound() {
+        private suspend fun fetchLatestLotteryRound(): Boolean =
             getLotteryRoundUseCase()
                 .onSuccess { round ->
                     fetchLotteryNumbers(round)
-                }.onFailure { }
-        }
+                }.isSuccess
 
-        private suspend fun fetchLatestPensionLotteryRound() {
+        private suspend fun fetchLatestPensionLotteryRound(): Boolean =
             getPensionLotteryRoundUseCase()
                 .onSuccess { round ->
                     fetchPensionLotteryNumbers(round)
-                }.onFailure { }
-        }
+                }.isSuccess
 
         private suspend fun fetchLotteryNumbers(round: Int) {
             getLotteryUseCase(round)
@@ -114,6 +118,12 @@ class HomeViewModel
         private fun loading(isLoading: Boolean) {
             _state.update { state ->
                 state.copy(isLoading = isLoading)
+            }
+        }
+
+        private fun setError(isError: Boolean) {
+            _state.update { state ->
+                state.copy(isError = isError)
             }
         }
     }

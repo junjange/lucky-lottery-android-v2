@@ -18,14 +18,15 @@ import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import junjange.core.designsystem.components.ErrorRetryScreen
 import junjange.core.designsystem.theme.LottoTheme
 import junjange.core.ui.component.AdmobBanner
 import junjange.core.ui.component.LottoContent
@@ -93,6 +94,17 @@ fun HomeScreen(
                 )
             },
         ) {
+            if (state.isError) {
+                ErrorRetryScreen(
+                    title = stringResource(R.string.error_network_title),
+                    description = stringResource(R.string.error_network_description),
+                    onRetry = {
+                        viewModel.event(Event.Refresh)
+                    },
+                )
+                return@PullToRefreshBox
+            }
+
             Column(
                 Modifier
                     .fillMaxSize()
