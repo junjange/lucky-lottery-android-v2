@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">My Application</string>
+
+    <!-- Error Retry Screen -->
+    <string name="error_retry_button">재시도</string>
 </resources>
