@@ -35,7 +35,7 @@ fun LottoHomeTopBar(
     ) {
         Text(
             text = stringResource(R.string.home_top_bar_title),
-            style = LottoTheme.typography.headline3,
+            style = LottoTheme.typography.headline2,
         )
         actionIconRes?.let {
             IconButton(
