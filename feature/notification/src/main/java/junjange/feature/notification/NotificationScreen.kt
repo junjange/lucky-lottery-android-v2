@@ -1,20 +1,38 @@
 package junjange.feature.notification
 
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import junjange.core.designsystem.components.dialog.LottoTwoButtonDialog
+import junjange.core.designsystem.theme.Gray800
+import junjange.core.designsystem.theme.Gray900
+import junjange.core.designsystem.theme.Green
+import junjange.core.designsystem.theme.LottoTheme
+import junjange.core.designsystem.theme.White
 import junjange.core.ui.component.LottoSimpleTopBar
 import junjange.core.ui.component.LottoSwitchBar
-import junjange.feature.notification.NotificationActivity.NotificationType
 
 @Composable
 fun NotificationScreen(
@@ -22,6 +40,9 @@ fun NotificationScreen(
     finish: () -> Unit,
     onRequestLottoNotification: () -> Unit,
     onRequestPensionLottoNotification: () -> Unit,
+    showPermissionSettingsDialog: Boolean,
+    onDismissPermissionDialog: () -> Unit,
+    onNavigateToSettings: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -52,4 +73,26 @@ fun NotificationScreen(
             )
         }
     }
+
+    if (showPermissionSettingsDialog) {
+        PermissionSettingsDialog(
+            onDismiss = onDismissPermissionDialog,
+            onNavigateToSettings = onNavigateToSettings,
+        )
+    }
+}
+
+@Composable
+private fun PermissionSettingsDialog(
+    onDismiss: () -> Unit,
+    onNavigateToSettings: () -> Unit,
+) {
+    LottoTwoButtonDialog(
+        title = stringResource(R.string.permission_settings_dialog_title),
+        content = stringResource(R.string.permission_settings_dialog_message),
+        confirmText = stringResource(R.string.permission_settings_dialog_confirm),
+        cancelText = stringResource(R.string.permission_settings_dialog_dismiss),
+        onConfirm = onNavigateToSettings,
+        onCancel = onDismiss,
+    )
 }

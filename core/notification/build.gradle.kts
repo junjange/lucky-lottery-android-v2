@@ -1,10 +1,9 @@
 plugins {
     id("junjange.core.module")
-    alias(libs.plugins.parcelize)
 }
 
 android {
-    namespace = "junjange.core.local"
+    namespace = "junjange.core.notification"
     compileSdk = Versions.COMPILE_SDK
 
     defaultConfig {
@@ -23,23 +22,11 @@ android {
             )
         }
     }
-    // Java/Kotlin options provided by convention plugin
 }
+
 dependencies {
-    implementation(project(Modules.CORE_DATA))
-    implementation(project(Modules.CORE_NOTIFICATION))
+    implementation(project(Modules.FEATURE_MAIN))
 
-    implementation(libs.bundles.kotlin)
     implementation(libs.bundles.common)
-    implementation(libs.bundles.room)
-    implementation(libs.junit.ktx)
-
-    // WorkManager
-    implementation("androidx.work:work-runtime-ktx:2.9.0")
-    implementation("androidx.hilt:hilt-work:1.1.0")
-    ksp("androidx.hilt:hilt-compiler:1.1.0")
-
     ksp(libs.ksp.hilt)
-    ksp(libs.room.compiler)
-    annotationProcessor(libs.room.compiler)
 }

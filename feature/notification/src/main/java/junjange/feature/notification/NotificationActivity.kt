@@ -4,8 +4,10 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
@@ -27,6 +29,7 @@ class NotificationActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             var pendingNotificationType by remember { mutableStateOf<NotificationType?>(null) }
+            var showPermissionSettingsDialog by remember { mutableStateOf(false) }
 
             val notificationPermissionLauncher =
                 rememberLauncherForActivityResult(
@@ -51,7 +54,11 @@ class NotificationActivity : BaseActivity() {
                             viewModel.setLottoNotification(true)
                         } else {
                             pendingNotificationType = NotificationType.LOTTO
-                            requestNotificationPermission(notificationPermissionLauncher)
+                            if (shouldShowPermissionRationale()) {
+                                requestNotificationPermission(notificationPermissionLauncher)
+                            } else {
+                                showPermissionSettingsDialog = true
+                            }
                         }
                     },
                     onRequestPensionLottoNotification = {
@@ -59,11 +66,29 @@ class NotificationActivity : BaseActivity() {
                             viewModel.setPensionLottoNotification(true)
                         } else {
                             pendingNotificationType = NotificationType.PENSION_LOTTO
-                            requestNotificationPermission(notificationPermissionLauncher)
+                            if (shouldShowPermissionRationale()) {
+                                requestNotificationPermission(notificationPermissionLauncher)
+                            } else {
+                                showPermissionSettingsDialog = true
+                            }
                         }
+                    },
+                    showPermissionSettingsDialog = showPermissionSettingsDialog,
+                    onDismissPermissionDialog = { showPermissionSettingsDialog = false },
+                    onNavigateToSettings = {
+                        showPermissionSettingsDialog = false
+                        openAppSettings()
                     },
                 )
             }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (!checkNotificationPermission()) {
+            viewModel.setLottoNotification(false)
+            viewModel.setPensionLottoNotification(false)
         }
     }
 
@@ -77,10 +102,25 @@ class NotificationActivity : BaseActivity() {
             true
         }
 
+    private fun shouldShowPermissionRationale(): Boolean =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)
+        } else {
+            false
+        }
+
     private fun requestNotificationPermission(launcher: androidx.activity.result.ActivityResultLauncher<String>) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
+    }
+
+    private fun openAppSettings() {
+        val intent =
+            Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                data = Uri.fromParts("package", packageName, null)
+            }
+        startActivity(intent)
     }
 
     enum class NotificationType {

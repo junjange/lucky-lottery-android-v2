@@ -13,6 +13,7 @@ object Modules {
 
     const val CORE_NAVIGATION = ":core:navigation"
     const val CORE_GOOGLE = ":core:google"
+    const val CORE_NOTIFICATION = ":core:notification"
 
     const val FEATURE_MAIN = ":feature:main"
     const val FEATURE_EDITPROFILE = ":feature:editprofile"
