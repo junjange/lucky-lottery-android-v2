@@ -31,10 +31,10 @@ internal class PensionLotteryRepositoryImpl
         private val pensionLottery: LinkedHashMap<Int, PensionLotteryHome> = linkedMapOf()
 
         private val nextRound
-            get() = pensionLottery.keys.first() + 1
+            get() = pensionLottery.keys.firstOrNull()?.plus(1)
 
         private val nextWinningDate
-            get() = addDaysToDate(pensionLottery.values.first().winningDate)
+            get() = addDaysToDate(pensionLottery.values.firstOrNull()?.winningDate)
 
         override suspend fun postPensionLotterySave(
             pensionGroup: Int,
@@ -57,10 +57,17 @@ internal class PensionLotteryRepositoryImpl
 
         override suspend fun getPensionLotteryRandom(): Result<PensionLotteryRandom> =
             runCatching {
+                val pensionRound =
+                    nextRound ?: run {
+                        getPensionLotteryRound()
+                            .map { it + 1 }
+                            .getOrElse { throw it }
+                    }
+
                 val randomNumbers = generateNumbers()
                 val group = generateGroupNumber()
                 PensionLotteryRandom(
-                    pensionRound = nextRound,
+                    pensionRound = pensionRound,
                     pensionGroup = group,
                     pensionFirstNum = randomNumbers[0],
                     pensionSecondNum = randomNumbers[1],
@@ -111,14 +118,14 @@ internal class PensionLotteryRepositoryImpl
             val pagedRounds =
                 pensionLotteryRoomDataSource
                     .getPagedRounds(limit = size, offset = page * size)
-                    .getOrDefault(emptyList())
+                    .getOrThrow()
 
             if (pagedRounds.isEmpty()) return Result.success(emptyList())
 
             val lotteries =
                 pensionLotteryRoomDataSource
                     .getPensionLotteriesByRound(pagedRounds)
-                    .getOrDefault(emptyList())
+                    .getOrThrow()
 
             return getWinningPensionLotteries(pagedRounds, lotteries)
         }
@@ -132,9 +139,16 @@ internal class PensionLotteryRepositoryImpl
             fifthNum: Int,
             sixthNum: Int,
         ): Result<Unit> {
+            val round =
+                nextRound ?: run {
+                    getPensionLotteryRound()
+                        .map { it + 1 }
+                        .getOrElse { return Result.failure(it) }
+                }
+
             val pensionLotteryNumberDto =
                 PensionLotteryNumberDto(
-                    round = nextRound,
+                    round = round,
                     group = group,
                     firstNum = firstNum,
                     secondNum = secondNum,
@@ -150,12 +164,10 @@ internal class PensionLotteryRepositoryImpl
             round: Int,
             id: Long,
         ): Result<Unit> =
-            runCatching {
-                pensionLotteryRoomDataSource.deletePensionLotteryByRoundAndId(
-                    round = round,
-                    id = id,
-                )
-            }
+            pensionLotteryRoomDataSource.deletePensionLotteryByRoundAndId(
+                round = round,
+                id = id,
+            )
 
         private suspend fun getWinningPensionLotteries(
             pagedRounds: List<Int>,
@@ -224,13 +236,18 @@ internal class PensionLotteryRepositoryImpl
                 }
             }
 
-        private fun addDaysToDate(dateStr: String): String {
+        private fun addDaysToDate(dateStr: String?): String {
             val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
-
             val calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"))
-            calendar.time = dateFormat.parse(dateStr)!!
 
-            calendar.add(Calendar.DATE, 7)
+            if (dateStr != null) {
+                calendar.time = dateFormat.parse(dateStr)
+                calendar.add(Calendar.DATE, 7)
+            } else {
+                val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) // 일(1) ~ 토(7)
+                val daysUntilThursday = (Calendar.THURSDAY - dayOfWeek + 7) % 7
+                calendar.add(Calendar.DAY_OF_YEAR, daysUntilThursday)
+            }
 
             return dateFormat.format(calendar.time)
         }

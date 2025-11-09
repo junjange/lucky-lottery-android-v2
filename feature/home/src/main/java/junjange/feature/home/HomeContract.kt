@@ -6,6 +6,7 @@ import junjange.core.domain.model.PensionLotteryHome
 sealed interface HomeContract {
     data class State(
         val isLoading: Boolean = false,
+        val isError: Boolean = false,
         val lotteryNumbers: LotteryNumbers? = null,
         val pensionLotteryHome: PensionLotteryHome? = null,
         val lotteryRound: Int = 0,
@@ -30,10 +31,3 @@ sealed interface HomeContract {
         ) : Effect
     }
 }
-
-fun Long.formatPrizeAmount(): String =
-    when {
-        this >= 100_000_000 -> "${this / 100_000_000}억"
-        this >= 10_000 -> "${this / 10_000}만원"
-        else -> "${this}원"
-    }
