@@ -35,7 +35,7 @@ fun LottoTextBar(
         Text(
             text = subtext,
             style = LottoTheme.typography.caption1,
-            color = LottoTheme.colors.gray600,
+            color = LottoTheme.colors.lottoBlack,
         )
     }
 }
