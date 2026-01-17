@@ -3,6 +3,7 @@ package junjange.core.ui.base
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
+import androidx.activity.enableEdgeToEdge
 
 abstract class BaseActivity : ComponentActivity() {
     protected inline val TAG get() = this::class.java.simpleName
@@ -10,6 +11,7 @@ abstract class BaseActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
 
         activityTransition.overridePendingTransition(this)
     }

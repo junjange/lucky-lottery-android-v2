@@ -19,6 +19,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import junjange.core.designsystem.theme.LottoTheme
+import junjange.core.ui.component.EdgeToEdgeLayout
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -39,32 +40,34 @@ fun SplashScreen(
         }
     }
 
-    Box(
-        modifier =
-            Modifier
-                .fillMaxSize()
-                .background(LottoTheme.colors.lottoWhite)
-                .padding(top = (screenHeight / 7 * 3).dp),
-    ) {
-        Column(
-            modifier = Modifier.align(Alignment.TopCenter),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
+    EdgeToEdgeLayout(applySystemBarsPadding = false) {
+        Box(
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(LottoTheme.colors.lottoWhite)
+                    .padding(top = (screenHeight / 7 * 3).dp),
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.app_icon),
-                contentDescription = null,
-                modifier =
-                    Modifier
-                        .height(100.dp)
-                        .fillMaxWidth(),
-            )
-            Spacer(modifier = Modifier.height(13.dp))
-            Text(
-                text = "일상속에서 행운을 찾다",
-                style = LottoTheme.typography.headline3,
-                color = LottoTheme.colors.lottoBlack,
-            )
+            Column(
+                modifier = Modifier.align(Alignment.TopCenter),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.app_icon),
+                    contentDescription = null,
+                    modifier =
+                        Modifier
+                            .height(100.dp)
+                            .fillMaxWidth(),
+                )
+                Spacer(modifier = Modifier.height(13.dp))
+                Text(
+                    text = "일상속에서 행운을 찾다",
+                    style = LottoTheme.typography.headline3,
+                    color = LottoTheme.colors.lottoBlack,
+                )
+            }
         }
     }
 }
