@@ -22,6 +22,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import junjange.core.ui.component.EdgeToEdgeLayout
 import junjange.feature.google.GoogleSignInContract
 import kotlinx.coroutines.flow.collectLatest
 
@@ -58,31 +59,33 @@ fun LoginScreen(
         }
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        Image(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .height(100.dp)
-                    .align(Alignment.Center),
-            painter = painterResource(id = R.drawable.ic_clover),
-            contentDescription = null,
-        )
-        Column(
-            modifier =
-                Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = 24.dp),
-        ) {
-            LoginButton(
-                iconRes = R.drawable.ic_kakao_login,
-                onClick = { viewModel.kakaoLogin(deviceId = deviceId) },
+    EdgeToEdgeLayout {
+        Box(modifier = Modifier.fillMaxSize()) {
+            Image(
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .height(100.dp)
+                        .align(Alignment.Center),
+                painter = painterResource(id = R.drawable.ic_clover),
+                contentDescription = null,
             )
-            Spacer(modifier = Modifier.height(8.dp))
-            LoginButton(
-                iconRes = R.drawable.ic_google_login,
-                onClick = { authResultLauncher.launch(SIGN_IN_REQUEST_CODE) },
-            )
+            Column(
+                modifier =
+                    Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(bottom = 24.dp),
+            ) {
+                LoginButton(
+                    iconRes = R.drawable.ic_kakao_login,
+                    onClick = { viewModel.kakaoLogin(deviceId = deviceId) },
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                LoginButton(
+                    iconRes = R.drawable.ic_google_login,
+                    onClick = { authResultLauncher.launch(SIGN_IN_REQUEST_CODE) },
+                )
+            }
         }
     }
 }
