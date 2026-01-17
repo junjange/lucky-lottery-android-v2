@@ -53,11 +53,11 @@ internal fun PensionLottery720PrizeResponse.toData(requestedRound: Int): Pension
     val roundData = data?.result?.filter { it.settlementEpisode == requestedRound } ?: return null
     if (roundData.isEmpty()) return null
 
-    // rnum 1: 1등 (조 번호 포함)
-    val firstPrizeItem = roundData.firstOrNull { it.rowNumber == 1 } ?: return null
+    // wnSqNo 1: 1등 당첨 번호 (조 번호 포함)
+    val firstPrizeItem = roundData.firstOrNull { it.winnerSequenceNumber == 1 } ?: return null
 
-    // rnum 8: 2등 (보너스 번호)
-    val bonusItem = roundData.firstOrNull { it.rowNumber == 8 } ?: return null
+    // wnSqNo 21: 2등 보너스 번호
+    val bonusItem = roundData.firstOrNull { it.winnerSequenceNumber == 21 } ?: return null
 
     // wnBndNo: 조 (1~5)
     val lotteryGroup = firstPrizeItem.bondNumber?.toIntOrNull() ?: return null
