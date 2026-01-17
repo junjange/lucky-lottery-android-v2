@@ -9,7 +9,6 @@ import junjange.core.remote.api.ApiService
 import junjange.core.remote.api.LotteryService
 import junjange.core.remote.model.request.LotteryRandomRequest
 import junjange.core.remote.model.response.toData
-import junjange.core.remote.model.response.toParseLotteryNumbers
 import okhttp3.ResponseBody
 import org.jsoup.Jsoup
 import javax.inject.Inject
@@ -23,7 +22,14 @@ internal class LotteryDataSourceImpl
         override suspend fun getLotteryRound(): Result<Int> = fetchLatestRound(selector = "#lottoDrwNo") { lotteryService.getRoundInfo() }
 
         override suspend fun getPensionLotteryRound(): Result<Int> =
-            fetchLatestRound(selector = "#drwNo720") { lotteryService.getRoundInfo() }
+            runCatching {
+                val response = lotteryService.getPensionLotteryInfo(round = null)
+                response.data
+                    ?.result
+                    ?.firstOrNull()
+                    ?.settlementEpisode
+                    ?: throw IllegalStateException("Unable to fetch latest pension lottery round")
+            }
 
         private suspend fun fetchLatestRound(
             selector: String,
@@ -80,7 +86,7 @@ internal class LotteryDataSourceImpl
 
         override suspend fun getPensionLottoNumber(drwNo: Int): Result<PensionLotteryHomeEntity> =
             runCatching {
-                val responseBody = lotteryService.getPensionLottoNumber(round = drwNo)
-                responseBody.toParseLotteryNumbers()
+                val response = lotteryService.getPensionLotteryInfo(round = drwNo)
+                response.toData(drwNo) ?: throw IllegalStateException("Pension lottery information not available for round $drwNo")
             }
     }
