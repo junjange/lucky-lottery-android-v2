@@ -1,7 +1,6 @@
 package junjange.feature.randomnumbergeneration
 
 import androidx.lifecycle.SavedStateHandle
-import dagger.hilt.android.lifecycle.HiltViewModel
 import junjange.core.domain.model.LottoType
 import junjange.core.domain.usecase.GetLotteryRandomUseCase
 import junjange.core.domain.usecase.GetPensionLotteryRandomUseCase
@@ -16,11 +15,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
-import javax.inject.Inject
 
-@HiltViewModel
+
 class RandomNumberGenerationViewModel
-    @Inject
+    
     constructor(
         savedStateHandle: SavedStateHandle,
         private val getLotteryRandomUseCase: GetLotteryRandomUseCase,

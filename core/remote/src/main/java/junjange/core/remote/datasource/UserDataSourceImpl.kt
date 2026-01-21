@@ -6,10 +6,9 @@ import junjange.core.remote.api.ApiService
 import junjange.core.remote.model.request.NotificationRequest
 import junjange.core.remote.model.request.UserMyInfoRequest
 import junjange.core.remote.model.response.toData
-import javax.inject.Inject
 
 internal class UserDataSourceImpl
-    @Inject
+    
     constructor(
         private val apiService: ApiService,
     ) : UserDataSource {

@@ -5,10 +5,9 @@ import junjange.core.data.mapper.toDomain
 import junjange.core.domain.model.IsRegistered
 import junjange.core.domain.model.JwtToken
 import junjange.core.domain.repository.CredentialRepository
-import javax.inject.Inject
 
 internal class CredentialRepositoryImpl
-    @Inject
+    
     constructor(
         private val dataSource: CredentialDataSource,
     ) : CredentialRepository {

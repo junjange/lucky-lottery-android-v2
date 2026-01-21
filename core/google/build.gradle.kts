@@ -44,7 +44,4 @@ dependencies {
 
     // google
     implementation(libs.bundles.google)
-
-    // ksp
-    ksp(libs.ksp.hilt)
 }

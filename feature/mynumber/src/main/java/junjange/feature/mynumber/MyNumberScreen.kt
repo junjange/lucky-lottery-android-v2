@@ -64,7 +64,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import org.koin.androidx.compose.koinViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
@@ -98,7 +98,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun MyNumberScreen(
-    viewModel: MyNumberViewModel = hiltViewModel(),
+    viewModel: MyNumberViewModel = koinViewModel(),
     initialPage: Int,
 ) {
     val context = LocalContext.current

@@ -1,6 +1,5 @@
 package junjange.feature.my
 
-import dagger.hilt.android.lifecycle.HiltViewModel
 import junjange.core.domain.model.OauthProvider
 import junjange.core.domain.usecase.DeleteLocalDataUseCase
 import junjange.core.domain.usecase.GetUserMyInfoUseCase
@@ -13,11 +12,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import javax.inject.Inject
 
-@HiltViewModel
+
 class MyViewModel
-    @Inject
+    
     constructor(
         private val getUserMyInfoUseCase: GetUserMyInfoUseCase,
         private val postLogoutUseCase: PostLogoutUseCase,

@@ -11,10 +11,9 @@ import junjange.core.local.worker.LottoNotificationWorker
 import junjange.core.local.worker.PensionLottoNotificationWorker
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
 internal class NotificationLocalDataSourceImpl
-    @Inject
+    
     constructor(
         private val sharedPreferences: SharedPreferences,
         private val workManager: WorkManager,

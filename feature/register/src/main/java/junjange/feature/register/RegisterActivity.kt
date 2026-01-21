@@ -4,19 +4,18 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
-import dagger.hilt.android.AndroidEntryPoint
+import org.koin.androidx.viewmodel.ext.android.viewModel
+// import androidx.activity.viewModels
 import junjange.core.designsystem.theme.LottoTheme
 import junjange.core.navigation.RegisterNavigator
 import junjange.core.ui.base.BaseActivity
-import javax.inject.Inject
 
-@AndroidEntryPoint
+
 class RegisterActivity : BaseActivity() {
-    @Inject
+    
     lateinit var navigator: RegisterNavigator
 
-    private val viewModel: RegisterViewModel by viewModels()
+    private val viewModel: RegisterViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

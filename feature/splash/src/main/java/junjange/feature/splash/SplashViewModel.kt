@@ -1,19 +1,14 @@
 package junjange.feature.splash
 
 import junjange.core.domain.usecase.GetJwtTokenUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.receiveAsFlow
-import javax.inject.Inject
 import junjange.core.ui.base.BaseViewModel
 
-@HiltViewModel
-class SplashViewModel
-    @Inject
-    constructor(
-        private val getJwtTokenUseCase: GetJwtTokenUseCase,
-    ) : BaseViewModel() {
+class SplashViewModel(
+    private val getJwtTokenUseCase: GetJwtTokenUseCase,
+) : BaseViewModel() {
         private val _effect = Channel<SplashContract.Effect>(Channel.BUFFERED)
         val effect get() = _effect.receiveAsFlow()
 

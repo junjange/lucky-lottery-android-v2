@@ -4,10 +4,9 @@ import junjange.core.data.datasource.GoogleDataSource
 import junjange.core.data.mapper.toDomain
 import junjange.core.domain.model.GoogleOauthToken
 import junjange.core.domain.repository.GoogleRepository
-import javax.inject.Inject
 
 internal class GoogleRepositoryImpl
-    @Inject
+    
     constructor(
         private val dataSource: GoogleDataSource,
     ) : GoogleRepository {

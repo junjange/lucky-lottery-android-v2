@@ -5,10 +5,9 @@ import junjange.core.data.model.remote.LotteryNumbersEntity
 import junjange.core.data.model.remote.PensionLotteryHomeEntity
 import junjange.core.remote.api.ApiService
 import junjange.core.remote.model.response.toData
-import javax.inject.Inject
 
 internal class WinningDataSourceImpl
-    @Inject
+    
     constructor(
         private val apiService: ApiService,
     ) : WinningDataSource {

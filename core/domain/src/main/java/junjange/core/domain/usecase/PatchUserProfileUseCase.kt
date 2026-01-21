@@ -1,10 +1,9 @@
 package junjange.core.domain.usecase
 
 import junjange.core.domain.repository.UserRepository
-import javax.inject.Inject
 
 class PatchUserProfileUseCase
-    @Inject
+    
     constructor(
         private val repository: UserRepository,
     ) {

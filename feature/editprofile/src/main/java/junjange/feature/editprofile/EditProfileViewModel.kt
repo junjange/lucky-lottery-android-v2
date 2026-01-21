@@ -2,7 +2,6 @@ package junjange.feature.editprofile
 
 import android.graphics.Bitmap
 import androidx.lifecycle.SavedStateHandle
-import dagger.hilt.android.lifecycle.HiltViewModel
 import junjange.core.domain.usecase.ImagesUploadUseCase
 import junjange.core.domain.usecase.PatchUserProfileUseCase
 import junjange.core.ui.base.BaseViewModel
@@ -16,11 +15,10 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import okhttp3.MultipartBody
-import javax.inject.Inject
 
-@HiltViewModel
+
 class EditProfileViewModel
-    @Inject
+    
     constructor(
         private val savedStateHandle: SavedStateHandle,
         private val patchUserProfileUseCase: PatchUserProfileUseCase,

@@ -5,10 +5,9 @@ import junjange.core.data.model.remote.GoogleOauthTokenEntity
 import junjange.core.firebase.api.GoogleApiService
 import junjange.core.firebase.model.request.GoogleOauthTokenRequest
 import junjange.core.firebase.model.response.toData
-import javax.inject.Inject
 
 internal class GoogleDataSourceImpl
-    @Inject
+    
     constructor(
         private val apiService: GoogleApiService,
     ) : GoogleDataSource {

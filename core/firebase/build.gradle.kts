@@ -32,5 +32,4 @@ dependencies {
     implementation(libs.bundles.common)
     implementation(libs.bundles.google)
     implementation(libs.bundles.network)
-    ksp(libs.ksp.hilt)
 }

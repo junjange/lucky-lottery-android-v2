@@ -5,10 +5,9 @@ import junjange.core.data.mapper.toDomain
 import junjange.core.domain.model.ImageUpload
 import junjange.core.domain.repository.ImagesRepository
 import okhttp3.MultipartBody
-import javax.inject.Inject
 
 internal class ImagesRepositoryImpl
-    @Inject
+    
     constructor(
         private val imagesDataSource: ImagesDataSource,
     ) : ImagesRepository {

@@ -14,7 +14,6 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
             with(pluginManager) {
                 apply("com.android.application")
                 apply("org.jetbrains.kotlin.android")
-                apply("com.google.dagger.hilt.android")
                 apply("com.google.devtools.ksp")
                 apply("org.jetbrains.kotlin.plugin.serialization")
                 apply("org.jetbrains.kotlin.plugin.compose")
@@ -88,7 +87,6 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                 add("implementation", libs.findBundle("datastore").get())
                 add("implementation", libs.findBundle("room").get())
 
-                add("ksp", libs.findLibrary("ksp-hilt").get())
                 add("ksp", libs.findLibrary("room-compiler").get())
             }
         }

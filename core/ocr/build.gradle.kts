@@ -29,7 +29,4 @@ dependencies {
     implementation(libs.bundles.common)
 
     implementation(libs.tesseract.android)
-
-    // ksp
-    ksp(libs.ksp.hilt)
 }

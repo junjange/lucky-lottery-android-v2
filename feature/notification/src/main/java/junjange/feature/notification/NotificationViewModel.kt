@@ -1,6 +1,5 @@
 package junjange.feature.notification
 
-import dagger.hilt.android.lifecycle.HiltViewModel
 import junjange.core.domain.usecase.GetNotificationUseCase
 import junjange.core.domain.usecase.PatchLotteryNotificationUseCase
 import junjange.core.domain.usecase.PatchPensionLotteryNotificationUseCase
@@ -9,11 +8,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import javax.inject.Inject
 
-@HiltViewModel
+
 class NotificationViewModel
-    @Inject
+    
     constructor(
         private val getNotificationUseCase: GetNotificationUseCase,
         private val patchLotteryNotificationUseCase: PatchLotteryNotificationUseCase,

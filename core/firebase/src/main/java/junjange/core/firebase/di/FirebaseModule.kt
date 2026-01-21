@@ -1,16 +1,8 @@
 package junjange.core.firebase.di
 
 import com.google.firebase.messaging.FirebaseMessaging
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import org.koin.dsl.module
 
-@Module
-@InstallIn(SingletonComponent::class)
-internal object FirebaseModule {
-    @Provides
-    @Singleton
-    fun provideMessaging(): FirebaseMessaging = FirebaseMessaging.getInstance()
+val firebaseModule = module {
+    single { FirebaseMessaging.getInstance() }
 }

@@ -1,6 +1,5 @@
 package junjange.feature.home
 
-import dagger.hilt.android.lifecycle.HiltViewModel
 import junjange.core.domain.usecase.GetLotteryRoundUseCase
 import junjange.core.domain.usecase.GetLotteryUseCase
 import junjange.core.domain.usecase.GetPensionLotteryRoundUseCase
@@ -17,17 +16,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
-import javax.inject.Inject
 
-@HiltViewModel
-class HomeViewModel
-    @Inject
-    constructor(
-        private val getLotteryRoundUseCase: GetLotteryRoundUseCase,
-        private val getPensionLotteryRoundUseCase: GetPensionLotteryRoundUseCase,
-        private val getLotteryUseCase: GetLotteryUseCase,
-        private val getPensionLotteryUseCase: GetPensionLotteryUseCase,
-    ) : BaseViewModel() {
+class HomeViewModel(
+    private val getLotteryRoundUseCase: GetLotteryRoundUseCase,
+    private val getPensionLotteryRoundUseCase: GetPensionLotteryRoundUseCase,
+    private val getLotteryUseCase: GetLotteryUseCase,
+    private val getPensionLotteryUseCase: GetPensionLotteryUseCase,
+) : BaseViewModel() {
         private val _state = MutableStateFlow(State())
         val state: StateFlow<State> = _state.asStateFlow()
 

@@ -22,56 +22,19 @@ import junjange.core.domain.repository.NotificationRepository
 import junjange.core.domain.repository.PensionLotteryRepository
 import junjange.core.domain.repository.UserRepository
 import junjange.core.domain.repository.WinningRepository
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import org.koin.dsl.module
 
-@Module
-@InstallIn(SingletonComponent::class)
-internal abstract class RepositoryModule {
-    @Binds
-    @Singleton
-    abstract fun bindKakaoLoginRepository(kakaoLoginRepositoryImpl: KakaoLoginRepositoryImpl): KakaoLoginRepository
-
-    @Binds
-    @Singleton
-    abstract fun bindFirebaseRepository(firebaseRepositoryImpl: FirebaseRepositoryImpl): FirebaseRepository
-
-    @Binds
-    @Singleton
-    abstract fun bindLocalRepository(localRepositoryImpl: LocalRepositoryImpl): LocalRepository
-
-    @Binds
-    @Singleton
-    abstract fun bindCredentialRepository(credentialRepositoryImpl: CredentialRepositoryImpl): CredentialRepository
-
-    @Binds
-    @Singleton
-    abstract fun bindUserRepository(userRepositoryImpl: UserRepositoryImpl): UserRepository
-
-    @Binds
-    @Singleton
-    abstract fun bindLotteryRepository(lotteryRepositoryImpl: LotteryRepositoryImpl): LotteryRepository
-
-    @Binds
-    @Singleton
-    abstract fun bindPensionLotteryRepository(pensionLotteryRepositoryImpl: PensionLotteryRepositoryImpl): PensionLotteryRepository
-
-    @Binds
-    @Singleton
-    abstract fun bindWinningRepository(winningRepositoryImpl: WinningRepositoryImpl): WinningRepository
-
-    @Binds
-    @Singleton
-    abstract fun bindNotificationRepository(notificationRepositoryImpl: NotificationRepositoryImpl): NotificationRepository
-
-    @Binds
-    @Singleton
-    abstract fun bindImagesRepository(imagesRepositoryImpl: ImagesRepositoryImpl): ImagesRepository
-
-    @Binds
-    @Singleton
-    abstract fun bindGoogleRepository(googleRepositoryImpl: GoogleRepositoryImpl): GoogleRepository
-}
+val repositoryModule =
+    module {
+        single<KakaoLoginRepository> { KakaoLoginRepositoryImpl(get()) }
+        single<FirebaseRepository> { FirebaseRepositoryImpl(get()) }
+        single<LocalRepository> { LocalRepositoryImpl(get()) }
+        single<CredentialRepository> { CredentialRepositoryImpl(get()) }
+        single<UserRepository> { UserRepositoryImpl(get(), get()) }
+        single<LotteryRepository> { LotteryRepositoryImpl(get(), get()) }
+        single<PensionLotteryRepository> { PensionLotteryRepositoryImpl(get(), get(), get()) }
+        single<WinningRepository> { WinningRepositoryImpl(get()) }
+        single<NotificationRepository> { NotificationRepositoryImpl(get()) }
+        single<ImagesRepository> { ImagesRepositoryImpl(get()) }
+        single<GoogleRepository> { GoogleRepositoryImpl(get()) }
+    }

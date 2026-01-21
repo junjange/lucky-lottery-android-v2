@@ -40,9 +40,6 @@ dependencies {
     implementation(libs.bundles.compose)
     implementation(libs.bundles.common)
 
-    // ksp
-    ksp(libs.ksp.hilt)
-
     // google
     implementation(libs.bundles.google)
 

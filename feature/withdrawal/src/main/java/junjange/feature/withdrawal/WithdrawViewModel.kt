@@ -7,7 +7,6 @@ import com.google.android.gms.tasks.Task
 import junjange.core.domain.usecase.DeleteLocalDataUseCase
 import junjange.core.domain.usecase.DeleteMeUseCase
 import junjange.core.domain.usecase.PostGoogleOauthTokenUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -15,13 +14,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import javax.inject.Inject
 import junjange.core.domain.model.OauthProvider
 import junjange.core.ui.base.BaseViewModel
 
-@HiltViewModel
+
 class WithdrawViewModel
-    @Inject
+    
     constructor(
         private val savedStateHandle: SavedStateHandle,
         private val googleOauthTokenUseCase: PostGoogleOauthTokenUseCase,

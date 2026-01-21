@@ -3,7 +3,8 @@ plugins {
 }
 
 dependencies {
-    implementation(libs.javax.inject)
+    implementation(libs.koin.core)
+
     // okhttp
     implementation(libs.okhttp.core)
 }

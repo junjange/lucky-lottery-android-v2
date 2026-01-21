@@ -17,9 +17,9 @@ class KotlinJvmConventionPlugin : Plugin<Project> {
 
             // Configure Kotlin JVM toolchain and compiler options for JVM modules
             extensions.configure(org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension::class.java) {
-                jvmToolchain(21)
+                jvmToolchain(17)
                 compilerOptions {
-                    jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21)
+                    jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
                 }
             }
 

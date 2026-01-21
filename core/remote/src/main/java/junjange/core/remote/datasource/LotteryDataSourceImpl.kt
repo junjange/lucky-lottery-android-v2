@@ -9,10 +9,9 @@ import junjange.core.remote.api.ApiService
 import junjange.core.remote.api.LotteryService
 import junjange.core.remote.model.request.LotteryRandomRequest
 import junjange.core.remote.model.response.toData
-import javax.inject.Inject
 
 internal class LotteryDataSourceImpl
-    @Inject
+    
     constructor(
         private val apiService: ApiService,
         private val lotteryService: LotteryService,

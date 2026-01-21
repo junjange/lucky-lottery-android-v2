@@ -5,10 +5,9 @@ import junjange.core.data.model.remote.ImageUploadEntity
 import junjange.core.remote.api.ApiService
 import junjange.core.remote.model.response.toData
 import okhttp3.MultipartBody
-import javax.inject.Inject
 
 internal class ImagesDataSourceImpl
-    @Inject
+    
     constructor(
         private val apiService: ApiService,
     ) : ImagesDataSource {

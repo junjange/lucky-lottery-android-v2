@@ -4,15 +4,15 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
-import dagger.hilt.android.AndroidEntryPoint
+import org.koin.androidx.viewmodel.ext.android.viewModel
+// import androidx.activity.viewModels
 import junjange.core.designsystem.theme.LottoTheme
 import junjange.core.domain.model.OauthProvider
 import junjange.core.ui.base.BaseActivity
 
-@AndroidEntryPoint
+
 class WithdrawalActivity : BaseActivity() {
-    private val viewModel: WithdrawViewModel by viewModels()
+    private val viewModel: WithdrawViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

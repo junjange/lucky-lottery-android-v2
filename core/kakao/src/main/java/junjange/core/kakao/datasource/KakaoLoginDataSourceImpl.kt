@@ -5,16 +5,13 @@ import junjange.core.data.datasource.KakaoLoginDataSource
 import junjange.core.data.model.local.KakaoAccessTokenEntity
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.suspendCancellableCoroutine
-import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
 internal class KakaoLoginDataSourceImpl
-    @Inject
     constructor(
-        @ApplicationContext private val context: Context,
+        private val context: Context,
     ) : KakaoLoginDataSource {
         /**
          * @param context: Activity context

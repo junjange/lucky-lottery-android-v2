@@ -6,10 +6,9 @@ import junjange.core.data.mapper.toDomain
 import junjange.core.domain.model.LuckyLotteryNotification
 import junjange.core.domain.model.UserMyInfo
 import junjange.core.domain.repository.UserRepository
-import javax.inject.Inject
 
 class UserRepositoryImpl
-    @Inject
+    
     constructor(
         private val dataSource: UserDataSource,
         private val notificationLocalDataSource: NotificationLocalDataSource,

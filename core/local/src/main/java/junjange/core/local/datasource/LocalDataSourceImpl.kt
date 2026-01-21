@@ -4,10 +4,9 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import junjange.core.data.datasource.LocalDataSource
 import junjange.core.data.model.local.JwtTokenEntity
-import javax.inject.Inject
 
 internal class LocalDataSourceImpl
-    @Inject
+    
     constructor(
         private val sharedPreferences: SharedPreferences,
     ) : LocalDataSource {

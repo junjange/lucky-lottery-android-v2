@@ -35,9 +35,6 @@ dependencies {
     // google
     implementation(libs.bundles.google)
 
-    // ksp
-    ksp(libs.ksp.hilt)
-
     debugImplementation(libs.compose.ui.test)
     debugImplementation(libs.compose.ui.tooling.debug)
 

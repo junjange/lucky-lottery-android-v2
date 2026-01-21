@@ -5,21 +5,20 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
-import dagger.hilt.android.AndroidEntryPoint
+import org.koin.androidx.viewmodel.ext.android.viewModel
+// import androidx.activity.viewModels
 import junjange.core.designsystem.theme.LottoTheme
 import junjange.core.domain.model.LottoType
 import junjange.core.navigation.RandomNumberGenerationNavigator
 import junjange.core.navigation.RandomNumberNavigator
 import junjange.core.ui.base.BaseActivity
-import javax.inject.Inject
 
-@AndroidEntryPoint
+
 class RandomNumberGenerationActivity : BaseActivity() {
-    @Inject
+    
     lateinit var navigator: RandomNumberGenerationNavigator
 
-    private val viewModel: RandomNumberGenerationViewModel by viewModels()
+    private val viewModel: RandomNumberGenerationViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
