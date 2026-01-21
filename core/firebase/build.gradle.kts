@@ -1,6 +1,9 @@
 plugins {
     id("junjange.core.module")
     alias(libs.plugins.parcelize)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlinx.serialization)
+    alias(libs.plugins.ktorfit)
 }
 
 android {
@@ -32,4 +35,8 @@ dependencies {
     implementation(libs.bundles.common)
     implementation(libs.bundles.google)
     implementation(libs.bundles.network)
+    implementation(libs.kotlinx.serialization)
+
+    // Ktorfit KSP processor
+    ksp(libs.ktorfit.ksp)
 }

@@ -51,9 +51,6 @@ import junjange.core.ui.component.LottoEditProfileBottomSheet
 import junjange.core.ui.component.LottoProfileTextField
 import junjange.core.ui.util.saveBitmapToFile
 import kotlinx.coroutines.flow.collectLatest
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -78,11 +75,7 @@ fun EditProfileScreen(
                         }
                     viewModel.onPickImage(bitmap)
                     val file = saveBitmapToFile(context, bitmap)
-
-                    val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
-                    val requestBody =
-                        MultipartBody.Part.createFormData("file", file.name, requestFile)
-                    viewModel.getFile(requestBody)
+                    viewModel.setImageFile(file)
                 }
             }
         }

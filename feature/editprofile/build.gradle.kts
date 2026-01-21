@@ -41,6 +41,9 @@ dependencies {
     implementation(libs.bundles.compose)
     implementation(libs.bundles.common)
 
+    // Ktor for multipart form data
+    implementation(libs.ktor.client.core)
+
     // google
     implementation(libs.bundles.google)
 

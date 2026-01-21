@@ -1,7 +1,11 @@
 package junjange.core.remote.model.response
 
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.SerialName
+
 import junjange.core.data.model.remote.LotteryGetNumbersEntity
 
+@Serializable
 data class LotteryGetNumbersResponse(
     val firstNum: Int,
     val secondNum: Int,

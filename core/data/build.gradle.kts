@@ -9,6 +9,6 @@ dependencies {
     implementation(libs.coroutines.core)
     implementation(libs.koin.core)
 
-    // okhttp
-    implementation(libs.okhttp.core)
+    // Ktor for multipart
+    implementation(libs.ktor.client.core)
 }

@@ -1,11 +1,14 @@
 package junjange.core.remote.model.error
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.SerialName
 
+
+@Serializable
 data class ErrorResponseImpl(
-    @SerializedName("success") override val success: Boolean,
-    @SerializedName("status") override val status: Int,
-    @SerializedName("reason") override val reason: String,
-    @SerializedName("timeStamp") override val timeStamp: String,
-    @SerializedName("path") override val path: String,
+    @SerialName("success") override val success: Boolean,
+    @SerialName("status") override val status: Int,
+    @SerialName("reason") override val reason: String,
+    @SerialName("timeStamp") override val timeStamp: String,
+    @SerialName("path") override val path: String,
 ) : ErrorResponse

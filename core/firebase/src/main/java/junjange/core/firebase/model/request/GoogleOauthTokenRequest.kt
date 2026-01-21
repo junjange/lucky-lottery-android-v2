@@ -1,16 +1,18 @@
 package junjange.core.firebase.model.request
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class GoogleOauthTokenRequest(
-    @SerializedName("grant_type")
-    private val grantType: String,
-    @SerializedName("client_id")
-    private val clientId: String,
-    @SerializedName("client_secret")
-    private val clientSecret: String,
-    @SerializedName("redirect_uri")
-    private val redirectUri: String,
-    @SerializedName("code")
-    private val code: String,
+    @SerialName("grant_type")
+    val grantType: String,
+    @SerialName("client_id")
+    val clientId: String,
+    @SerialName("client_secret")
+    val clientSecret: String,
+    @SerialName("redirect_uri")
+    val redirectUri: String,
+    @SerialName("code")
+    val code: String,
 )

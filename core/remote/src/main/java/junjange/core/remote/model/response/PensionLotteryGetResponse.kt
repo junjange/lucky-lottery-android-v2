@@ -1,7 +1,11 @@
 package junjange.core.remote.model.response
 
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.SerialName
+
 import junjange.core.data.model.remote.PensionLotteryGetEntity
 
+@Serializable
 data class PensionLotteryGetResponse(
     val content: List<PensionLotteryGetContentResponse>,
     val last: Boolean,

@@ -1,14 +1,17 @@
 package junjange.core.remote.model.response
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.SerialName
+
 import junjange.core.data.model.remote.PensionLotteryGetContentEntity
 
+@Serializable
 data class PensionLotteryGetContentResponse(
     val round: Int,
     val winningDate: String,
     val checkWinningBonus: Boolean,
     val pensionLotteryNumbersResponse: List<PensionLotteryNumbersResponse>,
-    @SerializedName("winningLotteryNumbersResponse") val winningPensionLotteryNumbersResponse: WinningPensionLotteryNumbersResponse?,
+    @SerialName("winningLotteryNumbersResponse") val winningPensionLotteryNumbersResponse: WinningPensionLotteryNumbersResponse?,
     val winningPensionLotteryBonusNumbersResponse: WinningPensionLotteryBonusNumbersResponse?,
 )
 

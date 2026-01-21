@@ -1,8 +1,8 @@
 package junjange.core.data.datasource
 
+import io.ktor.client.request.forms.MultiPartFormDataContent
 import junjange.core.data.model.remote.ImageUploadEntity
-import okhttp3.MultipartBody
 
 interface ImagesDataSource {
-    suspend fun postImagesUpload(file: MultipartBody.Part): Result<ImageUploadEntity>
+    suspend fun postImagesUpload(file: MultiPartFormDataContent): Result<ImageUploadEntity>
 }
