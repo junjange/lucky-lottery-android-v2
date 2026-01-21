@@ -1,6 +1,8 @@
 package junjange.core.remote.model.response
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.SerialName
+
 import junjange.core.data.model.remote.LottoEntity
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -9,46 +11,49 @@ import java.util.Locale
  * 로또 645 당첨 정보 API 응답 모델
  * API: /lt645/selectPstLt645Info.do?srchLtEpsd={회차}
  */
+@Serializable
 data class Lotto645InfoResponse(
-    @SerializedName("resultCode")
+    @SerialName("resultCode")
     val resultCode: String?,
-    @SerializedName("resultMessage")
+    @SerialName("resultMessage")
     val resultMessage: String?,
-    @SerializedName("data")
+    @SerialName("data")
     val data: Lotto645Data?,
 )
 
+@Serializable
 data class Lotto645Data(
-    @SerializedName("list")
+    @SerialName("list")
     val list: List<Lotto645Item>?,
 )
 
+@Serializable
 data class Lotto645Item(
-    @SerializedName("ltEpsd")
+    @SerialName("ltEpsd")
     val round: Int,
-    @SerializedName("tm1WnNo")
+    @SerialName("tm1WnNo")
     val number1: Int,
-    @SerializedName("tm2WnNo")
+    @SerialName("tm2WnNo")
     val number2: Int,
-    @SerializedName("tm3WnNo")
+    @SerialName("tm3WnNo")
     val number3: Int,
-    @SerializedName("tm4WnNo")
+    @SerialName("tm4WnNo")
     val number4: Int,
-    @SerializedName("tm5WnNo")
+    @SerialName("tm5WnNo")
     val number5: Int,
-    @SerializedName("tm6WnNo")
+    @SerialName("tm6WnNo")
     val number6: Int,
-    @SerializedName("bnsWnNo")
+    @SerialName("bnsWnNo")
     val bonusNumber: Int,
-    @SerializedName("ltRflYmd")
+    @SerialName("ltRflYmd")
     val drawDate: String,
-    @SerializedName("rnk1WnNope")
+    @SerialName("rnk1WnNope")
     val rank1WinnerCount: Int,
-    @SerializedName("rnk1WnAmt")
+    @SerialName("rnk1WnAmt")
     val rank1PrizeAmount: Long,
-    @SerializedName("rnk1SumWnAmt")
+    @SerialName("rnk1SumWnAmt")
     val rank1TotalAmount: Long,
-    @SerializedName("wholEpsdSumNtslAmt")
+    @SerialName("wholEpsdSumNtslAmt")
     val totalSalesAmount: Long,
 )
 

@@ -1,7 +1,11 @@
 package junjange.core.remote.model.response
 
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.SerialName
+
 import junjange.core.data.model.remote.UserMyInfoEntity
 
+@Serializable
 data class UserMyInfoResponse(
     val id: Int,
     val nickname: String,

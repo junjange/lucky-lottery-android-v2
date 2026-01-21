@@ -1,19 +1,21 @@
 package junjange.core.firebase.model.response
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import junjange.core.data.model.remote.GoogleOauthTokenEntity
 
+@Serializable
 data class GoogleOauthTokenResponse(
-    @SerializedName("access_token")
-    var accessToken: String = "",
-    @SerializedName("expires_in")
-    var expiresIn: Int = 0,
-    @SerializedName("scope")
-    var scope: String = "",
-    @SerializedName("token_type")
-    var tokenType: String = "",
-    @SerializedName("id_token")
-    var idToken: String = "",
+    @SerialName("access_token")
+    val accessToken: String = "",
+    @SerialName("expires_in")
+    val expiresIn: Int = 0,
+    @SerialName("scope")
+    val scope: String = "",
+    @SerialName("token_type")
+    val tokenType: String = "",
+    @SerialName("id_token")
+    val idToken: String = "",
 )
 
 internal fun GoogleOauthTokenResponse.toData() =

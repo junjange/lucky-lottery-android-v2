@@ -1,5 +1,14 @@
 package junjange.core.remote.api
 
+import de.jensklingenberg.ktorfit.http.Body
+import de.jensklingenberg.ktorfit.http.DELETE
+import de.jensklingenberg.ktorfit.http.GET
+import de.jensklingenberg.ktorfit.http.Multipart
+import de.jensklingenberg.ktorfit.http.PATCH
+import de.jensklingenberg.ktorfit.http.POST
+import de.jensklingenberg.ktorfit.http.Part
+import de.jensklingenberg.ktorfit.http.Query
+import io.ktor.client.request.forms.MultiPartFormDataContent
 import junjange.core.remote.model.BaseResponse
 import junjange.core.remote.model.request.LotteryRandomRequest
 import junjange.core.remote.model.request.NotificationRegisterRequest
@@ -18,15 +27,6 @@ import junjange.core.remote.model.response.PensionLotteryGetResponse
 import junjange.core.remote.model.response.PensionLotteryHomeResponse
 import junjange.core.remote.model.response.PensionLotteryRandomResponse
 import junjange.core.remote.model.response.UserMyInfoResponse
-import okhttp3.MultipartBody
-import retrofit2.http.Body
-import retrofit2.http.DELETE
-import retrofit2.http.GET
-import retrofit2.http.Multipart
-import retrofit2.http.PATCH
-import retrofit2.http.POST
-import retrofit2.http.Part
-import retrofit2.http.Query
 
 internal interface ApiService {
     @POST(ApiClient.Credentials.POST_CREDENTIALS_REGISTER)
@@ -121,6 +121,6 @@ internal interface ApiService {
     @Multipart
     @POST(ApiClient.Images.POST_IMAGES_UPLOAD)
     suspend fun postImagesUpload(
-        @Part file: MultipartBody.Part,
+        @Part file: MultiPartFormDataContent,
     ): BaseResponse<ImagesUploadResponse>
 }

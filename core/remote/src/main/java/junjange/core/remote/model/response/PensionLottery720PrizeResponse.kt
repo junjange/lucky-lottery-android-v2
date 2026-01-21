@@ -1,6 +1,8 @@
 package junjange.core.remote.model.response
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.SerialName
+
 import junjange.core.data.model.remote.PensionLotteryHomeEntity
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -9,38 +11,41 @@ import java.util.Locale
  * 연금복권 720+ 당첨 정보 API 응답 모델 (당첨 번호 + 당첨금)
  * API: /pt720/selectPstPt720Info.do?Round={회차}
  */
+@Serializable
 data class PensionLottery720PrizeResponse(
-    @SerializedName("resultCode")
+    @SerialName("resultCode")
     val resultCode: String?,
-    @SerializedName("resultMessage")
+    @SerialName("resultMessage")
     val resultMessage: String?,
-    @SerializedName("data")
+    @SerialName("data")
     val data: PensionLottery720PrizeData?,
 )
 
+@Serializable
 data class PensionLottery720PrizeData(
-    @SerializedName("result")
+    @SerialName("result")
     val result: List<PensionLottery720PrizeItem>?,
 )
 
+@Serializable
 data class PensionLottery720PrizeItem(
-    @SerializedName("rnum")
+    @SerialName("rnum")
     val rowNumber: Int,
-    @SerializedName("wnSqNo")
+    @SerialName("wnSqNo")
     val winnerSequenceNumber: Int,
-    @SerializedName("wnAmt")
+    @SerialName("wnAmt")
     val prizeAmount: Long,
-    @SerializedName("wnBndNo")
+    @SerialName("wnBndNo")
     val bondNumber: String?,
-    @SerializedName("wnRnkVl")
+    @SerialName("wnRnkVl")
     val rankValue: String,
-    @SerializedName("psltRflYmd")
+    @SerialName("psltRflYmd")
     val settlementDate: String,
-    @SerializedName("psltEpsd")
+    @SerialName("psltEpsd")
     val settlementEpisode: Int,
-    @SerializedName("psltSn")
+    @SerialName("psltSn")
     val settlementSequence: Int,
-    @SerializedName("ltGdsCd")
+    @SerialName("ltGdsCd")
     val lotteryGoodsCode: String,
 )
 

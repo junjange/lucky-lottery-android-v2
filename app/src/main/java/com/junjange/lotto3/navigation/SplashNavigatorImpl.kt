@@ -10,11 +10,8 @@ import junjange.feature.main.MainActivity
 import junjange.feature.notification.NotificationActivity
 import junjange.feature.randomnumber.RandomNumberActivity
 import junjange.feature.withdrawal.WithdrawalActivity
-import javax.inject.Inject
 
-class SplashNavigatorImpl
-    @Inject
-    constructor() : SplashNavigator {
+class SplashNavigatorImpl : SplashNavigator {
         override fun startMainActivity(context: Context) {
             MainActivity.startActivity(context = context)
         }

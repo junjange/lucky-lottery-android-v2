@@ -2,6 +2,10 @@ package junjange.feature.editprofile
 
 import android.graphics.Bitmap
 import androidx.lifecycle.SavedStateHandle
+import io.ktor.client.request.forms.MultiPartFormDataContent
+import io.ktor.client.request.forms.formData
+import io.ktor.http.Headers
+import io.ktor.http.HttpHeaders
 import junjange.core.domain.usecase.ImagesUploadUseCase
 import junjange.core.domain.usecase.PatchUserProfileUseCase
 import junjange.core.ui.base.BaseViewModel
@@ -14,11 +18,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import okhttp3.MultipartBody
-
+import java.io.File
 
 class EditProfileViewModel
-    
     constructor(
         private val savedStateHandle: SavedStateHandle,
         private val patchUserProfileUseCase: PatchUserProfileUseCase,
@@ -54,8 +56,21 @@ class EditProfileViewModel
 
         fun postImagesUpload() {
             launch {
-                _uiState.value.profilePath?.let { profilePath ->
-                    postImagesUploadUseCase(profilePath)
+                _uiState.value.profileImageFile?.let { file ->
+                    val multipartContent =
+                        MultiPartFormDataContent(
+                            formData {
+                                append(
+                                    "file",
+                                    file.readBytes(),
+                                    Headers.build {
+                                        append(HttpHeaders.ContentType, "image/*")
+                                        append(HttpHeaders.ContentDisposition, "filename=\"${file.name}\"")
+                                    },
+                                )
+                            },
+                        )
+                    postImagesUploadUseCase(multipartContent)
                         .onSuccess { imageUpload ->
                             patchUserProfile(imageUpload.imageUrl)
                         }.onFailure {
@@ -82,9 +97,9 @@ class EditProfileViewModel
             }
         }
 
-        fun getFile(file: MultipartBody.Part) {
+        fun setImageFile(file: File) {
             _uiState.update {
-                it.copy(profilePath = file)
+                it.copy(profileImageFile = file)
             }
         }
 
@@ -115,7 +130,7 @@ class EditProfileViewModel
         fun onClickedProfileDefaultImageSelect() {
             _uiState.update {
                 it.copy(
-                    profilePath = null,
+                    profileImageFile = null,
                     newProfileImage = null,
                     isBottomSheetShowing = false,
                     newProfileImageBitmap = null,

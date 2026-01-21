@@ -1,9 +1,9 @@
 package junjange.core.remote.api
 
+import de.jensklingenberg.ktorfit.http.GET
+import de.jensklingenberg.ktorfit.http.Query
 import junjange.core.remote.model.response.Lotto645InfoResponse
 import junjange.core.remote.model.response.PensionLottery720PrizeResponse
-import retrofit2.http.GET
-import retrofit2.http.Query
 
 interface LotteryService {
     /**

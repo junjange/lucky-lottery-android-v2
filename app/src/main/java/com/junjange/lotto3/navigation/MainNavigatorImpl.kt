@@ -8,11 +8,8 @@ import junjange.feature.login.LoginActivity
 import junjange.feature.notification.NotificationActivity
 import junjange.feature.randomnumber.RandomNumberActivity
 import junjange.feature.withdrawal.WithdrawalActivity
-import javax.inject.Inject
 
-class MainNavigatorImpl
-    @Inject
-    constructor() : MainNavigator {
+class MainNavigatorImpl : MainNavigator {
         override fun startRandomActivity(context: Context) {
             RandomNumberActivity.startActivity(context = context)
         }

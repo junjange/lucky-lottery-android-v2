@@ -1,29 +1,50 @@
 package junjange.core.firebase.di
 
+import de.jensklingenberg.ktorfit.Ktorfit
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.okhttp.OkHttp
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logging
+import io.ktor.serialization.kotlinx.json.json
 import junjange.core.firebase.api.GoogleApiService
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
+import kotlinx.serialization.json.Json
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 val googleModule = module {
-    single(named("google")) {
-        val loggingInterceptor = HttpLoggingInterceptor()
-        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
-        OkHttpClient.Builder()
-            .addInterceptor(loggingInterceptor)
-            .build()
+    // JSON configuration for Google API
+    single(named("googleJson")) {
+        Json {
+            ignoreUnknownKeys = true
+            isLenient = true
+            encodeDefaults = true
+            prettyPrint = true
+        }
     }
 
-    single(named("google")) {
-        Retrofit.Builder()
+    // HttpClient for Google API
+    single<HttpClient>(named("googleHttpClient")) {
+        val json: Json = get(named("googleJson"))
+
+        HttpClient(OkHttp) {
+            install(ContentNegotiation) {
+                json(json)
+            }
+            install(Logging) {
+                level = LogLevel.BODY
+            }
+        }
+    }
+
+    // GoogleApiService using Ktorfit
+    single<GoogleApiService> {
+        val httpClient: HttpClient = get(named("googleHttpClient"))
+
+        Ktorfit.Builder()
             .baseUrl("https://www.googleapis.com")
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(get(named("google")))
+            .httpClient(httpClient)
             .build()
+            .create()
     }
-
-    single { get<Retrofit>(named("google")).create(GoogleApiService::class.java) }
 }
