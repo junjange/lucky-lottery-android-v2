@@ -28,5 +28,4 @@ dependencies {
     implementation(project(Modules.FEATURE_MAIN))
 
     implementation(libs.bundles.common)
-    ksp(libs.ksp.hilt)
 }

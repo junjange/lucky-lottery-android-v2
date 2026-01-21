@@ -14,7 +14,6 @@ lifecycle-extensions = "2.2.0"
 compose = "1.10.1"
 compose-ui = "1.9.3"
 navigation = "2.9.5"
-hilt-navigation-compose = "1.3.0"
 
 ## test
 junit = "4.13.2"
@@ -24,7 +23,9 @@ junit-espresso = "3.6.1"
 ## android-library
 datastore = "1.1.3"
 coil = "2.5.0"
-hilt = "2.57.2"
+koin = "4.0.1"
+koin-compose = "4.0.0"
+koin-compiler = "2.0.0-Beta1"
 image-cropper = "4.5.0"
 
 ## kakao
@@ -59,7 +60,7 @@ room = "2.8.2"
 
 # workmanager
 work = "2.9.0"
-hilt-work = "1.1.0"
+koin-workmanager = "4.0.0"
 
 [libraries]
 # default
@@ -85,7 +86,6 @@ compose-ui-tooling-debug = { group = "androidx.compose.ui", name = "ui-tooling" 
 compose-material = { group = "androidx.compose.material", name = "material" }
 compose-material3 = { group = "androidx.compose.material3", name = "material3", version = "1.3.1" }
 compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
-compose-hilt-navigation = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt-navigation-compose" }
 compose-compiler-gradle-plugin = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin-lang" }
 
 # test
@@ -97,16 +97,19 @@ compose-ui-test = { group = "androidx.compose.ui", name = "ui-test-manifest", ve
 # android-library
 datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
 datastore-core = { group = "androidx.datastore", name = "datastore-preferences-core", version.ref = "datastore" }
-hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
-hilt-core = { group = "com.google.dagger", name = "hilt-core", version.ref = "hilt" }
+koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
+koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
+koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin-compose" }
+koin-compiler = { group = "io.insert-koin", name = "koin-ksp-compiler", version.ref = "koin-compiler" }
+koin-annotations = { group = "io.insert-koin", name = "koin-annotations", version.ref = "koin-compiler" }
+koin-test = { group = "io.insert-koin", name = "koin-test", version.ref = "koin" }
+koin-test-junit4 = { group = "io.insert-koin", name = "koin-test-junit4", version.ref = "koin" }
 coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 paging-compose = { group = "androidx.paging", name = "paging-compose", version = "3.3.6" }
 javax-inject = "javax.inject:javax.inject:1"
 image-cropper = { module = "com.vanniktech:android-image-cropper", version.ref = "image-cropper" }
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 
-# ksp
-ksp-hilt = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
 
 # kakao
 kakao-user = { group = "com.kakao.sdk", name = "v2-user", version.ref = "kakao" }
@@ -146,26 +149,24 @@ room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 
 # workmanager
 work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "work" }
-hilt-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "hilt-work" }
-hilt-work-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hilt-work" }
+koin-androidx-workmanager = { group = "io.insert-koin", name = "koin-androidx-workmanager", version.ref = "koin-workmanager" }
 
 [bundles]
 android = ["core-ktx", "lifecycle-runtime-ktx", "material", "lifecycle-extensions", "coil", "image-cropper", "zxing-android-embedded", "zxing-core"]
 kotlin = ["coroutines-core", "kotlinx-serialization", "kotlinx-datetime"]
-compose = ["activity-compose", "compose-lifecycle", "compose-ui", "compose-ui-graphics", "compose-ui-tooling-preview", "compose-material", "compose-material3", "compose-hilt-navigation", "compose-navigation", "paging-compose"]
-common = ["hilt"]
+compose = ["activity-compose", "compose-lifecycle", "compose-ui", "compose-ui-graphics", "compose-ui-tooling-preview", "compose-material", "compose-material3", "compose-navigation", "paging-compose"]
+common = ["koin-android", "koin-core", "koin-androidx-compose"]
 google = ["google-services", "firebase-auth", "firebase-messaging", "firebase-bom", "google-auth", "google-admob-ads"]
 kakao = ["kakao-user"]
 network = ["retrofit-core", "retrofit-converter-gson", "okhttp-core", "okhttp-logging-interceptor"]
 datastore = ["datastore", "datastore-core"]
 room = ["room-runtime", "room-ktx"]
-workmanager = ["work-runtime-ktx", "hilt-work"]
+workmanager = ["work-runtime-ktx", "koin-androidx-workmanager"]
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
 android-library = { id = "com.android.library", version.ref = "android-gradle-plugin" }
 kotlin-lang = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin-lang" }
-hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 ksp = { id = "com.google.devtools.ksp", version = "2.2.20-2.0.4" }
 parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin-lang" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-lang" }

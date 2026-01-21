@@ -3,10 +3,9 @@ package junjange.core.local.provider
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import junjange.core.data.provider.RefreshTokenProvider
-import javax.inject.Inject
 
 internal class RefreshTokenProviderImpl
-    @Inject
+    
     constructor(
         private val sharedPreferences: SharedPreferences,
     ) : RefreshTokenProvider {

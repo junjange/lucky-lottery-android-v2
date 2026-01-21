@@ -10,20 +10,20 @@ import android.os.Bundle
 import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.viewModels
+// import androidx.activity.viewModels
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.core.content.ContextCompat
-import dagger.hilt.android.AndroidEntryPoint
 import junjange.core.designsystem.theme.LottoTheme
 import junjange.core.ui.base.BaseActivity
 
-@AndroidEntryPoint
+
 class NotificationActivity : BaseActivity() {
-    private val viewModel: NotificationViewModel by viewModels()
+    private val viewModel: NotificationViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

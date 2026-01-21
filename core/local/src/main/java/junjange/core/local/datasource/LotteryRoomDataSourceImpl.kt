@@ -5,10 +5,9 @@ import junjange.core.data.model.local.LotteryNumberDto
 import junjange.core.local.dao.LotteryDao
 import junjange.core.local.model.toData
 import junjange.core.local.model.toLocal
-import javax.inject.Inject
 
 internal class LotteryRoomDataSourceImpl
-    @Inject
+    
     constructor(
         private val dao: LotteryDao,
     ) : LotteryRoomDataSource {

@@ -2,7 +2,6 @@ package junjange.feature.mynumber
 
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import dagger.hilt.android.lifecycle.HiltViewModel
 import junjange.core.domain.usecase.DeleteLotteryByRoundAndIdUseCase
 import junjange.core.domain.usecase.DeletePensionLotteryByRoundAndIdUseCase
 import junjange.core.domain.usecase.InsertLotteryUseCase
@@ -20,11 +19,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import java.io.File
-import javax.inject.Inject
 
-@HiltViewModel
+
 class MyNumberViewModel
-    @Inject
+    
     constructor(
         private val ocrService: OcrService,
         private val insertLotteryUseCase: InsertLotteryUseCase,

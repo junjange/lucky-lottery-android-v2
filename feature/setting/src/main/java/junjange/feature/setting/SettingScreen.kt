@@ -15,7 +15,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.hilt.navigation.compose.hiltViewModel
+import org.koin.androidx.compose.koinViewModel
 import junjange.core.ui.component.LottoButtonBar
 import junjange.core.ui.component.LottoSimpleTopBar
 import junjange.core.ui.component.LottoTextBar
@@ -24,7 +24,7 @@ import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun SettingScreen(
-    viewModel: SettingViewModel = hiltViewModel(),
+    viewModel: SettingViewModel = koinViewModel(),
     navigateToNotification: (lottoNotificationState: Boolean, pensionLottoNotificationState: Boolean) -> Unit,
 ) {
     val context = LocalContext.current

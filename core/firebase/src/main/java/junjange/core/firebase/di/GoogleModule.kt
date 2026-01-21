@@ -1,39 +1,29 @@
 package junjange.core.firebase.di
 
 import junjange.core.firebase.api.GoogleApiService
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.core.qualifier.named
+import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Singleton
 
-@Module
-@InstallIn(SingletonComponent::class)
-internal object GoogleModule {
-    @Singleton
-    @Provides
-    fun provideGoogleOkHttpClient(): OkHttpClient {
+val googleModule = module {
+    single(named("google")) {
         val loggingInterceptor = HttpLoggingInterceptor()
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
-        return OkHttpClient.Builder()
+        OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
             .build()
     }
 
-    @Singleton
-    @Provides
-    fun provideGoogleRetrofit(okHttpClient: OkHttpClient): Retrofit =
+    single(named("google")) {
         Retrofit.Builder()
             .baseUrl("https://www.googleapis.com")
             .addConverterFactory(GsonConverterFactory.create())
-            .client(okHttpClient)
+            .client(get(named("google")))
             .build()
+    }
 
-    @Singleton
-    @Provides
-    fun provideGoogleAPIService(retrofit: Retrofit): GoogleApiService = retrofit.create(GoogleApiService::class.java)
+    single { get<Retrofit>(named("google")).create(GoogleApiService::class.java) }
 }

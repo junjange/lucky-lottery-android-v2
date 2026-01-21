@@ -2,10 +2,9 @@ package junjange.core.data.repository
 
 import junjange.core.data.datasource.NotificationDataSource
 import junjange.core.domain.repository.NotificationRepository
-import javax.inject.Inject
 
 internal class NotificationRepositoryImpl
-    @Inject
+    
     constructor(
         private val dataSource: NotificationDataSource,
     ) : NotificationRepository {

@@ -3,10 +3,9 @@ package junjange.core.remote.datasource
 import junjange.core.data.datasource.NotificationDataSource
 import junjange.core.remote.api.ApiService
 import junjange.core.remote.model.request.NotificationRegisterRequest
-import javax.inject.Inject
 
 internal class NotificationDataSourceImpl
-    @Inject
+    
     constructor(
         private val apiService: ApiService,
     ) : NotificationDataSource {

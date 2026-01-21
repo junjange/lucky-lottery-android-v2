@@ -6,10 +6,9 @@ import junjange.core.data.model.remote.PensionLotteryRandomEntity
 import junjange.core.remote.api.ApiService
 import junjange.core.remote.model.request.PensionLotteryRandomRequest
 import junjange.core.remote.model.response.toData
-import javax.inject.Inject
 
 internal class PensionLotteryDataSourceImpl
-    @Inject
+    
     constructor(
         private val apiService: ApiService,
     ) : PensionLotteryDataSource {

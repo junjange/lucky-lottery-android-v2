@@ -16,10 +16,9 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 import java.util.TimeZone
-import javax.inject.Inject
 
 internal class LotteryRepositoryImpl
-    @Inject
+    
     constructor(
         private val lotteryDataSource: LotteryDataSource,
         private val lotteryRoomDataSource: LotteryRoomDataSource,

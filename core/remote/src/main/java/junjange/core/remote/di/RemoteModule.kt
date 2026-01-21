@@ -7,42 +7,50 @@ import junjange.core.remote.api.AuthenticationListener
 import junjange.core.remote.api.Authenticator
 import junjange.core.remote.api.BaseUrl
 import junjange.core.remote.api.LotteryService
-import junjange.core.remote.api.baseUrl
 import junjange.core.remote.interceptor.AccessTokenInterceptor
 import junjange.core.remote.interceptor.ErrorResponseInterceptor
 import junjange.core.remote.interceptor.Interceptors
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
+import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Singleton
 
-@Module
-@InstallIn(SingletonComponent::class)
-internal object RemoteModule {
-    @Provides
-    @Singleton
-    fun provideApiService(
-        baseUrl: BaseUrl,
-        interceptors: Interceptors,
-        accessTokenProvider: AccessTokenProvider,
-        refreshTokenProvider: RefreshTokenProvider,
-        authenticationListener: AuthenticationListener,
-    ): ApiService {
-        val authenticator =
-            Authenticator(
-                apiService = provideRefreshApiService(baseUrl, interceptors),
-                accessTokenProvider = accessTokenProvider,
-                refreshTokenProvider = refreshTokenProvider,
-                authenticationListener = authenticationListener,
-            )
+private fun createOkHttpClient(
+    interceptors: Interceptors,
+    apply: OkHttpClient.Builder.() -> Unit = { },
+) = OkHttpClient
+    .Builder()
+    .apply {
+        interceptors.interceptors.forEach(::addInterceptor)
+    }.apply(apply)
+    .build()
 
-        return Retrofit
+val remoteModule = module {
+    single<ApiService> {
+        val baseUrl: BaseUrl = get()
+        val interceptors: Interceptors = get()
+        val accessTokenProvider: AccessTokenProvider = get()
+        val refreshTokenProvider: RefreshTokenProvider = get()
+        val authenticationListener: AuthenticationListener = get()
+
+        val refreshApiService = Retrofit
             .Builder()
-            .baseUrl(baseUrl)
+            .baseUrl(baseUrl.url)
+            .client(createOkHttpClient(interceptors))
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(ApiService::class.java)
+
+        val authenticator = Authenticator(
+            apiService = refreshApiService,
+            accessTokenProvider = accessTokenProvider,
+            refreshTokenProvider = refreshTokenProvider,
+            authenticationListener = authenticationListener,
+        )
+
+        Retrofit
+            .Builder()
+            .baseUrl(baseUrl.url)
             .client(
                 createOkHttpClient(interceptors) {
                     addInterceptor(AccessTokenInterceptor(accessTokenProvider))
@@ -54,24 +62,11 @@ internal object RemoteModule {
             .create(ApiService::class.java)
     }
 
-    private fun provideRefreshApiService(
-        baseUrl: BaseUrl,
-        interceptors: Interceptors,
-    ): ApiService =
+    single<LotteryService> {
+        val interceptors: Interceptors = get()
         Retrofit
             .Builder()
-            .baseUrl(baseUrl)
-            .client(createOkHttpClient(interceptors))
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(ApiService::class.java)
-
-    @Provides
-    @Singleton
-    fun provideLotteryService(interceptors: Interceptors): LotteryService =
-        Retrofit
-            .Builder()
-            .baseUrl(BaseUrl("https://dhlottery.co.kr"))
+            .baseUrl("https://dhlottery.co.kr")
             .client(
                 createOkHttpClient(interceptors) {
                     addInterceptor(ErrorResponseInterceptor())
@@ -79,14 +74,5 @@ internal object RemoteModule {
             ).addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(LotteryService::class.java)
-
-    private fun createOkHttpClient(
-        interceptors: Interceptors,
-        apply: OkHttpClient.Builder.() -> Unit = { },
-    ) = OkHttpClient
-        .Builder()
-        .apply {
-            interceptors.interceptors.forEach(::addInterceptor)
-        }.apply(apply)
-        .build()
+    }
 }

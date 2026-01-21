@@ -3,7 +3,6 @@ package junjange.feature.login
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import dagger.hilt.android.lifecycle.HiltViewModel
 import junjange.core.domain.usecase.GetFCMTokenUseCase
 import junjange.core.domain.usecase.GetValidRegisterUseCase
 import junjange.core.domain.usecase.KakaoLoginUseCase
@@ -18,12 +17,8 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import javax.inject.Inject
 
-@HiltViewModel
-class LoginViewModel
-    @Inject
-    constructor(
+class LoginViewModel(
         private val kakaoLoginUseCase: KakaoLoginUseCase,
         private val getValidRegisterUseCase: GetValidRegisterUseCase,
         private val postLoginUseCase: PostLoginUseCase,

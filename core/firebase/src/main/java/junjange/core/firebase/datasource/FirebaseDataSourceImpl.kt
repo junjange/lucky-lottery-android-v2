@@ -3,11 +3,10 @@ package junjange.core.firebase.datasource
 import com.google.firebase.messaging.FirebaseMessaging
 import junjange.core.data.datasource.FirebaseDataSource
 import kotlinx.coroutines.suspendCancellableCoroutine
-import javax.inject.Inject
 import kotlin.coroutines.resume
 
 internal class FirebaseDataSourceImpl
-    @Inject
+    
     constructor(
         private val messaging: FirebaseMessaging,
     ) : FirebaseDataSource {

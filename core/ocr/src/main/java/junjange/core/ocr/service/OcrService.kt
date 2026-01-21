@@ -3,9 +3,8 @@ package junjange.core.ocr.service
 import android.graphics.Bitmap
 import com.googlecode.tesseract.android.TessBaseAPI
 import java.io.File
-import javax.inject.Inject
 
-class OcrService @Inject constructor(
+class OcrService constructor(
     private val tess: TessBaseAPI,
 ) {
     fun getTextOfImage(imagePath: File): String =

@@ -14,32 +14,14 @@ import junjange.core.remote.datasource.NotificationDataSourceImpl
 import junjange.core.remote.datasource.PensionLotteryDataSourceImpl
 import junjange.core.remote.datasource.UserDataSourceImpl
 import junjange.core.remote.datasource.WinningDataSourceImpl
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import org.koin.dsl.module
 
-@Module
-@InstallIn(SingletonComponent::class)
-internal abstract class DataSourceModule {
-    @Binds
-    abstract fun bindsCredentialDataSource(credentialDataSourceImpl: CredentialDataSourceImpl): CredentialDataSource
-
-    @Binds
-    abstract fun bindsUserDataSource(userDataSourceImpl: UserDataSourceImpl): UserDataSource
-
-    @Binds
-    abstract fun bindsLotteryDataSource(lotteryDataSourceImpl: LotteryDataSourceImpl): LotteryDataSource
-
-    @Binds
-    abstract fun bindsPensionLotteryDataSource(pensionLotteryDataSourceImpl: PensionLotteryDataSourceImpl): PensionLotteryDataSource
-
-    @Binds
-    abstract fun bindsWinningDataSource(winningDataSourceImpl: WinningDataSourceImpl): WinningDataSource
-
-    @Binds
-    abstract fun bindsNotificationDataSource(notificationDataSourceImpl: NotificationDataSourceImpl): NotificationDataSource
-
-    @Binds
-    abstract fun bindsImagesDataSource(imagesDataSourceImpl: ImagesDataSourceImpl): ImagesDataSource
+val remoteDataSourceModule = module {
+    single<CredentialDataSource> { CredentialDataSourceImpl(apiService = get()) }
+    single<UserDataSource> { UserDataSourceImpl(apiService = get()) }
+    single<LotteryDataSource> { LotteryDataSourceImpl(apiService = get(), lotteryService = get()) }
+    single<PensionLotteryDataSource> { PensionLotteryDataSourceImpl(apiService = get()) }
+    single<WinningDataSource> { WinningDataSourceImpl(apiService = get()) }
+    single<NotificationDataSource> { NotificationDataSourceImpl(apiService = get()) }
+    single<ImagesDataSource> { ImagesDataSourceImpl(apiService = get()) }
 }

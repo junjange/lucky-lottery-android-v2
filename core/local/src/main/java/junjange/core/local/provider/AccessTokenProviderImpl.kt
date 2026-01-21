@@ -3,10 +3,9 @@ package junjange.core.local.provider
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import junjange.core.data.provider.AccessTokenProvider
-import javax.inject.Inject
 
 internal class AccessTokenProviderImpl
-    @Inject
+    
     constructor(
         private val sharedPreferences: SharedPreferences,
     ) : AccessTokenProvider {

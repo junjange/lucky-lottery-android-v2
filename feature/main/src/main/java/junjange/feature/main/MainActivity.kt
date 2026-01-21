@@ -5,9 +5,10 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.viewModels
+// import androidx.activity.viewModels
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
@@ -15,19 +16,17 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.zxing.integration.android.IntentIntegrator
-import dagger.hilt.android.AndroidEntryPoint
 import junjange.core.designsystem.theme.LottoTheme
 import junjange.core.domain.model.OauthProvider
 import junjange.core.navigation.MainNavigator
 import junjange.core.ui.base.BaseActivity
-import javax.inject.Inject
 
-@AndroidEntryPoint
+
 class MainActivity : BaseActivity() {
-    @Inject
+    
     lateinit var navigator: MainNavigator
 
-    private val viewModel: MainViewModel by viewModels()
+    private val viewModel: MainViewModel by viewModel()
     private val scanLauncher: ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             onActivityResult(result.resultCode, result.data)

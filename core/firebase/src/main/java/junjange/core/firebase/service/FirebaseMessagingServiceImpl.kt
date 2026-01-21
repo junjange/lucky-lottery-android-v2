@@ -11,11 +11,9 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import dagger.hilt.android.AndroidEntryPoint
 import junjange.feature.main.MainActivity
 import junjange.feature.main.R.*
 
-@AndroidEntryPoint
 internal class FirebaseMessagingServiceImpl : FirebaseMessagingService() {
     override fun onNewToken(token: String) {}
 

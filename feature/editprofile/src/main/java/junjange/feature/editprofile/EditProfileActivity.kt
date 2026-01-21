@@ -4,14 +4,14 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
-import dagger.hilt.android.AndroidEntryPoint
+import org.koin.androidx.viewmodel.ext.android.viewModel
+// import androidx.activity.viewModels
 import junjange.core.designsystem.theme.LottoTheme
 import junjange.core.ui.base.BaseActivity
 
-@AndroidEntryPoint
+
 class EditProfileActivity : BaseActivity() {
-    private val viewModel: EditProfileViewModel by viewModels()
+    private val viewModel: EditProfileViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

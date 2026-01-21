@@ -6,10 +6,9 @@ import junjange.core.data.model.remote.IsRegisteredEntity
 import junjange.core.remote.api.ApiService
 import junjange.core.remote.model.request.RegisterRequest
 import junjange.core.remote.model.response.toData
-import javax.inject.Inject
 
 internal class CredentialDataSourceImpl
-    @Inject
+    
     constructor(
         private val apiService: ApiService,
     ) : CredentialDataSource {

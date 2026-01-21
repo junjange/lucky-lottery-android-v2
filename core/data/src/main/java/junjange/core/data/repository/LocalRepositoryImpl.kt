@@ -5,10 +5,9 @@ import junjange.core.data.mapper.toData
 import junjange.core.data.mapper.toDomain
 import junjange.core.domain.model.JwtToken
 import junjange.core.domain.repository.LocalRepository
-import javax.inject.Inject
 
 internal class LocalRepositoryImpl
-    @Inject
+    
     constructor(
         private val localDataSource: LocalDataSource,
     ) : LocalRepository {

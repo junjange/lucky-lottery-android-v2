@@ -2,7 +2,6 @@ package junjange.feature.register
 
 import android.graphics.Bitmap
 import androidx.lifecycle.SavedStateHandle
-import dagger.hilt.android.lifecycle.HiltViewModel
 import junjange.core.domain.model.JwtToken
 import junjange.core.domain.usecase.GetFCMTokenUseCase
 import junjange.core.domain.usecase.PostNotificationRegisterTokenUseCase
@@ -16,11 +15,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import javax.inject.Inject
 
-@HiltViewModel
+
 class RegisterViewModel
-    @Inject
+    
     constructor(
         savedStateHandle: SavedStateHandle,
         private val postRegisterUseCase: PostRegisterUseCase,

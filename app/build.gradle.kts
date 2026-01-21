@@ -96,10 +96,10 @@ dependencies {
     implementation(libs.bundles.android)
     implementation(libs.bundles.common)
     implementation(libs.bundles.workmanager)
+    implementation(libs.koin.annotations)
 
-    // ksp
-    ksp(libs.ksp.hilt)
-    ksp(libs.hilt.work.compiler)
+    // Koin KSP Compiler for compile-time verification
+    ksp(libs.koin.compiler)
 
     // kakao
     implementation(libs.bundles.kakao)
@@ -113,6 +113,8 @@ dependencies {
 
     // test
     testImplementation(libs.junit)
+    testImplementation(libs.koin.test)
+    testImplementation(libs.koin.test.junit4)
     androidTestImplementation(libs.junit.ext)
     androidTestImplementation(libs.junit.espresso)
     debugImplementation(libs.compose.ui.test)

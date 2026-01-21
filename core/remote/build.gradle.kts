@@ -7,11 +7,7 @@ dependencies {
     implementation(project(Modules.CORE_DATA))
 
     implementation(libs.coroutines.core)
-
-    implementation(libs.hilt.core)
-
-    // ksp
-    ksp(libs.ksp.hilt)
+    implementation(libs.koin.core)
 
     // network
     implementation(libs.bundles.network)

@@ -1,20 +1,9 @@
 package junjange.core.local.di
 
-import android.content.Context
 import androidx.work.WorkManager
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import org.koin.android.ext.koin.androidContext
+import org.koin.dsl.module
 
-@Module
-@InstallIn(SingletonComponent::class)
-internal object WorkManagerModule {
-    @Provides
-    @Singleton
-    fun provideWorkManager(
-        @ApplicationContext context: Context,
-    ): WorkManager = WorkManager.getInstance(context)
+val workManagerModule = module {
+    single { WorkManager.getInstance(androidContext()) }
 }

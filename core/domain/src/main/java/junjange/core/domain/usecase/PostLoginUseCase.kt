@@ -2,10 +2,9 @@ package junjange.core.domain.usecase
 
 import junjange.core.domain.model.JwtToken
 import junjange.core.domain.repository.CredentialRepository
-import javax.inject.Inject
 
 class PostLoginUseCase
-    @Inject
+    
     constructor(
         private val repository: CredentialRepository,
     ) {

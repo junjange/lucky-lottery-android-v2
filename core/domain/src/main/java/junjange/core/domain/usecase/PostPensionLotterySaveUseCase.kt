@@ -1,10 +1,9 @@
 package junjange.core.domain.usecase
 
 import junjange.core.domain.repository.PensionLotteryRepository
-import javax.inject.Inject
 
 class PostPensionLotterySaveUseCase
-    @Inject
+    
     constructor(
         private val repository: PensionLotteryRepository,
     ) {

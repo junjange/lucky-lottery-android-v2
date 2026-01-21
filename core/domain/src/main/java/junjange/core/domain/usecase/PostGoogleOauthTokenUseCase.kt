@@ -2,10 +2,9 @@ package junjange.core.domain.usecase
 
 import junjange.core.domain.model.GoogleOauthToken
 import junjange.core.domain.repository.GoogleRepository
-import javax.inject.Inject
 
 class PostGoogleOauthTokenUseCase
-    @Inject
+    
     constructor(
         private val repository: GoogleRepository,
     ) {
