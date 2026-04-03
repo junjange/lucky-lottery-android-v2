@@ -6,6 +6,10 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+
+plugins {
+    id("org.gradle.toolchains.foojay-resolver-convention") version "0.9.0"
+}
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
@@ -19,6 +23,7 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 rootProject.name = "Lotto3"
 include(":app")
+include(":shared")
 include(":core:domain")
 include(":core:data")
 include(":core:kakao")
@@ -27,10 +32,7 @@ include(":core:local")
 include(":core:ocr")
 include(":core:remote")
 include(":core:ui")
-include(":core:designsystem")
 include(":core:navigation")
-include(":core:google")
-include(":core:notification")
 include(":feature:main")
 include(":feature:editprofile")
 include(":feature:home")

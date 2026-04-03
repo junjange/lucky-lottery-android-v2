@@ -1,8 +1,15 @@
 [versions]
+# app
+compile-sdk = "35"
+min-sdk = "24"
+version-code = "12"
+version-name = "3.1.1"
+
 # plugins
 jsoup-version = "1.15.3"
 kotlin-lang = "2.2.20"
 android-gradle-plugin = "8.13.0"
+kotlin-multiplatform = "2.2.20"
 
 # libraries
 ktx = "1.15.0"
@@ -125,6 +132,7 @@ google-admob-ads = { group = "com.google.android.gms", name = "play-services-ads
 # Network - Ktor
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
+ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
 ktor-client-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktor" }
@@ -177,3 +185,4 @@ parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotli
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-lang" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin-lang" }
 ktorfit = { id = "de.jensklingenberg.ktorfit", version.ref = "ktorfit" }
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin-multiplatform" }

@@ -11,10 +11,13 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import junjange.feature.main.MainActivity
-import junjange.feature.main.R.*
+import junjange.core.notification.NotificationConfig
+import org.koin.android.ext.android.inject
 
 internal class FirebaseMessagingServiceImpl : FirebaseMessagingService() {
+
+    private val notificationConfig: NotificationConfig by inject()
+
     override fun onNewToken(token: String) {}
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
@@ -25,7 +28,7 @@ internal class FirebaseMessagingServiceImpl : FirebaseMessagingService() {
     /** 알림 생성 메서드 */
     private fun sendNotification(remoteMessage: RemoteMessage) {
         val uniId: Int = (System.currentTimeMillis() / 7).toInt()
-        val intent = Intent(this, MainActivity::class.java)
+        val intent = Intent(this, notificationConfig.mainActivityClass)
         for (key in remoteMessage.data.keys) {
             intent.putExtra(key, remoteMessage.data.getValue(key))
         }
@@ -37,8 +40,8 @@ internal class FirebaseMessagingServiceImpl : FirebaseMessagingService() {
         val notificationBuilder =
             NotificationCompat
                 .Builder(this, channelId)
-                .setLargeIcon(BitmapFactory.decodeResource(resources, drawable.app_icon))
-                .setSmallIcon(drawable.app_icon)
+                .setLargeIcon(BitmapFactory.decodeResource(resources, notificationConfig.appIconRes))
+                .setSmallIcon(notificationConfig.appIconRes)
                 .setContentTitle(remoteMessage.data["title"].toString())
                 .setContentText(remoteMessage.data["content"].toString())
                 .setAutoCancel(true)
@@ -50,7 +53,7 @@ internal class FirebaseMessagingServiceImpl : FirebaseMessagingService() {
                 .setStyle(
                     NotificationCompat
                         .BigPictureStyle()
-                        .bigPicture(BitmapFactory.decodeResource(resources, drawable.app_icon)),
+                        .bigPicture(BitmapFactory.decodeResource(resources, notificationConfig.appIconRes)),
                 )
 
         val notificationManager =

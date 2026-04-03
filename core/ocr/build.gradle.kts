@@ -5,10 +5,10 @@ plugins {
 
 android {
     namespace = "junjange.core.ocr"
-    compileSdk = Versions.COMPILE_SDK
+    compileSdk = libs.versions.compile.sdk.get().toInt()
 
     defaultConfig {
-        minSdk = Versions.MIN_SDK
+        minSdk = libs.versions.min.sdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")

@@ -47,5 +47,9 @@ gradlePlugin {
             id = "junjange.kotlin.jvm"
             implementationClass = "junjange.build_logic.convention.KotlinJvmConventionPlugin"
         }
+        create("kotlinMultiplatform") {
+            id = "junjange.kotlin.multiplatform"
+            implementationClass = "junjange.build_logic.convention.KotlinMultiplatformConventionPlugin"
+        }
     }
 }

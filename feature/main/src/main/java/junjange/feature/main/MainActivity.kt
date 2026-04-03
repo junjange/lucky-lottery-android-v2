@@ -20,11 +20,12 @@ import junjange.core.designsystem.theme.LottoTheme
 import junjange.core.domain.model.OauthProvider
 import junjange.core.navigation.MainNavigator
 import junjange.core.ui.base.BaseActivity
+import org.koin.android.ext.android.inject
 
 
 class MainActivity : BaseActivity() {
-    
-    lateinit var navigator: MainNavigator
+
+    private val navigator: MainNavigator by inject()
 
     private val viewModel: MainViewModel by viewModel()
     private val scanLauncher: ActivityResultLauncher<Intent> =

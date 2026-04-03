@@ -10,21 +10,21 @@ val localPropertiesFile = rootProject.file("local.properties")
 val localProperties = Properties()
 localProperties.load(FileInputStream(localPropertiesFile))
 
-val baseUrl = localProperties.getProperty("BASE_URL") ?: ""
-val kakaoNativeAppKey = localProperties.getProperty("KAKAO_NATIVE_APP_KEY") ?: ""
+val baseUrl = localProperties.getProperty("BASE_URL") ?: "\"\""
+val kakaoNativeAppKey = localProperties.getProperty("KAKAO_NATIVE_APP_KEY") ?: "\"\""
 val kakaoOauthHost = localProperties.getProperty("KAKAO_OAUTH_HOST") ?: ""
 val adMobAppId = localProperties.getProperty("AD_MOB_APP_ID") ?: ""
 
 android {
     namespace = "com.junjange.lotto3"
-    compileSdk = Versions.COMPILE_SDK
+    compileSdk = libs.versions.compile.sdk.get().toInt()
 
     defaultConfig {
         applicationId = "com.junjange.lotto3"
-        minSdk = Versions.MIN_SDK
-        targetSdk = Versions.COMPILE_SDK
-        versionCode = Versions.VERSION_CODE
-        versionName = Versions.VERSION_NAME
+        minSdk = libs.versions.min.sdk.get().toInt()
+        targetSdk = libs.versions.compile.sdk.get().toInt()
+        versionCode = libs.versions.version.code.get().toInt()
+        versionName = libs.versions.version.name.get()
 
         buildConfigField("String", "BASE_URL", baseUrl)
         buildConfigField("String", "KAKAO_NATIVE_APP_KEY", kakaoNativeAppKey)
@@ -67,31 +67,28 @@ android {
 }
 
 dependencies {
-    implementation(project(Modules.CORE_DOMAIN))
-    implementation(project(Modules.CORE_DATA))
-    implementation(project(Modules.CORE_KAKAO))
-    implementation(project(Modules.CORE_FIREBASE))
-    implementation(project(Modules.CORE_LOCAL))
-    implementation(project(Modules.CORE_OCR))
-    implementation(project(Modules.CORE_REMOTE))
-    implementation(project(Modules.CORE_UI))
-    implementation(project(Modules.CORE_DESIGNSYSTEM))
-    implementation(project(Modules.CORE_NAVIGATION))
-    implementation(project(Modules.CORE_GOOGLE))
-    implementation(project(Modules.CORE_NOTIFICATION))
-    implementation(project(Modules.FEATURE_MAIN))
-    implementation(project(Modules.FEATURE_EDITPROFILE))
-    implementation(project(Modules.FEATURE_HOME))
-    implementation(project(Modules.FEATURE_LOGIN))
-    implementation(project(Modules.FEATURE_MY))
-    implementation(project(Modules.FEATURE_MYNUMBER))
-    implementation(project(Modules.FEATURE_NOTIFICATION))
-    implementation(project(Modules.FEATURE_RANDOMNUMBER))
-    implementation(project(Modules.FEATURE_RANDOMNUMBERGENERATION))
-    implementation(project(Modules.FEATURE_REGISTER))
-    implementation(project(Modules.FEATURE_SPLASH))
-    implementation(project(Modules.FEATURE_WITHDRAWAL))
-    implementation(project(Modules.FEATURE_SETTING))
+    implementation(projects.core.domain)
+    implementation(projects.core.data)
+    implementation(projects.core.kakao)
+    implementation(projects.core.firebase)
+    implementation(projects.core.local)
+    implementation(projects.core.ocr)
+    implementation(projects.core.remote)
+    implementation(projects.core.ui)
+    implementation(projects.core.navigation)
+    implementation(projects.feature.main)
+    implementation(projects.feature.editprofile)
+    implementation(projects.feature.home)
+    implementation(projects.feature.login)
+    implementation(projects.feature.my)
+    implementation(projects.feature.mynumber)
+    implementation(projects.feature.notification)
+    implementation(projects.feature.randomnumber)
+    implementation(projects.feature.randomnumbergeneration)
+    implementation(projects.feature.register)
+    implementation(projects.feature.splash)
+    implementation(projects.feature.withdrawal)
+    implementation(projects.feature.setting)
 
     implementation(libs.bundles.android)
     implementation(libs.bundles.common)

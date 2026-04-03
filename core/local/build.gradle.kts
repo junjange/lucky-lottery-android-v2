@@ -1,14 +1,15 @@
 plugins {
     id("junjange.core.module")
     alias(libs.plugins.parcelize)
+    alias(libs.plugins.ksp)
 }
 
 android {
     namespace = "junjange.core.local"
-    compileSdk = Versions.COMPILE_SDK
+    compileSdk = libs.versions.compile.sdk.get().toInt()
 
     defaultConfig {
-        minSdk = Versions.MIN_SDK
+        minSdk = libs.versions.min.sdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -26,8 +27,7 @@ android {
     // Java/Kotlin options provided by convention plugin
 }
 dependencies {
-    implementation(project(Modules.CORE_DATA))
-    implementation(project(Modules.CORE_NOTIFICATION))
+    implementation(projects.core.data)
 
     implementation(libs.bundles.kotlin)
     implementation(libs.bundles.common)
@@ -35,7 +35,7 @@ dependencies {
     implementation(libs.junit.ktx)
 
     // WorkManager
-    implementation("androidx.work:work-runtime-ktx:2.9.0")
+    implementation(libs.work.runtime.ktx)
 
     ksp(libs.room.compiler)
     annotationProcessor(libs.room.compiler)

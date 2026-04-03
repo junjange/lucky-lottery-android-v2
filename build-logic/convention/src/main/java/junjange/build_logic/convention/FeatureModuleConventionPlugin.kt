@@ -14,17 +14,17 @@ class FeatureModuleConventionPlugin : Plugin<Project> {
             with(pluginManager) {
                 apply("com.android.library")
                 apply("org.jetbrains.kotlin.android")
-                apply("com.google.devtools.ksp")
                 apply("org.jetbrains.kotlin.plugin.serialization")
                 apply("org.jetbrains.kotlin.plugin.compose")
             }
 
+            val libs = extensions.getByType(VersionCatalogsExtension::class.java).named("libs")
+
             extensions.configure<LibraryExtension> {
-                compileSdk = 35
+                compileSdk = libs.findVersion("compile-sdk").get().toString().toInt()
 
                 defaultConfig {
-                    minSdk = 24
-
+                    minSdk = libs.findVersion("min-sdk").get().toString().toInt()
                     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
                     consumerProguardFiles("consumer-rules.pro")
                 }
@@ -44,38 +44,23 @@ class FeatureModuleConventionPlugin : Plugin<Project> {
                     targetCompatibility = JavaVersion.VERSION_1_8
                 }
 
-                // Kotlin options are configured below via KotlinAndroidProjectExtension
-
                 buildFeatures {
                     compose = true
                 }
-
-                composeOptions {
-                    kotlinCompilerExtensionVersion = "1.5.8"
-                }
             }
 
-            val libs = extensions.getByType(VersionCatalogsExtension::class.java).named("libs")
-
-            // Configure Kotlin compiler options for Android modules
             extensions.configure<org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension> {
                 compilerOptions {
                     jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8)
                 }
             }
 
+            // Feature modules get Kotlin + Compose + Koin (common) + datastore
             dependencies {
-                add("implementation", libs.findBundle("android").get())
                 add("implementation", libs.findBundle("kotlin").get())
                 add("implementation", libs.findBundle("compose").get())
                 add("implementation", libs.findBundle("common").get())
-                add("implementation", libs.findBundle("google").get())
-                add("implementation", libs.findBundle("kakao").get())
-                add("implementation", libs.findBundle("network").get())
                 add("implementation", libs.findBundle("datastore").get())
-                add("implementation", libs.findBundle("room").get())
-
-                add("ksp", libs.findLibrary("room-compiler").get())
             }
         }
     }

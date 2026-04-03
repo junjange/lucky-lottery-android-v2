@@ -11,11 +11,12 @@ import junjange.core.domain.model.LottoType
 import junjange.core.navigation.MainNavigator
 import junjange.core.navigation.RandomNumberNavigator
 import junjange.core.ui.base.BaseActivity
+import org.koin.android.ext.android.inject
 
 
 class RandomNumberActivity : BaseActivity() {
-    
-    lateinit var navigator: RandomNumberNavigator
+
+    private val navigator: RandomNumberNavigator by inject()
 
     private val viewModel: RandomNumberViewModel by viewModel()
 

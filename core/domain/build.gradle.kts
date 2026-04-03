@@ -1,10 +1,11 @@
 plugins {
-    id("junjange.kotlin.jvm")
+    id("junjange.kotlin.multiplatform")
 }
 
-dependencies {
-    implementation(libs.koin.core)
-
-    // Ktor for multipart
-    implementation(libs.ktor.client.core)
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            implementation(libs.ktor.client.core)
+        }
+    }
 }

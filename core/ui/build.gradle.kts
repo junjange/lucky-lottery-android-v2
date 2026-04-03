@@ -9,15 +9,15 @@ val localPropertiesFile = rootProject.file("local.properties")
 val localProperties = Properties()
 localProperties.load(FileInputStream(localPropertiesFile))
 
-val fullScreenAdUnitId = localProperties.getProperty("FULL_SCREEN_AD_UNIT_ID") ?: ""
-val bannerAdUnitId = localProperties.getProperty("BANNER_AD_UNIT_ID") ?: ""
+val fullScreenAdUnitId = localProperties.getProperty("FULL_SCREEN_AD_UNIT_ID") ?: "\"\""
+val bannerAdUnitId = localProperties.getProperty("BANNER_AD_UNIT_ID") ?: "\"\""
 
 android {
     namespace = "junjange.core.ui"
-    compileSdk = Versions.COMPILE_SDK
+    compileSdk = libs.versions.compile.sdk.get().toInt()
 
     defaultConfig {
-        minSdk = Versions.MIN_SDK
+        minSdk = libs.versions.min.sdk.get().toInt()
 
         buildConfigField("String", "FULL_SCREEN_AD_UNIT_ID", fullScreenAdUnitId)
         buildConfigField("String", "BANNER_AD_UNIT_ID", bannerAdUnitId)
@@ -46,9 +46,8 @@ android {
 }
 
 dependencies {
-    implementation(project(Modules.CORE_DESIGNSYSTEM))
-    implementation(project(Modules.CORE_NAVIGATION))
-    implementation(project(Modules.CORE_DOMAIN))
+    implementation(projects.core.navigation)
+    implementation(projects.core.domain)
 
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.android)

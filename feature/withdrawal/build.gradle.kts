@@ -10,15 +10,15 @@ val localPropertiesFile = rootProject.file("local.properties")
 val localProperties = Properties()
 localProperties.load(FileInputStream(localPropertiesFile))
 
-val googleClientId = localProperties.getProperty("GOOGLE_CLIENT_ID") ?: ""
-val googleClientSecret = localProperties.getProperty("GOOGLE_CLIENT_SECRET") ?: ""
+val googleClientId = localProperties.getProperty("GOOGLE_CLIENT_ID") ?: "\"\""
+val googleClientSecret = localProperties.getProperty("GOOGLE_CLIENT_SECRET") ?: "\"\""
 
 android {
     namespace = "junjange.feature.withdrawal"
-    compileSdk = Versions.COMPILE_SDK
+    compileSdk = libs.versions.compile.sdk.get().toInt()
 
     defaultConfig {
-        minSdk = Versions.MIN_SDK
+        minSdk = libs.versions.min.sdk.get().toInt()
 
         buildConfigField("String", "GOOGLE_CLIENT_ID", googleClientId)
         buildConfigField("String", "GOOGLE_CLIENT_SECRET", googleClientSecret)
@@ -41,11 +41,10 @@ android {
 }
 
 dependencies {
-    implementation(project(Modules.CORE_DOMAIN))
-    implementation(project(Modules.CORE_UI))
-    implementation(project(Modules.CORE_DESIGNSYSTEM))
-    implementation(project(Modules.CORE_NAVIGATION))
-    implementation(project(Modules.CORE_GOOGLE))
+    implementation(projects.core.domain)
+    implementation(projects.core.ui)
+    implementation(projects.core.navigation)
+    implementation(projects.core.firebase)
 
     implementation(libs.bundles.android)
     implementation(libs.bundles.compose)

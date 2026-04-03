@@ -13,11 +13,6 @@
                   <project path="$PROJECT_DIR$/build-logic/convention" />
                 </projects>
               </build>
-              <build path="$PROJECT_DIR$/buildSrc" name="buildSrc">
-                <projects>
-                  <project path="$PROJECT_DIR$/buildSrc" />
-                </projects>
-              </build>
             </builds>
           </compositeBuild>
         </compositeConfiguration>
@@ -30,17 +25,13 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/build-logic" />
             <option value="$PROJECT_DIR$/build-logic/convention" />
-            <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/core/data" />
-            <option value="$PROJECT_DIR$/core/designsystem" />
             <option value="$PROJECT_DIR$/core/domain" />
             <option value="$PROJECT_DIR$/core/firebase" />
-            <option value="$PROJECT_DIR$/core/google" />
             <option value="$PROJECT_DIR$/core/kakao" />
             <option value="$PROJECT_DIR$/core/local" />
             <option value="$PROJECT_DIR$/core/navigation" />
-            <option value="$PROJECT_DIR$/core/notification" />
             <option value="$PROJECT_DIR$/core/ocr" />
             <option value="$PROJECT_DIR$/core/remote" />
             <option value="$PROJECT_DIR$/core/ui" />
@@ -58,6 +49,7 @@
             <option value="$PROJECT_DIR$/feature/setting" />
             <option value="$PROJECT_DIR$/feature/splash" />
             <option value="$PROJECT_DIR$/feature/withdrawal" />
+            <option value="$PROJECT_DIR$/shared" />
           </set>
         </option>
       </GradleProjectSettings>

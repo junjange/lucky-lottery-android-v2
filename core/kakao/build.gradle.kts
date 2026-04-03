@@ -5,10 +5,10 @@ plugins {
 
 android {
     namespace = "junjange.core.kakao"
-    compileSdk = Versions.COMPILE_SDK
+    compileSdk = libs.versions.compile.sdk.get().toInt()
 
     defaultConfig {
-        minSdk = Versions.MIN_SDK
+        minSdk = libs.versions.min.sdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -26,7 +26,7 @@ android {
     // Java/Kotlin options provided by convention plugin
 }
 dependencies {
-    implementation(project(Modules.CORE_DATA))
+    implementation(projects.core.data)
 
     implementation(libs.bundles.common)
     implementation(libs.junit.ktx)

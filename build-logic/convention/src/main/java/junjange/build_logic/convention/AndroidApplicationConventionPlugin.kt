@@ -19,16 +19,14 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                 apply("org.jetbrains.kotlin.plugin.compose")
             }
 
+            val libs = extensions.getByType(VersionCatalogsExtension::class.java).named("libs")
+
             extensions.configure<ApplicationExtension> {
-                compileSdk = 35
+                compileSdk = libs.findVersion("compile-sdk").get().toString().toInt()
 
                 defaultConfig {
-                    applicationId = "com.lucky.lottery"
-                    minSdk = 24
-                    targetSdk = 35
-                    versionCode = 1
-                    versionName = "1.0"
-
+                    minSdk = libs.findVersion("min-sdk").get().toString().toInt()
+                    targetSdk = libs.findVersion("compile-sdk").get().toString().toInt()
                     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
                     vectorDrawables {
                         useSupportLibrary = true
@@ -50,14 +48,8 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                     targetCompatibility = JavaVersion.VERSION_1_8
                 }
 
-                // Kotlin options are configured below via KotlinAndroidProjectExtension
-
                 buildFeatures {
                     compose = true
-                }
-
-                composeOptions {
-                    kotlinCompilerExtensionVersion = "1.5.8"
                 }
 
                 packaging {
@@ -67,27 +59,18 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                 }
             }
 
-            val libs = extensions.getByType(VersionCatalogsExtension::class.java).named("libs")
-
-            // Configure Kotlin compiler options for Android modules
             extensions.configure<org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension> {
                 compilerOptions {
                     jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8)
                 }
             }
 
+            // Application module gets all common dependencies
             dependencies {
                 add("implementation", libs.findBundle("android").get())
                 add("implementation", libs.findBundle("kotlin").get())
                 add("implementation", libs.findBundle("compose").get())
                 add("implementation", libs.findBundle("common").get())
-                add("implementation", libs.findBundle("google").get())
-                add("implementation", libs.findBundle("kakao").get())
-                add("implementation", libs.findBundle("network").get())
-                add("implementation", libs.findBundle("datastore").get())
-                add("implementation", libs.findBundle("room").get())
-
-                add("ksp", libs.findLibrary("room-compiler").get())
             }
         }
     }

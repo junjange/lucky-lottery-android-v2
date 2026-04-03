@@ -9,11 +9,12 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import junjange.core.designsystem.theme.LottoTheme
 import junjange.core.navigation.RegisterNavigator
 import junjange.core.ui.base.BaseActivity
+import org.koin.android.ext.android.inject
 
 
 class RegisterActivity : BaseActivity() {
-    
-    lateinit var navigator: RegisterNavigator
+
+    private val navigator: RegisterNavigator by inject()
 
     private val viewModel: RegisterViewModel by viewModel()
 

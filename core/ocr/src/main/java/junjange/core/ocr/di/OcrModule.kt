@@ -2,6 +2,7 @@ package junjange.core.ocr.di
 
 import android.content.Context
 import com.googlecode.tesseract.android.TessBaseAPI
+import junjange.core.ocr.service.OcrService
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import java.io.File
@@ -40,6 +41,8 @@ val ocrModule = module {
         tess.setVariable(TessBaseAPI.VAR_CHAR_BLACKLIST, "!@#$%^&*()_+=-[]}{;:'\"\\|~`,./<>?")
         tess
     }
+
+    single { OcrService(get()) }
 }
 
 private fun checkDir(vararg dirs: File) {

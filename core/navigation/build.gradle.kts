@@ -4,10 +4,10 @@ plugins {
 
 android {
     namespace = "junjange.core.navigation"
-    compileSdk = Versions.COMPILE_SDK
+    compileSdk = libs.versions.compile.sdk.get().toInt()
 
     defaultConfig {
-        minSdk = Versions.MIN_SDK
+        minSdk = libs.versions.min.sdk.get().toInt()
     }
 
     buildTypes {
@@ -27,7 +27,7 @@ android {
 }
 
 dependencies {
-    implementation(project(Modules.CORE_DOMAIN))
+    implementation(projects.core.domain)
 
     implementation(libs.bundles.android)
     implementation(libs.bundles.compose)

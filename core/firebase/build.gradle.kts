@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     id("junjange.core.module")
     alias(libs.plugins.parcelize)
@@ -6,12 +9,20 @@ plugins {
     alias(libs.plugins.ktorfit)
 }
 
+val localPropertiesFile = rootProject.file("local.properties")
+val localProperties = Properties()
+localProperties.load(FileInputStream(localPropertiesFile))
+
+val googleClientId = localProperties.getProperty("GOOGLE_CLIENT_ID") ?: "\"\""
+
 android {
     namespace = "junjange.core.firebase"
-    compileSdk = Versions.COMPILE_SDK
+    compileSdk = libs.versions.compile.sdk.get().toInt()
 
     defaultConfig {
-        minSdk = Versions.MIN_SDK
+        minSdk = libs.versions.min.sdk.get().toInt()
+
+        buildConfigField("String", "GOOGLE_CLIENT_ID", googleClientId)
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -26,11 +37,13 @@ android {
             )
         }
     }
-    // Java/Kotlin options are provided by convention plugin
+    buildFeatures {
+        buildConfig = true
+    }
 }
 dependencies {
-    implementation(project(Modules.FEATURE_MAIN))
-    implementation(project(Modules.CORE_DATA))
+    implementation(projects.core.data)
+    implementation(projects.core.local)
 
     implementation(libs.bundles.common)
     implementation(libs.bundles.google)

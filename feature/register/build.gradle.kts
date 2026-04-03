@@ -5,10 +5,10 @@ plugins {
 
 android {
     namespace = "junjange.feature.register"
-    compileSdk = Versions.COMPILE_SDK
+    compileSdk = libs.versions.compile.sdk.get().toInt()
 
     defaultConfig {
-        minSdk = Versions.MIN_SDK
+        minSdk = libs.versions.min.sdk.get().toInt()
     }
 
     buildTypes {
@@ -27,10 +27,9 @@ android {
 }
 
 dependencies {
-    implementation(project(Modules.CORE_DOMAIN))
-    implementation(project(Modules.CORE_UI))
-    implementation(project(Modules.CORE_DESIGNSYSTEM))
-    implementation(project(Modules.CORE_NAVIGATION))
+    implementation(projects.core.domain)
+    implementation(projects.core.ui)
+    implementation(projects.core.navigation)
 
     implementation(libs.bundles.android)
     implementation(libs.bundles.compose)
