@@ -29,12 +29,12 @@ sealed interface MyNumberContract {
 
         data object LoadPensionLottery : Event
 
-        data class InsertLottery(
-            val lottery: List<String>,
+        data class InsertLotteries(
+            val lotteries: List<List<String>>,
         ) : Event
 
-        data class InsertPensionLottery(
-            val pensionLottery: List<String>,
+        data class InsertPensionLotteries(
+            val pensionLotteries: List<List<String>>,
         ) : Event
 
         data class LottoTextOfImage(
@@ -56,6 +56,10 @@ sealed interface MyNumberContract {
         data class DeletePensionLottery(
             val userRoundIds: List<UserRoundId>,
         ) : Event
+
+        data object DeleteAllLottery : Event
+
+        data object DeleteAllPensionLottery : Event
     }
 
     sealed interface Effect {

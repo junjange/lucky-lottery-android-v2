@@ -46,4 +46,6 @@ interface PensionLotteryRepository {
         round: Int,
         id: Long,
     ): Result<Unit>
+
+    suspend fun deleteAllPensionLottery(): Result<Unit>
 }

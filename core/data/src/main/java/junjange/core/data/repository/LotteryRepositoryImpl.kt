@@ -82,6 +82,8 @@ internal class LotteryRepositoryImpl
             id: Long,
         ): Result<Unit> = lotteryRoomDataSource.deleteLotteryByRoundAndId(round = round, id = id)
 
+        override suspend fun deleteAllLottery(): Result<Unit> = lotteryRoomDataSource.deleteAllLottery()
+
         private suspend fun getWinningLotteries(
             pagedRounds: List<Int>,
             lotteries: List<LotteryNumberDto>,

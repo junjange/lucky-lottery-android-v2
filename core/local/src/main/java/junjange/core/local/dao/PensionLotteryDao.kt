@@ -25,4 +25,7 @@ interface PensionLotteryDao {
         round: Int,
         id: Long,
     )
+
+    @Query("DELETE FROM pension_lottery")
+    suspend fun deleteAllPensionLottery()
 }
