@@ -221,9 +221,9 @@ fun MyNumberScreen(
         snackbarHostState = snackbarHostState,
         onGalleryClicked = { viewModel.event(PickedImage) },
         onDeleteClicked = { deleteMode -> isDeleteMode = deleteMode },
-        onLotterySaveClicked = { lottery -> viewModel.event(InsertLottery(lottery)) },
-        onPensionLotterySaveClicked = { pensionLottery ->
-            viewModel.event(InsertPensionLottery(pensionLottery))
+        onLotterySaveClicked = { lotteries -> viewModel.event(InsertLotteries(lotteries)) },
+        onPensionLotterySaveClicked = { pensionLotteries ->
+            viewModel.event(InsertPensionLotteries(pensionLotteries))
         },
         checkedLottery = { lotteryGetNumber ->
             if (deleteLottery.contains(lotteryGetNumber)) {
@@ -268,8 +268,8 @@ fun MyNumberContent(
     modifier: Modifier = Modifier,
     onGalleryClicked: () -> Unit,
     onDeleteClicked: (isDeleteMode: Boolean) -> Unit,
-    onLotterySaveClicked: (List<String>) -> Unit,
-    onPensionLotterySaveClicked: (List<String>) -> Unit,
+    onLotterySaveClicked: (List<List<String>>) -> Unit,
+    onPensionLotterySaveClicked: (List<List<String>>) -> Unit,
     checkedLottery: (userRoundId: UserRoundId) -> Unit,
     checkedPensionLottery: (userRoundId: UserRoundId) -> Unit,
     onDeleteLotteryClicked: () -> Unit,
@@ -370,9 +370,9 @@ fun MyNumberContent(
                     when (pagerState.currentPage) {
                         0 ->
                             LottoNumberEntry(
-                                onSubmit = { lottery ->
+                                onSubmit = { lotteries ->
                                     isSheetOpen = false
-                                    onLotterySaveClicked(lottery)
+                                    onLotterySaveClicked(lotteries)
                                 },
                                 onDuplicateLottery = {
                                     context.showToast(R.string.lotto_duplicate_error)
@@ -381,10 +381,9 @@ fun MyNumberContent(
 
                         1 ->
                             PensionLotteryNumberEntry(
-                                onSubmit = { pensionLottery ->
+                                onSubmit = { pensionLotteries ->
                                     isSheetOpen = false
-                                    onPensionLotterySaveClicked(pensionLottery)
-//                                    context.showToast(R.string.pension_lottery_number_submitted)
+                                    onPensionLotterySaveClicked(pensionLotteries)
                                 },
                                 onInvalidGroup = {
                                     context.showToast(R.string.pension_lottery_invalid_group)

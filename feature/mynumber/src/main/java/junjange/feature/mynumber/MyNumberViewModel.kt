@@ -50,8 +50,8 @@ class MyNumberViewModel
                 is Event.PickedImage -> onPickedImage()
                 is Event.LoadLottery -> loadLottery()
                 is Event.LoadPensionLottery -> loadPensionLottery()
-                is Event.InsertLottery -> insertLottery(lottery = event.lottery)
-                is Event.InsertPensionLottery -> insertPensionLottery(pensionLottery = event.pensionLottery)
+                is Event.InsertLotteries -> insertLotteries(lotteries = event.lotteries)
+                is Event.InsertPensionLotteries -> insertPensionLotteries(pensionLotteries = event.pensionLotteries)
                 is Event.LottoTextOfImage -> getLottoTextOfImage(imagePath = event.imagePath)
                 is Event.PensionLottoTextOfImage -> getPensionLottoTextOfImage(imagePath = event.imagePath)
                 is Event.DeleteLottery -> deleteLottery(userRoundIds = event.userRoundIds)
@@ -96,41 +96,53 @@ class MyNumberViewModel
             }
         }
 
-        private fun insertLottery(lottery: List<String>) {
+        private fun insertLotteries(lotteries: List<List<String>>) {
             launch {
                 loading(isLoading = true)
-                insertLotteryUseCase(
-                    firstNum = lottery[0].toInt(),
-                    secondNum = lottery[1].toInt(),
-                    thirdNum = lottery[2].toInt(),
-                    fourthNum = lottery[3].toInt(),
-                    fifthNum = lottery[4].toInt(),
-                    sixthNum = lottery[5].toInt(),
-                ).onSuccess {
+                val results =
+                    lotteries.map { lottery ->
+                        insertLotteryUseCase(
+                            firstNum = lottery[0].toInt(),
+                            secondNum = lottery[1].toInt(),
+                            thirdNum = lottery[2].toInt(),
+                            fourthNum = lottery[3].toInt(),
+                            fifthNum = lottery[4].toInt(),
+                            sixthNum = lottery[5].toInt(),
+                        )
+                    }
+                if (results.any { it.isSuccess }) {
                     _effect.send(Effect.LotteryRefresh)
+                }
+                if (results.all { it.isSuccess }) {
                     _effect.send(Effect.ShowMessage(MyNumberMessage.LOTTERY_INSERT_SUCCESS))
-                }.onFailure {
+                } else {
                     _effect.send(Effect.ShowMessage(MyNumberMessage.LOTTERY_INSERT_FAILED))
                 }
                 loading(false)
             }
         }
 
-        private fun insertPensionLottery(pensionLottery: List<String>) {
+        private fun insertPensionLotteries(pensionLotteries: List<List<String>>) {
             launch {
                 loading(isLoading = true)
-                insertPensionLotteryUseCase(
-                    group = pensionLottery[0].toInt(),
-                    firstNum = pensionLottery[1].toInt(),
-                    secondNum = pensionLottery[2].toInt(),
-                    thirdNum = pensionLottery[3].toInt(),
-                    fourthNum = pensionLottery[4].toInt(),
-                    fifthNum = pensionLottery[5].toInt(),
-                    sixthNum = pensionLottery[6].toInt(),
-                ).onSuccess {
+                val results =
+                    pensionLotteries.map { pensionLottery ->
+                        insertPensionLotteryUseCase(
+                            group = pensionLottery[0].toInt(),
+                            firstNum = pensionLottery[1].toInt(),
+                            secondNum = pensionLottery[2].toInt(),
+                            thirdNum = pensionLottery[3].toInt(),
+                            fourthNum = pensionLottery[4].toInt(),
+                            fifthNum = pensionLottery[5].toInt(),
+                            sixthNum = pensionLottery[6].toInt(),
+                        )
+                    }
+                if (results.any { it.isSuccess }) {
                     _effect.send(Effect.PensionLotteryRefresh)
+                }
+                if (results.all { it.isSuccess }) {
                     _effect.send(Effect.ShowMessage(MyNumberMessage.PENSION_LOTTERY_INSERT_SUCCESS))
-                }.onFailure {
+                } else {
                     _effect.send(Effect.ShowMessage(MyNumberMessage.PENSION_LOTTERY_INSERT_FAILED))
                 }
                 loading(false)
@@ -149,9 +161,7 @@ class MyNumberViewModel
             val lottoNumbers = text.extractLottoNumbers()
 
             if (lottoNumbers.isValidLottoNumbers()) {
-                lottoNumbers.forEach { lottoNumber ->
-                    insertLottery(lottery = lottoNumber)
-                }
+                insertLotteries(lotteries = lottoNumbers)
             }
         }
 
@@ -161,9 +171,7 @@ class MyNumberViewModel
             val lottoNumbers = text.extractPensionLottoNumbers()
 
             if (lottoNumbers.isValidPensionLottoNumbers()) {
-                lottoNumbers.forEach { lottoNumber ->
-                    insertPensionLottery(pensionLottery = lottoNumber)
-                }
+                insertPensionLotteries(pensionLotteries = lottoNumbers)
             }
         }
 
