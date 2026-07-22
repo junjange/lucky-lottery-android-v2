@@ -16,6 +16,8 @@
     <string name="done">완료</string>
     <string name="empty_delete_list">삭제할 번호가 없어요</string>
     <string name="delete">삭제</string>
+    <string name="select_all">전체 선택</string>
+    <string name="deselect_all">선택 해제</string>
 
     <string name="lotto_number_submitted">로또 번호가 추가되었습니다.</string>
     <string name="lotto_duplicate_error">로또 번호가 중복되었습니다!</string>

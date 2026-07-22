@@ -26,4 +26,6 @@ internal class LotteryRoomDataSourceImpl
             round: Int,
             id: Long,
         ): Result<Unit> = runCatching { dao.deleteLotteryByRoundAndId(round = round, id = id) }
+
+        override suspend fun deleteAllLottery(): Result<Unit> = runCatching { dao.deleteAllLottery() }
     }

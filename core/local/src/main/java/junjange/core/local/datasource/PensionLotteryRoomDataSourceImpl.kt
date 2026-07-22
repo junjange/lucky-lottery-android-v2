@@ -26,4 +26,6 @@ internal class PensionLotteryRoomDataSourceImpl
             round: Int,
             id: Long,
         ): Result<Unit> = runCatching { dao.deletePensionLotteryByRoundAndId(round = round, id = id) }
+
+        override suspend fun deleteAllPensionLottery(): Result<Unit> = runCatching { dao.deleteAllPensionLottery() }
     }

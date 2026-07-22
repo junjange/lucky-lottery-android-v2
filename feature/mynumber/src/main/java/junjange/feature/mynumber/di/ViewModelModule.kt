@@ -13,7 +13,9 @@ val myNumberViewModelModule = module {
             insertPensionLotteryUseCase = get(),
             loadPensionLotteryRoundsUseCase = get(),
             deleteLotteryByRoundAndIdUseCase = get(),
-            deletePensionLotteryByRoundAndIdUseCase = get()
+            deletePensionLotteryByRoundAndIdUseCase = get(),
+            deleteAllLotteryUseCase = get(),
+            deleteAllPensionLotteryUseCase = get(),
         )
     }
 }

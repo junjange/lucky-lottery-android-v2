@@ -25,4 +25,7 @@ interface LotteryDao {
         round: Int,
         id: Long,
     )
+
+    @Query("DELETE FROM lottery")
+    suspend fun deleteAllLottery()
 }

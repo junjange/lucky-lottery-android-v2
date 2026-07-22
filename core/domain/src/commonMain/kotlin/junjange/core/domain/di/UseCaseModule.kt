@@ -35,6 +35,7 @@ val useCaseModule = module {
     factory { InsertLotteryUseCase(get()) }
     factory { LoadLotteryRoundsUseCase(get()) }
     factory { DeleteLotteryByRoundAndIdUseCase(get()) }
+    factory { DeleteAllLotteryUseCase(get()) }
 
     // Pension Lottery UseCases
     factory { GetPensionLotteryUseCase(get()) }
@@ -46,6 +47,7 @@ val useCaseModule = module {
     factory { InsertPensionLotteryUseCase(get()) }
     factory { LoadPensionLotteryRoundsUseCase(get()) }
     factory { DeletePensionLotteryByRoundAndIdUseCase(get()) }
+    factory { DeleteAllPensionLotteryUseCase(get()) }
 
     // Notification UseCases
     factory { GetNotificationUseCase(get()) }

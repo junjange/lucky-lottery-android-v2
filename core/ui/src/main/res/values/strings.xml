@@ -14,6 +14,8 @@
 
     <string name="create_title">생성</string>
     <string name="group_title">조</string>
+    <string name="add_number">번호 추가</string>
+    <string name="remove_number">번호 삭제</string>
 
     <string name="winning_numbers_title">당첨번호</string>
     <string name="bonus_numbers_title">보너스</string>

@@ -145,6 +145,7 @@ fun MyNumberScreen(
     val lotteryGetContent = state.lotteryFlow.collectAsLazyPagingItems()
     val pensionLotteryGetContent = state.pensionLotteryFlow.collectAsLazyPagingItems()
     var isDeleteMode by remember { mutableStateOf(false) }
+    var isAllSelected by remember { mutableStateOf(false) }
 
     val deleteLottery =
         rememberSaveable(
@@ -194,14 +195,24 @@ fun MyNumberScreen(
         LotteryDeleteDialog(
             onDismiss = { viewModel.event(ShowDialog(isDialogShowing = false)) },
             okClick = {
-                if (deleteLottery.isNotEmpty()) {
-                    viewModel.event(DeleteLottery(deleteLottery.toList()))
+                if (isAllSelected) {
+                    when (pagerState.currentPage) {
+                        0 -> viewModel.event(DeleteAllLottery)
+                        1 -> viewModel.event(DeleteAllPensionLottery)
+                    }
                     deleteLottery.clear()
-                }
-
-                if (deletePensionLottery.isNotEmpty()) {
-                    viewModel.event(DeletePensionLottery(deletePensionLottery.toList()))
                     deletePensionLottery.clear()
+                    isAllSelected = false
+                } else {
+                    if (deleteLottery.isNotEmpty()) {
+                        viewModel.event(DeleteLottery(deleteLottery.toList()))
+                        deleteLottery.clear()
+                    }
+
+                    if (deletePensionLottery.isNotEmpty()) {
+                        viewModel.event(DeletePensionLottery(deletePensionLottery.toList()))
+                        deletePensionLottery.clear()
+                    }
                 }
 
                 viewModel.event(ShowDialog(isDialogShowing = false))
@@ -221,11 +232,12 @@ fun MyNumberScreen(
         snackbarHostState = snackbarHostState,
         onGalleryClicked = { viewModel.event(PickedImage) },
         onDeleteClicked = { deleteMode -> isDeleteMode = deleteMode },
-        onLotterySaveClicked = { lottery -> viewModel.event(InsertLottery(lottery)) },
-        onPensionLotterySaveClicked = { pensionLottery ->
-            viewModel.event(InsertPensionLottery(pensionLottery))
+        onLotterySaveClicked = { lotteries -> viewModel.event(InsertLotteries(lotteries)) },
+        onPensionLotterySaveClicked = { pensionLotteries ->
+            viewModel.event(InsertPensionLotteries(pensionLotteries))
         },
         checkedLottery = { lotteryGetNumber ->
+            isAllSelected = false
             if (deleteLottery.contains(lotteryGetNumber)) {
                 deleteLottery.remove(lotteryGetNumber)
             } else {
@@ -233,6 +245,7 @@ fun MyNumberScreen(
             }
         },
         checkedPensionLottery = { pensionLotteryNumbers ->
+            isAllSelected = false
             if (deletePensionLottery.contains(pensionLotteryNumbers)) {
                 deletePensionLottery.remove(pensionLotteryNumbers)
             } else {
@@ -246,8 +259,38 @@ fun MyNumberScreen(
                 context.showToast(context.getString(R.string.empty_delete_list))
             }
         },
+        isAllSelected = isAllSelected,
+        onSelectAllClicked = {
+            if (isAllSelected) {
+                deleteLottery.clear()
+                deletePensionLottery.clear()
+                isAllSelected = false
+            } else {
+                when (pagerState.currentPage) {
+                    0 -> {
+                        deleteLottery.clear()
+                        lotteryGetContent.itemSnapshotList.items.forEach { content ->
+                            content.lotteryGetNumbers.forEach { number ->
+                                deleteLottery.add(UserRoundId(round = content.round, id = number.id))
+                            }
+                        }
+                    }
+
+                    1 -> {
+                        deletePensionLottery.clear()
+                        pensionLotteryGetContent.itemSnapshotList.items.forEach { content ->
+                            content.pensionLotteryNumbers.forEach { number ->
+                                deletePensionLottery.add(UserRoundId(round = content.round, id = number.id))
+                            }
+                        }
+                    }
+                }
+                isAllSelected = true
+            }
+        },
         onDeleteLotteryCancelClicked = {
             isDeleteMode = false
+            isAllSelected = false
             deleteLottery.clear()
             deletePensionLottery.clear()
         },
@@ -268,11 +311,13 @@ fun MyNumberContent(
     modifier: Modifier = Modifier,
     onGalleryClicked: () -> Unit,
     onDeleteClicked: (isDeleteMode: Boolean) -> Unit,
-    onLotterySaveClicked: (List<String>) -> Unit,
-    onPensionLotterySaveClicked: (List<String>) -> Unit,
+    onLotterySaveClicked: (List<List<String>>) -> Unit,
+    onPensionLotterySaveClicked: (List<List<String>>) -> Unit,
     checkedLottery: (userRoundId: UserRoundId) -> Unit,
     checkedPensionLottery: (userRoundId: UserRoundId) -> Unit,
     onDeleteLotteryClicked: () -> Unit,
+    isAllSelected: Boolean,
+    onSelectAllClicked: () -> Unit,
     onDeleteLotteryCancelClicked: () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -300,14 +345,27 @@ fun MyNumberContent(
                                 onDeleteLotteryCancelClicked()
                             },
                     )
-                    Text(
-                        text = stringResource(R.string.delete),
-                        color = LottoTheme.colors.lottoError,
-                        modifier =
-                            Modifier.clickable {
-                                onDeleteLotteryClicked()
-                            },
-                    )
+                    Row {
+                        Text(
+                            text =
+                                stringResource(
+                                    if (isAllSelected) R.string.deselect_all else R.string.select_all,
+                                ),
+                            modifier =
+                                Modifier.clickable {
+                                    onSelectAllClicked()
+                                },
+                        )
+                        Spacer(modifier = Modifier.width(20.dp))
+                        Text(
+                            text = stringResource(R.string.delete),
+                            color = LottoTheme.colors.lottoError,
+                            modifier =
+                                Modifier.clickable {
+                                    onDeleteLotteryClicked()
+                                },
+                        )
+                    }
                 }
             } else {
                 TabRow(
@@ -370,9 +428,9 @@ fun MyNumberContent(
                     when (pagerState.currentPage) {
                         0 ->
                             LottoNumberEntry(
-                                onSubmit = { lottery ->
+                                onSubmit = { lotteries ->
                                     isSheetOpen = false
-                                    onLotterySaveClicked(lottery)
+                                    onLotterySaveClicked(lotteries)
                                 },
                                 onDuplicateLottery = {
                                     context.showToast(R.string.lotto_duplicate_error)
@@ -381,10 +439,9 @@ fun MyNumberContent(
 
                         1 ->
                             PensionLotteryNumberEntry(
-                                onSubmit = { pensionLottery ->
+                                onSubmit = { pensionLotteries ->
                                     isSheetOpen = false
-                                    onPensionLotterySaveClicked(pensionLottery)
-//                                    context.showToast(R.string.pension_lottery_number_submitted)
+                                    onPensionLotterySaveClicked(pensionLotteries)
                                 },
                                 onInvalidGroup = {
                                     context.showToast(R.string.pension_lottery_invalid_group)

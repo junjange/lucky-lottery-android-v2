@@ -1,9 +1,9 @@
 [versions]
 # app
-compile-sdk = "35"
+compile-sdk = "36"
 min-sdk = "24"
-version-code = "12"
-version-name = "3.1.1"
+version-code = "13"
+version-name = "3.2.0"
 
 # plugins
 jsoup-version = "1.15.3"
