@@ -3,6 +3,8 @@ package junjange.feature.mynumber
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
+import junjange.core.domain.usecase.DeleteAllLotteryUseCase
+import junjange.core.domain.usecase.DeleteAllPensionLotteryUseCase
 import junjange.core.domain.usecase.DeleteLotteryByRoundAndIdUseCase
 import junjange.core.domain.usecase.DeletePensionLotteryByRoundAndIdUseCase
 import junjange.core.domain.usecase.InsertLotteryUseCase
@@ -33,6 +35,8 @@ class MyNumberViewModel
         private val loadPensionLotteryRoundsUseCase: LoadPensionLotteryRoundsUseCase,
         private val deleteLotteryByRoundAndIdUseCase: DeleteLotteryByRoundAndIdUseCase,
         private val deletePensionLotteryByRoundAndIdUseCase: DeletePensionLotteryByRoundAndIdUseCase,
+        private val deleteAllLotteryUseCase: DeleteAllLotteryUseCase,
+        private val deleteAllPensionLotteryUseCase: DeleteAllPensionLotteryUseCase,
     ) : BaseViewModel() {
         private val _state = MutableStateFlow(State())
         val state: StateFlow<State> = _state.asStateFlow()
@@ -56,6 +60,8 @@ class MyNumberViewModel
                 is Event.PensionLottoTextOfImage -> getPensionLottoTextOfImage(imagePath = event.imagePath)
                 is Event.DeleteLottery -> deleteLottery(userRoundIds = event.userRoundIds)
                 is Event.DeletePensionLottery -> deletePensionLottery(userRoundIds = event.userRoundIds)
+                is Event.DeleteAllLottery -> deleteAllLottery()
+                is Event.DeleteAllPensionLottery -> deleteAllPensionLottery()
                 is Event.ShowDialog -> showDialog(isDialogShowing = event.isDialogShowing)
             }
         }
@@ -189,6 +195,20 @@ class MyNumberViewModel
                 userRoundIds.forEach { (round, id) ->
                     deletePensionLotteryByRoundAndIdUseCase(round = round, id = id)
                 }
+                _effect.send(Effect.PensionLotteryRefresh)
+            }
+        }
+
+        private fun deleteAllLottery() {
+            launch {
+                deleteAllLotteryUseCase()
+                _effect.send(Effect.LotteryRefresh)
+            }
+        }
+
+        private fun deleteAllPensionLottery() {
+            launch {
+                deleteAllPensionLotteryUseCase()
                 _effect.send(Effect.PensionLotteryRefresh)
             }
         }

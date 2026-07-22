@@ -169,6 +169,8 @@ internal class PensionLotteryRepositoryImpl
                 id = id,
             )
 
+        override suspend fun deleteAllPensionLottery(): Result<Unit> = pensionLotteryRoomDataSource.deleteAllPensionLottery()
+
         private suspend fun getWinningPensionLotteries(
             pagedRounds: List<Int>,
             pensionLotteries: List<PensionLotteryNumberDto>,

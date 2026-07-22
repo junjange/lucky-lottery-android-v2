@@ -145,6 +145,7 @@ fun MyNumberScreen(
     val lotteryGetContent = state.lotteryFlow.collectAsLazyPagingItems()
     val pensionLotteryGetContent = state.pensionLotteryFlow.collectAsLazyPagingItems()
     var isDeleteMode by remember { mutableStateOf(false) }
+    var isAllSelected by remember { mutableStateOf(false) }
 
     val deleteLottery =
         rememberSaveable(
@@ -194,14 +195,24 @@ fun MyNumberScreen(
         LotteryDeleteDialog(
             onDismiss = { viewModel.event(ShowDialog(isDialogShowing = false)) },
             okClick = {
-                if (deleteLottery.isNotEmpty()) {
-                    viewModel.event(DeleteLottery(deleteLottery.toList()))
+                if (isAllSelected) {
+                    when (pagerState.currentPage) {
+                        0 -> viewModel.event(DeleteAllLottery)
+                        1 -> viewModel.event(DeleteAllPensionLottery)
+                    }
                     deleteLottery.clear()
-                }
-
-                if (deletePensionLottery.isNotEmpty()) {
-                    viewModel.event(DeletePensionLottery(deletePensionLottery.toList()))
                     deletePensionLottery.clear()
+                    isAllSelected = false
+                } else {
+                    if (deleteLottery.isNotEmpty()) {
+                        viewModel.event(DeleteLottery(deleteLottery.toList()))
+                        deleteLottery.clear()
+                    }
+
+                    if (deletePensionLottery.isNotEmpty()) {
+                        viewModel.event(DeletePensionLottery(deletePensionLottery.toList()))
+                        deletePensionLottery.clear()
+                    }
                 }
 
                 viewModel.event(ShowDialog(isDialogShowing = false))
@@ -226,6 +237,7 @@ fun MyNumberScreen(
             viewModel.event(InsertPensionLotteries(pensionLotteries))
         },
         checkedLottery = { lotteryGetNumber ->
+            isAllSelected = false
             if (deleteLottery.contains(lotteryGetNumber)) {
                 deleteLottery.remove(lotteryGetNumber)
             } else {
@@ -233,6 +245,7 @@ fun MyNumberScreen(
             }
         },
         checkedPensionLottery = { pensionLotteryNumbers ->
+            isAllSelected = false
             if (deletePensionLottery.contains(pensionLotteryNumbers)) {
                 deletePensionLottery.remove(pensionLotteryNumbers)
             } else {
@@ -246,8 +259,38 @@ fun MyNumberScreen(
                 context.showToast(context.getString(R.string.empty_delete_list))
             }
         },
+        isAllSelected = isAllSelected,
+        onSelectAllClicked = {
+            if (isAllSelected) {
+                deleteLottery.clear()
+                deletePensionLottery.clear()
+                isAllSelected = false
+            } else {
+                when (pagerState.currentPage) {
+                    0 -> {
+                        deleteLottery.clear()
+                        lotteryGetContent.itemSnapshotList.items.forEach { content ->
+                            content.lotteryGetNumbers.forEach { number ->
+                                deleteLottery.add(UserRoundId(round = content.round, id = number.id))
+                            }
+                        }
+                    }
+
+                    1 -> {
+                        deletePensionLottery.clear()
+                        pensionLotteryGetContent.itemSnapshotList.items.forEach { content ->
+                            content.pensionLotteryNumbers.forEach { number ->
+                                deletePensionLottery.add(UserRoundId(round = content.round, id = number.id))
+                            }
+                        }
+                    }
+                }
+                isAllSelected = true
+            }
+        },
         onDeleteLotteryCancelClicked = {
             isDeleteMode = false
+            isAllSelected = false
             deleteLottery.clear()
             deletePensionLottery.clear()
         },
@@ -273,6 +316,8 @@ fun MyNumberContent(
     checkedLottery: (userRoundId: UserRoundId) -> Unit,
     checkedPensionLottery: (userRoundId: UserRoundId) -> Unit,
     onDeleteLotteryClicked: () -> Unit,
+    isAllSelected: Boolean,
+    onSelectAllClicked: () -> Unit,
     onDeleteLotteryCancelClicked: () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -300,14 +345,27 @@ fun MyNumberContent(
                                 onDeleteLotteryCancelClicked()
                             },
                     )
-                    Text(
-                        text = stringResource(R.string.delete),
-                        color = LottoTheme.colors.lottoError,
-                        modifier =
-                            Modifier.clickable {
-                                onDeleteLotteryClicked()
-                            },
-                    )
+                    Row {
+                        Text(
+                            text =
+                                stringResource(
+                                    if (isAllSelected) R.string.deselect_all else R.string.select_all,
+                                ),
+                            modifier =
+                                Modifier.clickable {
+                                    onSelectAllClicked()
+                                },
+                        )
+                        Spacer(modifier = Modifier.width(20.dp))
+                        Text(
+                            text = stringResource(R.string.delete),
+                            color = LottoTheme.colors.lottoError,
+                            modifier =
+                                Modifier.clickable {
+                                    onDeleteLotteryClicked()
+                                },
+                        )
+                    }
                 }
             } else {
                 TabRow(

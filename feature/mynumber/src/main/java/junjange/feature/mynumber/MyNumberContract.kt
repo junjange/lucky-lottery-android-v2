@@ -56,6 +56,10 @@ sealed interface MyNumberContract {
         data class DeletePensionLottery(
             val userRoundIds: List<UserRoundId>,
         ) : Event
+
+        data object DeleteAllLottery : Event
+
+        data object DeleteAllPensionLottery : Event
     }
 
     sealed interface Effect {
