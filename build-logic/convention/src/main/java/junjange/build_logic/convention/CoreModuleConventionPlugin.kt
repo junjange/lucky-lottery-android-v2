@@ -21,7 +21,7 @@ class CoreModuleConventionPlugin : Plugin<Project> {
             }
 
             extensions.configure<LibraryExtension> {
-                compileSdk = 35
+                compileSdk = 36
 
                 defaultConfig {
                     minSdk = 24
