@@ -21,8 +21,7 @@ dependencyResolutionManagement {
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 rootProject.name = "Lotto3"
-include(":app")
-include(":shared")
+include(":composeApp")
 include(":core:domain")
 include(":core:data")
 include(":core:local")
