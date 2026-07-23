@@ -54,7 +54,6 @@ kotlin {
             implementation(projects.core.navigation)
             implementation(libs.bundles.google)
             implementation(libs.core.ktx)
-            implementation(libs.appcompat)
             implementation(libs.compose.navigation)
         }
     }

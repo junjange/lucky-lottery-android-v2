@@ -45,7 +45,6 @@ kotlin {
         }
         androidMain.dependencies {
             implementation(libs.bundles.google)
-            implementation(libs.bundles.datastore)
             implementation(libs.zxing.android.embedded)
             implementation(libs.zxing.core)
         }

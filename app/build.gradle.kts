@@ -112,5 +112,5 @@ dependencies {
     androidTestImplementation(libs.junit.espresso)
     debugImplementation(libs.compose.ui.test)
     debugImplementation(libs.compose.ui.tooling.debug)
-    androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))
+    androidTestImplementation(platform(libs.compose.bom))
 }

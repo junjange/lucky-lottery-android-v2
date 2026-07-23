@@ -31,7 +31,6 @@ kotlin {
         androidMain.dependencies {
             implementation(projects.core.ocr)
             implementation(libs.bundles.google)
-            implementation(libs.bundles.datastore)
             implementation(libs.paging.compose)
             implementation(libs.image.cropper)
         }

@@ -43,7 +43,6 @@ kotlin {
         androidMain.dependencies {
             implementation(projects.core.firebase)
             implementation(libs.bundles.google)
-            implementation(libs.bundles.datastore)
         }
     }
 }

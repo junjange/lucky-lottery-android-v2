@@ -6,7 +6,6 @@ version-code = "13"
 version-name = "3.2.0"
 
 # plugins
-jsoup-version = "1.15.3"
 kotlin-lang = "2.2.20"
 android-gradle-plugin = "8.13.0"
 kotlin-multiplatform = "2.2.20"
@@ -18,7 +17,6 @@ lifecycle-viewmodel-compose-multiplatform = "2.10.0"
 ktx = "1.15.0"
 lifecycle-runtime-ktx = "2.8.7"
 material = "1.12.0"
-lifecycle-extensions = "2.2.0"
 
 ## compose
 compose = "1.10.1"
@@ -31,7 +29,6 @@ junit-ext = "1.2.1"
 junit-espresso = "3.6.1"
 
 ## android-library
-datastore = "1.1.3"
 coil = "2.5.0"
 koin = "4.0.1"
 koin-compose = "4.0.0"
@@ -48,7 +45,6 @@ firebase-messaging = "24.1.0"
 firebase-bom = "33.10.0"
 google-play-services-auth = "21.3.0"
 google-admob-ads = "24.0.0"
-appcompat = "1.7.0"
 compose-bom = "2025.02.00"
 tesseract = "4.9.0"
 
@@ -59,7 +55,6 @@ coroutines = "1.10.1"
 ktor = "3.0.3"
 ktorfit = "2.7.1"
 ktorfit-ksp-version = "2.7.1-2.0.4"
-junit-ktx = "1.2.1"
 
 # serialization
 serialization = "1.6.3"
@@ -77,13 +72,11 @@ koin-workmanager = "4.0.0"
 
 [libraries]
 # default
-jsoup-jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup-version" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin-lang" }
 android-gradle-plugin = { group = "com.android.tools.build", name = "gradle", version.ref = "android-gradle-plugin" }
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "ktx" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
-lifecycle-extensions = { group = "androidx.lifecycle", name = "lifecycle-extensions", version.ref = "lifecycle-extensions" }
 
 # kotlin
 kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
@@ -109,8 +102,6 @@ junit-espresso = { group = "androidx.test.espresso", name = "espresso-core", ver
 compose-ui-test = { group = "androidx.compose.ui", name = "ui-test-manifest", version.ref = "compose-ui" }
 
 # android-library
-datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
-datastore-core = { group = "androidx.datastore", name = "datastore-preferences-core", version.ref = "datastore" }
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
 koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
 koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin-compose" }
@@ -120,7 +111,6 @@ koin-test = { group = "io.insert-koin", name = "koin-test", version.ref = "koin"
 koin-test-junit4 = { group = "io.insert-koin", name = "koin-test-junit4", version.ref = "koin" }
 coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 paging-compose = { group = "androidx.paging", name = "paging-compose", version = "3.3.6" }
-javax-inject = "javax.inject:javax.inject:1"
 image-cropper = { module = "com.vanniktech:android-image-cropper", version.ref = "image-cropper" }
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 
@@ -156,9 +146,7 @@ koin-compose = { group = "io.insert-koin", name = "koin-compose", version.ref = 
 koin-compose-viewmodel = { group = "io.insert-koin", name = "koin-compose-viewmodel", version.ref = "koin-compose" }
 compose-multiplatform-gradle-plugin = { module = "org.jetbrains.compose:compose-gradle-plugin", version.ref = "compose-multiplatform" }
 
-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 
 # Zxing qr scanner
 zxing-android-embedded = { group = "com.journeyapps", name = "zxing-android-embedded", version = "4.1.0" }
@@ -166,13 +154,10 @@ zxing-core = { group = "com.google.zxing", name = "core", version = "3.4.0" }
 
 # Tesseract4Android
 tesseract-android = { module = "cz.adaptech.tesseract4android:tesseract4android", version.ref = "tesseract" }
-tesseract-android-openmp = { module = "cz.adaptech.tesseract4android:tesseract4android-openmp", version.ref = "tesseract" }
-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junit-ktx" }
 
 # room
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 sqlite-bundled = { group = "androidx.sqlite", name = "sqlite-bundled", version.ref = "sqlite" }
 
 # multiplatform key-value storage (SharedPreferences / NSUserDefaults)
@@ -187,15 +172,12 @@ work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx", version
 koin-androidx-workmanager = { group = "io.insert-koin", name = "koin-androidx-workmanager", version.ref = "koin-workmanager" }
 
 [bundles]
-android = ["core-ktx", "lifecycle-runtime-ktx", "material", "lifecycle-extensions", "coil", "image-cropper", "zxing-android-embedded", "zxing-core"]
+android = ["core-ktx", "lifecycle-runtime-ktx", "material", "coil", "image-cropper", "zxing-android-embedded", "zxing-core"]
 kotlin = ["coroutines-core", "kotlinx-serialization", "kotlinx-datetime"]
 compose = ["activity-compose", "compose-lifecycle", "compose-ui", "compose-ui-graphics", "compose-ui-tooling-preview", "compose-material", "compose-material3", "compose-navigation", "paging-compose"]
 common = ["koin-android", "koin-core", "koin-androidx-compose"]
 google = ["google-services", "firebase-auth", "firebase-messaging", "firebase-bom", "google-auth", "google-admob-ads"]
 kakao = ["kakao-user"]
-network = ["ktor-client-core", "ktor-client-okhttp", "ktor-client-content-negotiation", "ktor-client-logging", "ktor-client-auth", "ktor-serialization-kotlinx-json", "ktorfit-lib"]
-datastore = ["datastore", "datastore-core"]
-room = ["room-runtime", "room-ktx"]
 workmanager = ["work-runtime-ktx", "koin-androidx-workmanager"]
 
 [plugins]
