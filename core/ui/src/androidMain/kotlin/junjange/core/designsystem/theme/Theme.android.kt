@@ -12,7 +12,7 @@ actual fun PlatformThemeEffect() {
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
-            (view.context as Activity).window.statusBarColor = MaterialColors.background.toArgb()
+            (view.context as Activity).window.statusBarColor = LightColorScheme.background.toArgb()
             ViewCompat.getWindowInsetsController(view)?.isAppearanceLightStatusBars = true
         }
     }

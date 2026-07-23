@@ -1,12 +1,10 @@
 package junjange.shared.navigation
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -24,7 +22,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.savedstate.read
-import junjange.core.designsystem.theme.LottoTheme
 import junjange.core.ui.resources.Res
 import junjange.core.ui.resources.ic_clover
 import junjange.core.ui.resources.ic_clover_outlined
@@ -168,26 +165,18 @@ private fun MainTabs(
     Scaffold(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         bottomBar = {
-            NavigationBar(containerColor = LottoTheme.colors.white) {
+            NavigationBar {
                 Tab.entries.forEach { tab ->
                     val selected = selectedTab == tab
                     NavigationBarItem(
                         icon = {
-                            Image(
+                            Icon(
                                 painter = painterResource(if (selected) tab.selectedIcon else tab.unselectedIcon),
-                                contentDescription = null,
+                                contentDescription = tab.label,
                             )
                         },
-                        label = {
-                            Text(
-                                text = tab.label,
-                                style =
-                                    MaterialTheme.typography.labelSmall.copy(
-                                        color = if (selected) LottoTheme.colors.black else LottoTheme.colors.gray400,
-                                    ),
-                            )
-                        },
-                        selected = false,
+                        label = { Text(tab.label) },
+                        selected = selected,
                         onClick = {
                             if (tab == Tab.RANDOM_NUMBER) {
                                 onNavigateToRandomNumber()
@@ -195,7 +184,6 @@ private fun MainTabs(
                                 selectedTab = tab
                             }
                         },
-                        interactionSource = MutableInteractionSource(),
                     )
                 }
             }

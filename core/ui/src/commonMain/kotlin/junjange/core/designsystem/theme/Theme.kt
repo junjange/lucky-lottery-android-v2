@@ -1,6 +1,5 @@
 package junjange.core.designsystem.theme
 
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -20,10 +19,9 @@ fun LottoTheme(
     CompositionLocalProvider(
         LocalColors provides rememberedColors,
         LocalTypography provides typography,
-        LocalContentColor provides White,
     ) {
         MaterialTheme(
-            colorScheme = MaterialColors,
+            colorScheme = LightColorScheme,
             content = content,
         )
     }

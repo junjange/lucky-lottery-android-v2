@@ -1,36 +1,28 @@
 package junjange.core.ui.component
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import junjange.core.designsystem.theme.LottoTheme
 
+/**
+ * OS 위임형 디자인 시스템: M3 기본 Button을 사용한다 (primary 자동 적용).
+ * backgroundColor는 하위 호환을 위해 남겨둔 무시 파라미터.
+ */
 @Composable
-inline fun LottoRoundedCornerButton(
+fun LottoRoundedCornerButton(
     modifier: Modifier = Modifier,
     buttonText: String,
-    backgroundColor: Color,
+    backgroundColor: Color = Color.Unspecified,
     isEnabled: Boolean = true,
-    crossinline onClick: () -> Unit,
+    onClick: () -> Unit,
 ) {
-    Box(
-        modifier =
-            modifier
-                .background(if (isEnabled) backgroundColor else LottoTheme.colors.gray400)
-                .clickable(enabled = isEnabled) {
-                    onClick()
-                },
+    Button(
+        onClick = onClick,
+        modifier = modifier,
+        enabled = isEnabled,
     ) {
-        Text(
-            modifier = Modifier.align(Alignment.Center),
-            text = buttonText,
-            style = LottoTheme.typography.body3,
-            color = LottoTheme.colors.white,
-        )
+        Text(text = buttonText)
     }
 }

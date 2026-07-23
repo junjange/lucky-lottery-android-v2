@@ -149,14 +149,14 @@ fun PensionLotteryNumberEntry(
             Icon(
                 imageVector = Icons.Filled.Add,
                 contentDescription = null,
-                tint = LottoTheme.colors.green,
+                tint = androidx.compose.material3.MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(20.dp),
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
                 text = stringResource(Res.string.add_number),
                 style = LottoTheme.typography.body3,
-                color = LottoTheme.colors.green,
+                color = androidx.compose.material3.MaterialTheme.colorScheme.primary,
             )
         }
 
@@ -169,7 +169,6 @@ fun PensionLotteryNumberEntry(
                     .height(40.dp)
                     .fillMaxWidth(),
             buttonText = stringResource(Res.string.create_title),
-            backgroundColor = LottoTheme.colors.green,
             isEnabled = enabled,
             onClick = {
                 if (enabled) {

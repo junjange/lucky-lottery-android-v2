@@ -70,13 +70,11 @@ fun HomeScreen(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         floatingActionButton = {
             FloatingActionButton(
-                containerColor = LottoTheme.colors.green,
                 onClick = navigateToQRScanner,
             ) {
                 Icon(
                     painter = painterResource(Res.drawable.ic_qr_code),
                     contentDescription = null,
-                    tint = LottoTheme.colors.white,
                 )
             }
         },
@@ -95,8 +93,6 @@ fun HomeScreen(
                 Indicator(
                     modifier = Modifier.align(Alignment.TopCenter),
                     isRefreshing = state.isLoading,
-                    containerColor = LottoTheme.colors.white,
-                    color = LottoTheme.colors.black,
                     state = refreshState,
                 )
             },

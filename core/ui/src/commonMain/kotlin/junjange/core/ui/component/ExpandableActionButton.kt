@@ -104,7 +104,6 @@ fun ExpandableActionButton(
 
         FloatingActionButton(
             onClick = { isFabClicked = !isFabClicked },
-            containerColor = if (isFabClicked) LottoTheme.colors.white else LottoTheme.colors.green,
             shape = CircleShape,
         ) {
             Row(
@@ -114,7 +113,6 @@ fun ExpandableActionButton(
                 Icon(
                     imageVector = Icons.Filled.Add,
                     contentDescription = "Close",
-                    tint = if (isFabClicked) LottoTheme.colors.black else LottoTheme.colors.white,
                     modifier = Modifier.rotate(rotation),
                 )
 
@@ -124,7 +122,6 @@ fun ExpandableActionButton(
                     Text(
                         text = stringResource(Res.string.addition),
                         style = LottoTheme.typography.caption1,
-                        color = LottoTheme.colors.white,
                     )
                 }
             }

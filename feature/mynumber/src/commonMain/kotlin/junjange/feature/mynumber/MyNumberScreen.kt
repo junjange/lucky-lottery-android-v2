@@ -345,7 +345,7 @@ fun MyNumberContent(
                         Spacer(modifier = Modifier.width(20.dp))
                         Text(
                             text = stringResource(Res.string.delete),
-                            color = LottoTheme.colors.lottoError,
+                            color = androidx.compose.material3.MaterialTheme.colorScheme.error,
                             modifier =
                                 Modifier.clickable {
                                     onDeleteLotteryClicked()
@@ -412,7 +412,6 @@ fun MyNumberContent(
                 ModalBottomSheet(
                     modifier = Modifier.wrapContentHeight(),
                     onDismissRequest = { isSheetOpen = false },
-                    containerColor = LottoTheme.colors.lottoWhite,
                     sheetState = sheetState,
                 ) {
                     when (pagerState.currentPage) {
@@ -477,8 +476,6 @@ fun MyLotteryContent(
             Indicator(
                 modifier = Modifier.align(Alignment.TopCenter),
                 isRefreshing = contents.isRefreshing,
-                containerColor = LottoTheme.colors.white,
-                color = LottoTheme.colors.black,
                 state = refreshState,
             )
         },
@@ -630,8 +627,6 @@ fun MyPensionLotteryContent(
             Indicator(
                 modifier = Modifier.align(Alignment.TopCenter),
                 isRefreshing = contents.isRefreshing,
-                containerColor = LottoTheme.colors.white,
-                color = LottoTheme.colors.black,
                 state = refreshState,
             )
         },
