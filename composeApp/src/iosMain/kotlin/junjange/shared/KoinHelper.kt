@@ -3,6 +3,7 @@ package junjange.shared
 import androidx.lifecycle.SavedStateHandle
 import junjange.core.local.di.localModules
 import junjange.core.ocr.di.ocrModule
+import junjange.feature.mynumber.di.myNumberViewModelModule
 import junjange.feature.home.HomeViewModel
 import junjange.feature.notification.NotificationViewModel
 import junjange.feature.randomnumber.RandomNumberViewModel
@@ -27,6 +28,7 @@ fun startKoinApp() {
             buildList {
                 addAll(localModules)
                 add(ocrModule)
+                add(myNumberViewModelModule)
                 addAll(sharedModules)
                 add(iosViewModelModule)
             },

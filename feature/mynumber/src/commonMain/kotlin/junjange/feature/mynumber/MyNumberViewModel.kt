@@ -1,7 +1,7 @@
 package junjange.feature.mynumber
 
-import androidx.lifecycle.viewModelScope
-import androidx.paging.cachedIn
+import junjange.core.domain.model.LotteryGetContent
+import junjange.core.domain.model.PensionLotteryGetContent
 import junjange.core.domain.usecase.DeleteAllLotteryUseCase
 import junjange.core.domain.usecase.DeleteAllPensionLotteryUseCase
 import junjange.core.domain.usecase.DeleteLotteryByRoundAndIdUseCase
@@ -21,9 +21,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 
-
 class MyNumberViewModel
-
     constructor(
         private val ocrService: OcrService,
         private val insertLotteryUseCase: InsertLotteryUseCase,
@@ -41,16 +39,21 @@ class MyNumberViewModel
         private val _effect = Channel<Effect>(Channel.BUFFERED)
         val effect get() = _effect.receiveAsFlow()
 
+        private var lotteryPage = 0
+        private var pensionLotteryPage = 0
+
         init {
-            loadLottery()
-            loadPensionLottery()
+            loadLottery(refresh = true)
+            loadPensionLottery(refresh = true)
         }
 
         fun event(event: Event) {
             when (event) {
                 is Event.PickedImage -> onPickedImage()
-                is Event.LoadLottery -> loadLottery()
-                is Event.LoadPensionLottery -> loadPensionLottery()
+                is Event.RefreshLottery -> loadLottery(refresh = true)
+                is Event.RefreshPensionLottery -> loadPensionLottery(refresh = true)
+                is Event.LoadMoreLottery -> loadLottery(refresh = false)
+                is Event.LoadMorePensionLottery -> loadPensionLottery(refresh = false)
                 is Event.InsertLotteries -> insertLotteries(lotteries = event.lotteries)
                 is Event.InsertPensionLotteries -> insertPensionLotteries(pensionLotteries = event.pensionLotteries)
                 is Event.LottoTextOfImage -> getLottoTextOfImage(imagePath = event.imagePath)
@@ -64,38 +67,98 @@ class MyNumberViewModel
         }
 
         private fun showDialog(isDialogShowing: Boolean) {
+            _state.update { it.copy(isDeleteLotteryDialogShowing = isDialogShowing) }
+        }
+
+        private fun loadLottery(refresh: Boolean) {
+            val current = state.value.lottery
+            if (!refresh && (current.loadState == PageLoadState.Loading || current.endReached)) return
+
             launch {
+                if (refresh) lotteryPage = 0
                 _state.update {
-                    state.value.copy(
-                        isDeleteLotteryDialogShowing = isDialogShowing,
+                    it.copy(
+                        lottery =
+                            it.lottery.copy(
+                                loadState = PageLoadState.Loading,
+                                isRefreshing = refresh,
+                                endReached = if (refresh) false else it.lottery.endReached,
+                            ),
                     )
                 }
+
+                loadLotteryRoundsUseCase(page = lotteryPage, size = PAGE_SIZE)
+                    .onSuccess { loaded ->
+                        lotteryPage++
+                        _state.update {
+                            val items = if (refresh) loaded else it.lottery.items + loaded
+                            it.copy(
+                                lottery =
+                                    PagedContent(
+                                        items = items,
+                                        loadState = PageLoadState.Idle,
+                                        endReached = loaded.size < PAGE_SIZE,
+                                        isRefreshing = false,
+                                    ),
+                            )
+                        }
+                    }.onFailure {
+                        _state.update {
+                            it.copy(
+                                lottery =
+                                    it.lottery.copy(
+                                        loadState = PageLoadState.Error,
+                                        isRefreshing = false,
+                                    ),
+                            )
+                        }
+                    }
             }
         }
 
-        private fun loadLottery() {
+        private fun loadPensionLottery(refresh: Boolean) {
+            val current = state.value.pensionLottery
+            if (!refresh && (current.loadState == PageLoadState.Loading || current.endReached)) return
+
             launch {
-                val lotteryFlow =
-                    createLotteryPagingSource(loadLotteryRoundsUseCase = loadLotteryRoundsUseCase).flow.cachedIn(
-                        viewModelScope,
-                    )
-
+                if (refresh) pensionLotteryPage = 0
                 _state.update {
-                    state.value.copy(lotteryFlow = lotteryFlow)
-                }
-            }
-        }
-
-        private fun loadPensionLottery() {
-            launch {
-                val pensionLotteryFlow =
-                    createPensionLotteryPagingSource(loadPensionLotteryRoundsUseCase = loadPensionLotteryRoundsUseCase).flow.cachedIn(
-                        viewModelScope,
+                    it.copy(
+                        pensionLottery =
+                            it.pensionLottery.copy(
+                                loadState = PageLoadState.Loading,
+                                isRefreshing = refresh,
+                                endReached = if (refresh) false else it.pensionLottery.endReached,
+                            ),
                     )
-
-                _state.update {
-                    state.value.copy(pensionLotteryFlow = pensionLotteryFlow)
                 }
+
+                loadPensionLotteryRoundsUseCase(page = pensionLotteryPage, size = PAGE_SIZE)
+                    .onSuccess { loaded ->
+                        pensionLotteryPage++
+                        _state.update {
+                            val items = if (refresh) loaded else it.pensionLottery.items + loaded
+                            it.copy(
+                                pensionLottery =
+                                    PagedContent(
+                                        items = items,
+                                        loadState = PageLoadState.Idle,
+                                        endReached = loaded.size < PAGE_SIZE,
+                                        isRefreshing = false,
+                                    ),
+                            )
+                        }
+                    }.onFailure {
+                        _state.update {
+                            it.copy(
+                                pensionLottery =
+                                    it.pensionLottery.copy(
+                                        loadState = PageLoadState.Error,
+                                        isRefreshing = false,
+                                    ),
+                            )
+                        }
+                    }
             }
         }
 
@@ -114,7 +177,7 @@ class MyNumberViewModel
                         )
                     }
                 if (results.any { it.isSuccess }) {
-                    _effect.send(Effect.LotteryRefresh)
+                    loadLottery(refresh = true)
                 }
                 if (results.all { it.isSuccess }) {
                     _effect.send(Effect.ShowMessage(MyNumberMessage.LOTTERY_INSERT_SUCCESS))
@@ -141,7 +204,7 @@ class MyNumberViewModel
                         )
                     }
                 if (results.any { it.isSuccess }) {
-                    _effect.send(Effect.PensionLotteryRefresh)
+                    loadPensionLottery(refresh = true)
                 }
                 if (results.all { it.isSuccess }) {
                     _effect.send(Effect.ShowMessage(MyNumberMessage.PENSION_LOTTERY_INSERT_SUCCESS))
@@ -183,7 +246,7 @@ class MyNumberViewModel
                 userRoundIds.forEach { (round, id) ->
                     deleteLotteryByRoundAndIdUseCase(round = round, id = id)
                 }
-                _effect.send(Effect.LotteryRefresh)
+                loadLottery(refresh = true)
             }
         }
 
@@ -192,21 +255,21 @@ class MyNumberViewModel
                 userRoundIds.forEach { (round, id) ->
                     deletePensionLotteryByRoundAndIdUseCase(round = round, id = id)
                 }
-                _effect.send(Effect.PensionLotteryRefresh)
+                loadPensionLottery(refresh = true)
             }
         }
 
         private fun deleteAllLottery() {
             launch {
                 deleteAllLotteryUseCase()
-                _effect.send(Effect.LotteryRefresh)
+                loadLottery(refresh = true)
             }
         }
 
         private fun deleteAllPensionLottery() {
             launch {
                 deleteAllPensionLotteryUseCase()
-                _effect.send(Effect.PensionLotteryRefresh)
+                loadPensionLottery(refresh = true)
             }
         }
 
@@ -214,5 +277,9 @@ class MyNumberViewModel
             _state.update { state ->
                 state.copy(isLoading = isLoading)
             }
+        }
+
+        companion object {
+            private const val PAGE_SIZE = 10
         }
     }

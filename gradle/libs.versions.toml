@@ -154,7 +154,7 @@ koin-androidx-workmanager = { group = "io.insert-koin", name = "koin-androidx-wo
 [bundles]
 android = ["core-ktx", "lifecycle-runtime-ktx", "material", "image-cropper", "zxing-android-embedded", "zxing-core"]
 kotlin = ["coroutines-core", "kotlinx-serialization", "kotlinx-datetime"]
-compose = ["activity-compose", "compose-lifecycle", "compose-ui", "compose-ui-graphics", "compose-ui-tooling-preview", "compose-material", "compose-material3", "compose-navigation", "paging-compose"]
+compose = ["activity-compose", "compose-lifecycle", "compose-ui", "compose-ui-graphics", "compose-ui-tooling-preview", "compose-material", "compose-material3", "compose-navigation"]
 common = ["koin-android", "koin-core", "koin-androidx-compose"]
 workmanager = ["work-runtime-ktx", "koin-androidx-workmanager"]
 

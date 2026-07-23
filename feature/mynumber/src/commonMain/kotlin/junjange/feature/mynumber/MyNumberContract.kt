@@ -1,33 +1,44 @@
 package junjange.feature.mynumber
 
-import android.os.Parcelable
-import androidx.paging.PagingData
 import junjange.core.domain.model.LotteryGetContent
 import junjange.core.domain.model.PensionLotteryGetContent
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.parcelize.Parcelize
 
 sealed interface MyNumberContract {
+    enum class PageLoadState {
+        Idle,
+        Loading,
+        Error,
+    }
+
+    data class PagedContent<T>(
+        val items: List<T> = emptyList(),
+        val loadState: PageLoadState = PageLoadState.Loading,
+        val endReached: Boolean = false,
+        val isRefreshing: Boolean = false,
+    )
+
     data class State(
         val isLoading: Boolean = false,
         val isDeleteLotteryDialogShowing: Boolean = false,
-        val lotteryFlow: Flow<PagingData<LotteryGetContent>> = emptyFlow(),
-        val pensionLotteryFlow: Flow<PagingData<PensionLotteryGetContent>> = emptyFlow(),
+        val lottery: PagedContent<LotteryGetContent> = PagedContent(),
+        val pensionLottery: PagedContent<PensionLotteryGetContent> = PagedContent(),
     )
 
-    @Parcelize
     data class UserRoundId(
         val round: Int,
         val id: Long,
-    ) : Parcelable
+    )
 
     sealed interface Event {
         data object PickedImage : Event
 
-        data object LoadLottery : Event
+        data object RefreshLottery : Event
 
-        data object LoadPensionLottery : Event
+        data object RefreshPensionLottery : Event
+
+        data object LoadMoreLottery : Event
+
+        data object LoadMorePensionLottery : Event
 
         data class InsertLotteries(
             val lotteries: List<List<String>>,
@@ -64,10 +75,6 @@ sealed interface MyNumberContract {
 
     sealed interface Effect {
         data object NavigateToGallery : Effect
-
-        data object LotteryRefresh : Effect
-
-        data object PensionLotteryRefresh : Effect
 
         data class ShowMessage(
             val message: MyNumberMessage,

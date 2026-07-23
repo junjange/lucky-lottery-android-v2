@@ -1,11 +1,10 @@
 package junjange.feature.mynumber.di
 
 import junjange.feature.mynumber.MyNumberViewModel
-import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val myNumberViewModelModule = module {
-    viewModel {
+    factory {
         MyNumberViewModel(
             ocrService = get(),
             insertLotteryUseCase = get(),

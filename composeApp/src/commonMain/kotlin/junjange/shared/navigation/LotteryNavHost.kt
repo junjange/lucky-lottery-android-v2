@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ConfirmationNumber
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
@@ -22,6 +23,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import junjange.feature.home.HomeScreen
 import junjange.feature.home.HomeViewModel
+import junjange.feature.mynumber.MyNumberScreen
 import junjange.feature.notification.NotificationScreen
 import junjange.feature.notification.NotificationViewModel
 import junjange.feature.randomnumber.RandomNumberScreen
@@ -91,7 +93,7 @@ fun LotteryNavHost() {
     }
 }
 
-private enum class Tab { HOME, RANDOM, SETTING }
+private enum class Tab { HOME, MY_NUMBER, RANDOM, SETTING }
 
 @Composable
 private fun MainTabs(
@@ -109,6 +111,12 @@ private fun MainTabs(
                     onClick = { selectedTab = Tab.HOME },
                     icon = { Icon(Icons.Default.Home, contentDescription = null) },
                     label = { Text("홈") },
+                )
+                NavigationBarItem(
+                    selected = selectedTab == Tab.MY_NUMBER,
+                    onClick = { selectedTab = Tab.MY_NUMBER },
+                    icon = { Icon(Icons.Default.ConfirmationNumber, contentDescription = null) },
+                    label = { Text("내 번호") },
                 )
                 NavigationBarItem(
                     selected = selectedTab == Tab.RANDOM,
@@ -130,6 +138,12 @@ private fun MainTabs(
                 HomeScreen(
                     viewModel = koinInject<HomeViewModel>(),
                     navigateToQRScanner = {},
+                )
+
+            Tab.MY_NUMBER ->
+                MyNumberScreen(
+                    viewModel = koinInject(),
+                    initialPage = 0,
                 )
 
             Tab.RANDOM ->

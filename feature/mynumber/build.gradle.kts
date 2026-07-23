@@ -1,6 +1,5 @@
 plugins {
     id("junjange.compose.multiplatform")
-    alias(libs.plugins.parcelize)
 }
 
 android {
@@ -27,10 +26,9 @@ kotlin {
             implementation(projects.core.domain)
             implementation(projects.core.ui)
             implementation(projects.core.navigation)
+            implementation(projects.core.ocr)
         }
         androidMain.dependencies {
-            implementation(projects.core.ocr)
-            implementation(libs.paging.compose)
             implementation(libs.image.cropper)
         }
     }

@@ -64,7 +64,10 @@ fun MainScreen(
             composable(Destination.MY_NUMBER.route) { backStackEntry ->
                 val bundle = backStackEntry.arguments
                 val initialPage = bundle?.getString(INITIAL_PAGE)?.toIntOrNull() ?: 0
-                MyNumberScreen(initialPage = initialPage)
+                MyNumberScreen(
+                    viewModel = org.koin.compose.viewmodel.koinViewModel(),
+                    initialPage = initialPage,
+                )
             }
             composable(Destination.Setting.route) {
                 SettingScreen(
