@@ -129,11 +129,13 @@ private fun MainTabs(
         },
     ) { innerPadding ->
         when (selectedTab) {
-            Tab.HOME ->
+            Tab.HOME -> {
+                val qrScanAndOpen = junjange.feature.home.rememberQrScanAndOpen()
                 HomeScreen(
                     viewModel = koinInject<HomeViewModel>(),
-                    navigateToQRScanner = {},
+                    navigateToQRScanner = qrScanAndOpen ?: {},
                 )
+            }
 
             Tab.MY_NUMBER ->
                 MyNumberScreen(
