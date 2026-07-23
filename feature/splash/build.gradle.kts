@@ -27,7 +27,6 @@ kotlin {
         }
         androidMain.dependencies {
             implementation(projects.core.navigation)
-            implementation(libs.bundles.google)
         }
     }
 }

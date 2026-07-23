@@ -1,7 +1,6 @@
 package junjange.core.data.repository
 
 import junjange.core.data.datasource.LotteryDataSource
-import junjange.core.data.datasource.PensionLotteryDataSource
 import junjange.core.data.datasource.PensionLotteryRoomDataSource
 import junjange.core.data.mapper.toBonusCorrectNumbers
 import junjange.core.data.mapper.toCorrectNumbers
@@ -9,7 +8,6 @@ import junjange.core.data.mapper.toDomain
 import junjange.core.data.mapper.toWinningPensionLotteryBonusNumbers
 import junjange.core.data.mapper.toWinningPensionLotteryNumbers
 import junjange.core.data.model.local.PensionLotteryNumberDto
-import junjange.core.domain.model.PensionLotteryGet
 import junjange.core.domain.model.PensionLotteryGetContent
 import junjange.core.domain.model.PensionLotteryHome
 import junjange.core.domain.model.PensionLotteryNumbers
@@ -27,7 +25,6 @@ internal class PensionLotteryRepositoryImpl
     
     constructor(
         private val lotteryDataSource: LotteryDataSource,
-        private val pensionLotteryDataSource: PensionLotteryDataSource,
         private val pensionLotteryRoomDataSource: PensionLotteryRoomDataSource,
     ) : PensionLotteryRepository {
         private val pensionLottery: LinkedHashMap<Int, PensionLotteryHome> = linkedMapOf()
@@ -37,25 +34,6 @@ internal class PensionLotteryRepositoryImpl
 
         private val nextWinningDate
             get() = addDaysToDate(pensionLottery.values.firstOrNull()?.winningDate)
-
-        override suspend fun postPensionLotterySave(
-            pensionGroup: Int,
-            pensionFirstNum: Int,
-            pensionSecondNum: Int,
-            pensionThirdNum: Int,
-            pensionFourthNum: Int,
-            pensionFifthNum: Int,
-            pensionSixthNum: Int,
-        ): Result<Unit> =
-            pensionLotteryDataSource.postPensionLotterySave(
-                pensionGroup = pensionGroup,
-                pensionFirstNum = pensionFirstNum,
-                pensionSecondNum = pensionSecondNum,
-                pensionThirdNum = pensionThirdNum,
-                pensionFourthNum = pensionFourthNum,
-                pensionFifthNum = pensionFifthNum,
-                pensionSixthNum = pensionSixthNum,
-            )
 
         override suspend fun getPensionLotteryRandom(): Result<PensionLotteryRandom> =
             runCatching {
@@ -83,16 +61,6 @@ internal class PensionLotteryRepositoryImpl
         private fun generateGroupNumber(): Int = (1..5).shuffled().first()
 
         private fun generateNumbers(): List<Int> = (0..9).shuffled().take(6)
-
-        override suspend fun getPensionLotteryGet(
-            page: Int,
-            size: Int,
-        ): Result<PensionLotteryGet> =
-            pensionLotteryDataSource
-                .getPensionLotteryGet(
-                    page = page,
-                    size = size,
-                ).mapCatching { it.toDomain() }
 
         override suspend fun getPensionLotteryRound(): Result<Int> = lotteryDataSource.getPensionLotteryRound()
 

@@ -8,9 +8,7 @@ import junjange.core.ui.base.BaseActivity
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-
 class SplashActivity : BaseActivity() {
-
     private val navigator: SplashNavigator by inject()
 
     private val viewModel: SplashViewModel by viewModel()
@@ -22,7 +20,6 @@ class SplashActivity : BaseActivity() {
                 SplashScreen(
                     viewModel = viewModel,
                     navigateToMain = ::startMainActivity,
-                    navigateToLogin = ::startLoginActivity,
                 )
             }
         }
@@ -30,9 +27,5 @@ class SplashActivity : BaseActivity() {
 
     private fun startMainActivity() {
         navigator.startMainActivity(context = this@SplashActivity)
-    }
-
-    private fun startLoginActivity() {
-        navigator.startLoginActivity(context = this@SplashActivity)
     }
 }

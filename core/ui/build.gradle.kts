@@ -52,7 +52,7 @@ kotlin {
         }
         androidMain.dependencies {
             implementation(projects.core.navigation)
-            implementation(libs.bundles.google)
+            implementation(libs.google.admob.ads)
             implementation(libs.core.ktx)
             implementation(libs.compose.navigation)
         }

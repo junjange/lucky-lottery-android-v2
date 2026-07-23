@@ -36,21 +36,6 @@
             android:screenOrientation="portrait"
             tools:replace="screenOrientation" />
 
-        <activity
-            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="oauth"
-                    android:scheme="@string/KAKAO_OAUTH_HOST" />
-            </intent-filter>
-        </activity>
-
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="@string/AD_MOB_APP_ID" />

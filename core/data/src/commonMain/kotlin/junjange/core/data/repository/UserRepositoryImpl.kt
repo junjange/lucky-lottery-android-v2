@@ -1,16 +1,12 @@
 package junjange.core.data.repository
 
 import junjange.core.data.datasource.NotificationLocalDataSource
-import junjange.core.data.datasource.UserDataSource
 import junjange.core.data.mapper.toDomain
 import junjange.core.domain.model.LuckyLotteryNotification
-import junjange.core.domain.model.UserMyInfo
 import junjange.core.domain.repository.UserRepository
 
 class UserRepositoryImpl
-    
     constructor(
-        private val dataSource: UserDataSource,
         private val notificationLocalDataSource: NotificationLocalDataSource,
     ) : UserRepository {
         override suspend fun patchLotteryNotification(notificationStatus: Boolean): Result<Unit> =
@@ -21,14 +17,4 @@ class UserRepositoryImpl
 
         override suspend fun getNotification(): Result<LuckyLotteryNotification> =
             notificationLocalDataSource.getNotification().mapCatching { it.toDomain() }
-
-        override suspend fun patchUserMyInfo(
-            profilePath: String?,
-            nickname: String,
-        ): Result<Unit> =
-            runCatching {
-                dataSource.patchUserMyInfo(profilePath = profilePath, nickname = nickname)
-            }
-
-        override suspend fun getUserMyInfo(): Result<UserMyInfo> = dataSource.getUserMyInfo().mapCatching { it.toDomain() }
     }

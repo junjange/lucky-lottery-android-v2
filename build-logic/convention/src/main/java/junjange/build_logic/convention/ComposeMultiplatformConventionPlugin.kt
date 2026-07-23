@@ -73,7 +73,6 @@ class ComposeMultiplatformConventionPlugin : Plugin<Project> {
                     implementation(libs.findLibrary("compose-navigation").get())
                     implementation(libs.findLibrary("compose-lifecycle").get())
                     implementation(libs.findLibrary("core-ktx").get())
-                    implementation(libs.findLibrary("coil").get())
                 }
             }
         }

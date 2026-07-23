@@ -33,7 +33,6 @@ kotlin {
             implementation(projects.core.navigation)
         }
         androidMain.dependencies {
-            implementation(libs.bundles.google)
         }
     }
 }

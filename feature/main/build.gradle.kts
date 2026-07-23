@@ -44,7 +44,7 @@ kotlin {
             implementation(projects.feature.setting)
         }
         androidMain.dependencies {
-            implementation(libs.bundles.google)
+            implementation(libs.google.admob.ads)
             implementation(libs.zxing.android.embedded)
             implementation(libs.zxing.core)
         }

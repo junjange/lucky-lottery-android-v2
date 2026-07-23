@@ -6,7 +6,6 @@ import junjange.core.data.mapper.toCorrectNumbers
 import junjange.core.data.mapper.toDomain
 import junjange.core.data.mapper.toWinningLotteryNumbers
 import junjange.core.data.model.local.LotteryNumberDto
-import junjange.core.domain.model.LotteryGet
 import junjange.core.domain.model.LotteryGetContent
 import junjange.core.domain.model.LotteryGetNumbers
 import junjange.core.domain.model.LotteryNumbers
@@ -144,33 +143,6 @@ internal class LotteryRepositoryImpl
             }
 
         override suspend fun getLotteryRound(): Result<Int> = lotteryDataSource.getLotteryRound()
-
-        override suspend fun getLotteryGet(
-            page: Int,
-            size: Int,
-        ): Result<LotteryGet> =
-            lotteryDataSource
-                .getLotteryGet(
-                    page = page,
-                    size = size,
-                ).mapCatching { it.toDomain() }
-
-        override suspend fun postLotterySave(
-            firstNum: Int,
-            secondNum: Int,
-            thirdNum: Int,
-            fourthNum: Int,
-            fifthNum: Int,
-            sixthNum: Int,
-        ): Result<Unit> =
-            lotteryDataSource.postLotterySave(
-                firstNum = firstNum,
-                secondNum = secondNum,
-                thirdNum = thirdNum,
-                fourthNum = fourthNum,
-                fifthNum = fifthNum,
-                sixthNum = sixthNum,
-            )
 
         override suspend fun getLotteryRandom(): Result<LotteryRandomNumbers> =
             runCatching {

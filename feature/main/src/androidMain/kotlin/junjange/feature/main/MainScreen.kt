@@ -13,7 +13,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import junjange.core.domain.model.OauthProvider
 import junjange.core.navigation.Destination
 import junjange.core.navigation.INITIAL_PAGE
 import junjange.core.navigation.rememberNavigator
@@ -28,9 +27,6 @@ fun MainScreen(
     viewModel: MainViewModel,
     navigateToQRScanner: () -> Unit,
     navigateToRandomNumber: () -> Unit,
-    navigateToEditProfile: (nickname: String, profilePath: String?) -> Unit,
-    navigateToWithdrawal: (oauthProvider: OauthProvider) -> Unit,
-    navigateToSplash: () -> Unit,
     navigateToNotification: (lottoNotificationState: Boolean, pensionLottoNotificationState: Boolean) -> Unit,
 ) {
     val navController = rememberNavController()
@@ -84,15 +80,6 @@ fun MainScreen(
                     versionName = try { junjange.feature.setting.BuildConfig.VERSION_NAME } catch (_: Exception) { "" },
                 )
             }
-            // TODO 서버 로직 제거로 인해 내정보 탭바 임시 제거
-//            composable(Destination.MY.route) {
-//                MyScreen(
-//                    navigateToWithdrawal = navigateToWithdrawal,
-//                    navigateToSplash = navigateToSplash,
-//                    navigateToEditProfile = navigateToEditProfile,
-//                    navigateToNotification = navigateToNotification,
-//                )
-//            }
         }
     }
 }

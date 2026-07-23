@@ -22,8 +22,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import junjange.feature.home.HomeScreen
 import junjange.feature.home.HomeViewModel
-import junjange.feature.login.LoginScreen
-import junjange.feature.login.LoginViewModel
 import junjange.feature.notification.NotificationScreen
 import junjange.feature.notification.NotificationViewModel
 import junjange.feature.randomnumber.RandomNumberScreen
@@ -43,7 +41,6 @@ import org.koin.compose.koinInject
  */
 object Routes {
     const val SPLASH = "splash"
-    const val LOGIN = "login"
     const val MAIN = "main"
     const val RANDOM_GENERATION = "random_generation"
     const val NOTIFICATION = "notification"
@@ -60,28 +57,6 @@ fun LotteryNavHost() {
                 navigateToMain = {
                     navController.navigate(Routes.MAIN) {
                         popUpTo(Routes.SPLASH) { inclusive = true }
-                    }
-                },
-                navigateToLogin = {
-                    navController.navigate(Routes.LOGIN) {
-                        popUpTo(Routes.SPLASH) { inclusive = true }
-                    }
-                },
-            )
-        }
-
-        composable(Routes.LOGIN) {
-            LoginScreen(
-                viewModel = koinInject<LoginViewModel>(),
-                navigateToMain = {
-                    navController.navigate(Routes.MAIN) {
-                        popUpTo(Routes.LOGIN) { inclusive = true }
-                    }
-                },
-                navigateToRegister = { _, _ ->
-                    // TODO: route to a shared RegisterScreen once feature/register moves to commonMain.
-                    navController.navigate(Routes.MAIN) {
-                        popUpTo(Routes.LOGIN) { inclusive = true }
                     }
                 },
             )

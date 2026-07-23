@@ -29,21 +29,12 @@ junit-ext = "1.2.1"
 junit-espresso = "3.6.1"
 
 ## android-library
-coil = "2.5.0"
 koin = "4.0.1"
 koin-compose = "4.0.0"
 koin-compiler = "2.0.0-Beta1"
 image-cropper = "4.5.0"
 
-## kakao
-kakao = "2.20.3"
-
 ## google
-google-services = "4.4.2"
-firebase-auth = "23.2.0"
-firebase-messaging = "24.1.0"
-firebase-bom = "33.10.0"
-google-play-services-auth = "21.3.0"
 google-admob-ads = "24.0.0"
 compose-bom = "2025.02.00"
 tesseract = "4.9.0"
@@ -109,21 +100,12 @@ koin-compiler = { group = "io.insert-koin", name = "koin-ksp-compiler", version.
 koin-annotations = { group = "io.insert-koin", name = "koin-annotations", version.ref = "koin-compiler" }
 koin-test = { group = "io.insert-koin", name = "koin-test", version.ref = "koin" }
 koin-test-junit4 = { group = "io.insert-koin", name = "koin-test-junit4", version.ref = "koin" }
-coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 paging-compose = { group = "androidx.paging", name = "paging-compose", version = "3.3.6" }
 image-cropper = { module = "com.vanniktech:android-image-cropper", version.ref = "image-cropper" }
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 
 
-# kakao
-kakao-user = { group = "com.kakao.sdk", name = "v2-user", version.ref = "kakao" }
-
 # google
-google-services = { group = "com.google.gms", name = "google-services", version.ref = "google-services" }
-firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebase-auth" }
-firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebase-messaging" }
-firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-bom" }
-google-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "google-play-services-auth" }
 google-admob-ads = { group = "com.google.android.gms", name = "play-services-ads", version.ref = "google-admob-ads" }
 
 # Network - Ktor
@@ -172,12 +154,10 @@ work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx", version
 koin-androidx-workmanager = { group = "io.insert-koin", name = "koin-androidx-workmanager", version.ref = "koin-workmanager" }
 
 [bundles]
-android = ["core-ktx", "lifecycle-runtime-ktx", "material", "coil", "image-cropper", "zxing-android-embedded", "zxing-core"]
+android = ["core-ktx", "lifecycle-runtime-ktx", "material", "image-cropper", "zxing-android-embedded", "zxing-core"]
 kotlin = ["coroutines-core", "kotlinx-serialization", "kotlinx-datetime"]
 compose = ["activity-compose", "compose-lifecycle", "compose-ui", "compose-ui-graphics", "compose-ui-tooling-preview", "compose-material", "compose-material3", "compose-navigation", "paging-compose"]
 common = ["koin-android", "koin-core", "koin-androidx-compose"]
-google = ["google-services", "firebase-auth", "firebase-messaging", "firebase-bom", "google-auth", "google-admob-ads"]
-kakao = ["kakao-user"]
 workmanager = ["work-runtime-ktx", "koin-androidx-workmanager"]
 
 [plugins]

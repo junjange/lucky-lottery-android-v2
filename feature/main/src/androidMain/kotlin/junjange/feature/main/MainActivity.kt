@@ -17,7 +17,6 @@ import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.zxing.integration.android.IntentIntegrator
 import junjange.core.designsystem.theme.LottoTheme
-import junjange.core.domain.model.OauthProvider
 import junjange.core.navigation.MainNavigator
 import junjange.core.ui.base.BaseActivity
 import org.koin.android.ext.android.inject
@@ -45,9 +44,6 @@ class MainActivity : BaseActivity() {
                     viewModel = viewModel,
                     navigateToQRScanner = ::initiateScan,
                     navigateToRandomNumber = ::startRandomActivity,
-                    navigateToEditProfile = ::startEditProfileActivity,
-                    navigateToWithdrawal = ::startWithdrawalActivity,
-                    navigateToSplash = ::startSplashActivity,
                     navigateToNotification = ::startNotificationActivity,
                 )
             }
@@ -125,17 +121,6 @@ class MainActivity : BaseActivity() {
         navigator.startRandomActivity(context = this@MainActivity)
     }
 
-    private fun startEditProfileActivity(
-        nickname: String,
-        profilePath: String?,
-    ) {
-        navigator.startEditProfileActivity(
-            context = this@MainActivity,
-            nickname = nickname,
-            profilePath = profilePath,
-        )
-    }
-
     private fun startNotificationActivity(
         lottoNotificationState: Boolean,
         pensionLottoNotificationState: Boolean,
@@ -145,17 +130,6 @@ class MainActivity : BaseActivity() {
             lottoNotificationState = lottoNotificationState,
             pensionLottoNotificationState = pensionLottoNotificationState,
         )
-    }
-
-    private fun startWithdrawalActivity(oauthProvider: OauthProvider) {
-        navigator.startWithdrawalActivity(
-            context = this@MainActivity,
-            oauthProvider = oauthProvider,
-        )
-    }
-
-    private fun startSplashActivity() {
-        navigator.startLoginActivity(context = this@MainActivity)
     }
 
     companion object {
