@@ -1,7 +1,7 @@
 package com.junjange.lotto3.di
 
+import com.junjange.lotto3.MainActivity
 import junjange.core.notification.NotificationConfig
-import junjange.feature.main.MainActivity
 import org.koin.dsl.module
 
 val appModule = module {

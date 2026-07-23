@@ -1,7 +1,6 @@
 package com.junjange.lotto3
 
 import com.junjange.lotto3.di.appModule
-import com.junjange.lotto3.di.navigatorModule
 import junjange.core.data.di.repositoryModule
 import junjange.core.domain.di.useCaseModule
 import junjange.core.local.di.localDataSourceModule
@@ -49,7 +48,6 @@ class KoinModulesTest : KoinTest {
             includes(
                 // App modules
                 appModule,
-                navigatorModule,
                 // Core modules
                 localPlatformModule,
                 localDataSourceModule,

@@ -10,6 +10,7 @@ val localProperties = Properties()
 localProperties.load(FileInputStream(localPropertiesFile))
 
 val adMobAppId = localProperties.getProperty("AD_MOB_APP_ID") ?: ""
+val fullScreenAdUnitId = localProperties.getProperty("FULL_SCREEN_AD_UNIT_ID") ?: "\"\""
 
 android {
     namespace = "com.junjange.lotto3"
@@ -21,6 +22,8 @@ android {
         targetSdk = libs.versions.compile.sdk.get().toInt()
         versionCode = libs.versions.version.code.get().toInt()
         versionName = libs.versions.version.name.get()
+
+        buildConfigField("String", "FULL_SCREEN_AD_UNIT_ID", fullScreenAdUnitId)
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

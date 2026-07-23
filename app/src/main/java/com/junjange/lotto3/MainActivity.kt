@@ -1,14 +1,11 @@
-package junjange.feature.main
+package com.junjange.lotto3
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.activity.compose.setContent
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-// import androidx.activity.viewModels
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
@@ -16,20 +13,14 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.zxing.integration.android.IntentIntegrator
+import com.junjange.lotto3.navigation.LottoNavHost
 import junjange.core.designsystem.theme.LottoTheme
-import junjange.core.navigation.MainNavigator
 import junjange.core.ui.base.BaseActivity
-import org.koin.android.ext.android.inject
-
 
 class MainActivity : BaseActivity() {
-
-    private val navigator: MainNavigator by inject()
-
-    private val viewModel: MainViewModel by viewModel()
     private val scanLauncher: ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            onActivityResult(result.resultCode, result.data)
+            onScanResult(result.resultCode, result.data)
         }
 
     private var mInterstitialAd: InterstitialAd? = null
@@ -40,11 +31,8 @@ class MainActivity : BaseActivity() {
 
         setContent {
             LottoTheme {
-                MainScreen(
-                    viewModel = viewModel,
+                LottoNavHost(
                     navigateToQRScanner = ::initiateScan,
-                    navigateToRandomNumber = ::startRandomActivity,
-                    navigateToNotification = ::startNotificationActivity,
                 )
             }
         }
@@ -61,7 +49,7 @@ class MainActivity : BaseActivity() {
         scanLauncher.launch(integrator.createScanIntent())
     }
 
-    private fun onActivityResult(
+    private fun onScanResult(
         resultCode: Int,
         data: Intent?,
     ) {
@@ -86,8 +74,6 @@ class MainActivity : BaseActivity() {
                         }
                     }
             }
-        } else {
-            super.onActivityResult(resultCode, resultCode, data)
         }
     }
 
@@ -115,40 +101,5 @@ class MainActivity : BaseActivity() {
                 }
             },
         )
-    }
-
-    private fun startRandomActivity() {
-        navigator.startRandomActivity(context = this@MainActivity)
-    }
-
-    private fun startNotificationActivity(
-        lottoNotificationState: Boolean,
-        pensionLottoNotificationState: Boolean,
-    ) {
-        navigator.startNotificationActivity(
-            context = this@MainActivity,
-            lottoNotificationState = lottoNotificationState,
-            pensionLottoNotificationState = pensionLottoNotificationState,
-        )
-    }
-
-    companion object {
-        const val PUT_EXTRA_INITIAL_PAGE = "PUT_EXTRA_INITIAL_PAGE"
-
-        fun startActivity(context: Context) {
-            val intent = Intent(context, MainActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-            context.startActivity(intent)
-        }
-
-        fun startActivity(
-            context: Context,
-            initialPage: String,
-        ) {
-            val intent = Intent(context, MainActivity::class.java)
-            intent.putExtra(PUT_EXTRA_INITIAL_PAGE, initialPage)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            context.startActivity(intent)
-        }
     }
 }

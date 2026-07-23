@@ -1,6 +1,5 @@
 package junjange.feature.main
 
-import android.app.Activity
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -28,18 +27,16 @@ fun MainScreen(
     navigateToQRScanner: () -> Unit,
     navigateToRandomNumber: () -> Unit,
     navigateToNotification: (lottoNotificationState: Boolean, pensionLottoNotificationState: Boolean) -> Unit,
+    initialPage: String? = null,
 ) {
     val navController = rememberNavController()
     val navigator = rememberNavigator(navController = navController)
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
     val context = LocalContext.current
-    val activity = context as? Activity
 
     LaunchedEffect(navController) {
-        val initialPage =
-            activity?.intent?.getStringExtra(MainActivity.PUT_EXTRA_INITIAL_PAGE)
-                ?: return@LaunchedEffect
+        initialPage ?: return@LaunchedEffect
         navigator.navigateTo(Destination.MY_NUMBER, mapOf(INITIAL_PAGE to initialPage))
     }
 

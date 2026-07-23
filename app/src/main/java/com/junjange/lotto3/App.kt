@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.work.Configuration
 import com.google.android.gms.ads.MobileAds
 import com.junjange.lotto3.di.appModule
-import com.junjange.lotto3.di.navigatorModule
 import junjange.core.data.di.repositoryModule
 import junjange.core.domain.di.useCaseModule
 import junjange.core.local.di.localDataSourceModule
@@ -40,7 +39,6 @@ class App :
             modules(
                 // App modules
                 appModule,
-                navigatorModule,
 
                 // Core modules
                 localPlatformModule,
