@@ -13,8 +13,8 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.zxing.integration.android.IntentIntegrator
-import com.junjange.lotto3.navigation.LottoNavHost
 import junjange.core.designsystem.theme.LottoTheme
+import junjange.shared.navigation.LotteryNavHost
 import junjange.core.ui.base.BaseActivity
 
 class MainActivity : BaseActivity() {
@@ -31,8 +31,8 @@ class MainActivity : BaseActivity() {
 
         setContent {
             LottoTheme {
-                LottoNavHost(
-                    navigateToQRScanner = ::initiateScan,
+                LotteryNavHost(
+                    onLaunchQrScanner = ::initiateScan,
                 )
             }
         }

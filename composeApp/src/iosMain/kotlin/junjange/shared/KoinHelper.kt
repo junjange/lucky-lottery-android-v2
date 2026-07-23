@@ -19,7 +19,15 @@ private val iosViewModelModule = module {
     factory { SettingViewModel() }
     factory { RandomNumberViewModel() }
     factory { NotificationViewModel(get(), get(), get()) }
-    factory { RandomNumberGenerationViewModel(SavedStateHandle(), get(), get(), get(), get()) }
+    factory { params ->
+        RandomNumberGenerationViewModel(
+            SavedStateHandle(mapOf("lottoType" to params.getOrNull<String>())),
+            get(),
+            get(),
+            get(),
+            get(),
+        )
+    }
 }
 
 fun startKoinApp() {

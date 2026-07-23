@@ -9,7 +9,6 @@ import junjange.core.ocr.di.ocrModule
 import junjange.core.remote.di.remoteDataSourceModule
 import junjange.core.remote.di.remoteModule
 import junjange.feature.home.di.homeViewModelModule
-import junjange.feature.main.di.mainViewModelModule
 import junjange.feature.mynumber.di.myNumberViewModelModule
 import junjange.feature.notification.di.notificationViewModelModule
 import junjange.feature.randomnumber.di.randomNumberViewModelModule
@@ -58,7 +57,6 @@ class KoinModulesTest : KoinTest {
                 ocrModule,
                 // Feature ViewModels
                 homeViewModelModule,
-                mainViewModelModule,
                 myNumberViewModelModule,
                 notificationViewModelModule,
                 randomNumberViewModelModule,

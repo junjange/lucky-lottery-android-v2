@@ -1,26 +1,38 @@
 package junjange.shared.navigation
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ConfirmationNumber
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import androidx.savedstate.read
+import junjange.core.designsystem.theme.LottoTheme
+import junjange.core.ui.resources.Res
+import junjange.core.ui.resources.ic_clover
+import junjange.core.ui.resources.ic_clover_outlined
+import junjange.core.ui.resources.ic_home
+import junjange.core.ui.resources.ic_home_outlined
+import junjange.core.ui.resources.ic_plus
+import junjange.core.ui.resources.ic_settings
+import junjange.core.ui.resources.ic_settings_outlined
 import junjange.feature.home.HomeScreen
 import junjange.feature.home.HomeViewModel
 import junjange.feature.mynumber.MyNumberScreen
@@ -34,7 +46,10 @@ import junjange.feature.setting.SettingScreen
 import junjange.feature.setting.SettingViewModel
 import junjange.feature.splash.SplashScreen
 import junjange.feature.splash.SplashViewModel
+import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
+import org.koin.core.parameter.parametersOf
 
 /**
  * Shared Compose-Multiplatform navigation graph, in commonMain so both platforms can
@@ -44,12 +59,17 @@ import org.koin.compose.koinInject
 object Routes {
     const val SPLASH = "splash"
     const val MAIN = "main"
-    const val RANDOM_GENERATION = "random_generation"
+    const val RANDOM_NUMBER = "random_number"
+    const val RANDOM_GENERATION = "random_generation/{lottoType}"
     const val NOTIFICATION = "notification"
+
+    fun randomGeneration(lottoType: String): String = "random_generation/$lottoType"
 }
 
 @Composable
-fun LotteryNavHost() {
+fun LotteryNavHost(
+    onLaunchQrScanner: (() -> Unit)? = null,
+) {
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = Routes.SPLASH) {
@@ -64,17 +84,43 @@ fun LotteryNavHost() {
             )
         }
 
-        composable(Routes.MAIN) {
+        composable(Routes.MAIN) { backStackEntry ->
+            val requestedMyNumberPage by backStackEntry.savedStateHandle
+                .getStateFlow<String?>(KEY_MY_NUMBER_PAGE, null)
+                .collectAsState()
             MainTabs(
-                onNavigateToRandomGeneration = { navController.navigate(Routes.RANDOM_GENERATION) },
+                requestedMyNumberPage = requestedMyNumberPage,
+                onMyNumberPageConsumed = { backStackEntry.savedStateHandle[KEY_MY_NUMBER_PAGE] = null },
+                onLaunchQrScanner = onLaunchQrScanner,
+                onNavigateToRandomNumber = { navController.navigate(Routes.RANDOM_NUMBER) },
                 onNavigateToNotification = { _, _ -> navController.navigate(Routes.NOTIFICATION) },
             )
         }
 
-        composable(Routes.RANDOM_GENERATION) {
+        composable(Routes.RANDOM_NUMBER) {
+            RandomNumberScreen(
+                viewModel = remember { RandomNumberViewModel() },
+                navigateRandomNumberGeneration = { lottoType ->
+                    navController.navigate(Routes.randomGeneration(lottoType.name))
+                },
+                onBack = { navController.popBackStack() },
+            )
+        }
+
+        composable(
+            route = Routes.RANDOM_GENERATION,
+            arguments = listOf(navArgument("lottoType") { type = NavType.StringType }),
+        ) { backStackEntry ->
+            val lottoType = backStackEntry.arguments?.read { getStringOrNull("lottoType") }.orEmpty()
             RandomNumberGenerationScreen(
-                viewModel = koinInject<RandomNumberGenerationViewModel>(),
-                navigateToMain = { navController.popBackStack(Routes.MAIN, inclusive = false) },
+                viewModel = koinInject<RandomNumberGenerationViewModel> { parametersOf(lottoType) },
+                navigateToMain = { initialPage ->
+                    runCatching { navController.getBackStackEntry(Routes.MAIN) }
+                        .getOrNull()
+                        ?.savedStateHandle
+                        ?.set(KEY_MY_NUMBER_PAGE, initialPage)
+                    navController.popBackStack(Routes.MAIN, inclusive = false)
+                },
                 onBack = { navController.popBackStack() },
             )
         }
@@ -88,80 +134,107 @@ fun LotteryNavHost() {
     }
 }
 
-private enum class Tab { HOME, MY_NUMBER, RANDOM, SETTING }
+private const val KEY_MY_NUMBER_PAGE = "myNumberPage"
+
+private enum class Tab(
+    val label: String,
+    val selectedIcon: DrawableResource,
+    val unselectedIcon: DrawableResource,
+) {
+    HOME("홈", Res.drawable.ic_home, Res.drawable.ic_home_outlined),
+    MY_NUMBER("내 번호", Res.drawable.ic_clover, Res.drawable.ic_clover_outlined),
+    RANDOM_NUMBER("랜덤 번호", Res.drawable.ic_plus, Res.drawable.ic_plus),
+    SETTING("설정", Res.drawable.ic_settings, Res.drawable.ic_settings_outlined),
+}
 
 @Composable
 private fun MainTabs(
-    onNavigateToRandomGeneration: () -> Unit,
+    requestedMyNumberPage: String?,
+    onMyNumberPageConsumed: () -> Unit,
+    onLaunchQrScanner: (() -> Unit)?,
+    onNavigateToRandomNumber: () -> Unit,
     onNavigateToNotification: (lottoNotificationState: Boolean, pensionLottoNotificationState: Boolean) -> Unit,
 ) {
     var selectedTab by remember { mutableStateOf(Tab.HOME) }
+    var myNumberInitialPage by remember { mutableStateOf(0) }
+
+    LaunchedEffect(requestedMyNumberPage) {
+        requestedMyNumberPage ?: return@LaunchedEffect
+        myNumberInitialPage = requestedMyNumberPage.toIntOrNull() ?: 0
+        selectedTab = Tab.MY_NUMBER
+        onMyNumberPageConsumed()
+    }
 
     Scaffold(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         bottomBar = {
-            NavigationBar {
-                NavigationBarItem(
-                    selected = selectedTab == Tab.HOME,
-                    onClick = { selectedTab = Tab.HOME },
-                    icon = { Icon(Icons.Default.Home, contentDescription = null) },
-                    label = { Text("홈") },
-                )
-                NavigationBarItem(
-                    selected = selectedTab == Tab.MY_NUMBER,
-                    onClick = { selectedTab = Tab.MY_NUMBER },
-                    icon = { Icon(Icons.Default.ConfirmationNumber, contentDescription = null) },
-                    label = { Text("내 번호") },
-                )
-                NavigationBarItem(
-                    selected = selectedTab == Tab.RANDOM,
-                    onClick = { selectedTab = Tab.RANDOM },
-                    icon = { Icon(Icons.Default.Add, contentDescription = null) },
-                    label = { Text("랜덤 번호") },
-                )
-                NavigationBarItem(
-                    selected = selectedTab == Tab.SETTING,
-                    onClick = { selectedTab = Tab.SETTING },
-                    icon = { Icon(Icons.Default.Settings, contentDescription = null) },
-                    label = { Text("설정") },
-                )
+            NavigationBar(containerColor = LottoTheme.colors.white) {
+                Tab.entries.forEach { tab ->
+                    val selected = selectedTab == tab
+                    NavigationBarItem(
+                        icon = {
+                            Image(
+                                painter = painterResource(if (selected) tab.selectedIcon else tab.unselectedIcon),
+                                contentDescription = null,
+                            )
+                        },
+                        label = {
+                            Text(
+                                text = tab.label,
+                                style =
+                                    MaterialTheme.typography.labelSmall.copy(
+                                        color = if (selected) LottoTheme.colors.black else LottoTheme.colors.gray400,
+                                    ),
+                            )
+                        },
+                        selected = false,
+                        onClick = {
+                            if (tab == Tab.RANDOM_NUMBER) {
+                                onNavigateToRandomNumber()
+                            } else {
+                                selectedTab = tab
+                            }
+                        },
+                        interactionSource = MutableInteractionSource(),
+                    )
+                }
             }
         },
     ) { innerPadding ->
-        when (selectedTab) {
-            Tab.HOME -> {
-                val qrScanAndOpen = junjange.feature.home.rememberQrScanAndOpen()
-                HomeScreen(
-                    viewModel = koinInject<HomeViewModel>(),
-                    navigateToQRScanner = qrScanAndOpen ?: {},
-                )
-            }
+        Box(
+            modifier =
+                androidx.compose.ui.Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
+        ) {
+            when (selectedTab) {
+                Tab.HOME -> {
+                    val qrScanAndOpen = junjange.feature.home.rememberQrScanAndOpen()
+                    HomeScreen(
+                        viewModel = koinInject<HomeViewModel>(),
+                        navigateToQRScanner = onLaunchQrScanner ?: qrScanAndOpen ?: {},
+                    )
+                }
 
-            Tab.MY_NUMBER ->
-                MyNumberScreen(
-                    viewModel = koinInject(),
-                    initialPage = 0,
-                )
+                Tab.MY_NUMBER ->
+                    MyNumberScreen(
+                        viewModel = koinInject(),
+                        initialPage = myNumberInitialPage,
+                    )
 
-            Tab.RANDOM ->
-                RandomNumberScreen(
-                    viewModel = remember { RandomNumberViewModel() },
-                    navigateRandomNumberGeneration = { onNavigateToRandomGeneration() },
-                    onBack = { selectedTab = Tab.HOME },
-                )
+                Tab.RANDOM_NUMBER -> Unit
 
-            Tab.SETTING -> {
-                val settingActions = junjange.feature.setting.rememberSettingActions()
-                SettingScreen(
-                    viewModel = koinInject<SettingViewModel>(),
-                    navigateToNotification = onNavigateToNotification,
-                    onOpenUrl = settingActions.openUrl,
-                    onOpenReview = settingActions.openReview,
-                    versionName = settingActions.versionName,
-                )
+                Tab.SETTING -> {
+                    val settingActions = junjange.feature.setting.rememberSettingActions()
+                    SettingScreen(
+                        viewModel = koinInject<SettingViewModel>(),
+                        navigateToNotification = onNavigateToNotification,
+                        onOpenUrl = settingActions.openUrl,
+                        onOpenReview = settingActions.openReview,
+                        versionName = settingActions.versionName,
+                    )
+                }
             }
         }
-        // innerPadding intentionally consumed by each screen's own scaffolding.
-        innerPadding
     }
 }
