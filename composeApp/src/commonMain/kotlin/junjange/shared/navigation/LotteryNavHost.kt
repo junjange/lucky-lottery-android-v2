@@ -148,11 +148,16 @@ private fun MainTabs(
                     onBack = { selectedTab = Tab.HOME },
                 )
 
-            Tab.SETTING ->
+            Tab.SETTING -> {
+                val settingActions = junjange.feature.setting.rememberSettingActions()
                 SettingScreen(
                     viewModel = koinInject<SettingViewModel>(),
                     navigateToNotification = onNavigateToNotification,
+                    onOpenUrl = settingActions.openUrl,
+                    onOpenReview = settingActions.openReview,
+                    versionName = settingActions.versionName,
                 )
+            }
         }
         // innerPadding intentionally consumed by each screen's own scaffolding.
         innerPadding

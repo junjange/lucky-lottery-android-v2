@@ -70,14 +70,13 @@ fun MainScreen(
                 )
             }
             composable(Destination.Setting.route) {
+                val settingActions = junjange.feature.setting.rememberSettingActions()
                 SettingScreen(
                     viewModel = org.koin.compose.viewmodel.koinViewModel(),
                     navigateToNotification = navigateToNotification,
-                    onOpenUrl = { url ->
-                        context.startActivity(android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(url)))
-                    },
-                    onOpenReview = { junjange.feature.setting.openPlayStoreReviewFallback(context) },
-                    versionName = try { junjange.feature.setting.BuildConfig.VERSION_NAME } catch (_: Exception) { "" },
+                    onOpenUrl = settingActions.openUrl,
+                    onOpenReview = settingActions.openReview,
+                    versionName = settingActions.versionName,
                 )
             }
         }
