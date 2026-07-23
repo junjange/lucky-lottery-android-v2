@@ -28,10 +28,6 @@ dependencies {
 
 gradlePlugin {
     plugins {
-        create("androidApplication") {
-            id = "junjange.android.application"
-            implementationClass = "junjange.build_logic.convention.AndroidApplicationConventionPlugin"
-        }
         create("kotlinMultiplatform") {
             id = "junjange.kotlin.multiplatform"
             implementationClass = "junjange.build_logic.convention.KotlinMultiplatformConventionPlugin"
