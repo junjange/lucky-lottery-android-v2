@@ -24,7 +24,7 @@ import androidx.navigation.compose.rememberNavController
 import junjange.feature.home.HomeScreen
 import junjange.feature.home.HomeViewModel
 import junjange.feature.mynumber.MyNumberScreen
-import junjange.feature.notification.NotificationScreen
+import junjange.feature.notification.NotificationRoute
 import junjange.feature.notification.NotificationViewModel
 import junjange.feature.randomnumber.RandomNumberScreen
 import junjange.feature.randomnumber.RandomNumberViewModel
@@ -80,14 +80,9 @@ fun LotteryNavHost() {
         }
 
         composable(Routes.NOTIFICATION) {
-            NotificationScreen(
+            NotificationRoute(
                 viewModel = koinInject<NotificationViewModel>(),
                 finish = { navController.popBackStack() },
-                onRequestLottoNotification = {},
-                onRequestPensionLottoNotification = {},
-                showPermissionSettingsDialog = false,
-                onDismissPermissionDialog = {},
-                onNavigateToSettings = {},
             )
         }
     }

@@ -29,7 +29,7 @@ private enum class NotificationType {
  * NotificationScreen의 Android 래퍼 — POST_NOTIFICATIONS 런타임 권한 처리를 담당한다.
  */
 @Composable
-fun NotificationRoute(
+actual fun NotificationRoute(
     viewModel: NotificationViewModel,
     finish: () -> Unit,
 ) {
