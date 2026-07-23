@@ -1,0 +1,7 @@
+<resources>
+    <string name="setting">설정</string>
+    <string name="app_notification">알림 설정</string>
+    <string name="version_info">버전 정보</string>
+    <string name="usage_term">이용 약관</string>
+    <string name="review_app">칭찬하기 / 리뷰 남기기</string>
+</resources>

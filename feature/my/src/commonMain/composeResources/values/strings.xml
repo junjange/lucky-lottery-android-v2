@@ -1,0 +1,12 @@
+<resources>
+    <string name="my">내 정보</string>
+    <string name="login_with_kakao">Kakao 로그인</string>
+    <string name="login_with_Google">Google 로그인</string>
+    <string name="app_notification">알림 설정</string>
+    <string name="version_info">버전 정보</string>
+    <string name="newest_version">최신 버전</string>
+    <string name="usage_term">이용 약관</string>
+    <string name="sign_out">로그아웃</string>
+    <string name="withdraw_lotto">행운복권 탈퇴</string>
+
+</resources>

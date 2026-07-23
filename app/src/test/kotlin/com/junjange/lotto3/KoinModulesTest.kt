@@ -9,10 +9,8 @@ import junjange.core.firebase.di.firebaseModule
 import junjange.core.firebase.di.googleModule
 import junjange.core.kakao.di.kakaoDataSourceModule
 import junjange.core.local.di.localDataSourceModule
-import junjange.core.local.di.localModule
-import junjange.core.local.di.workManagerModule
-import junjange.core.local.provider.providerModule
-import junjange.core.notification.di.notificationModule
+import junjange.core.local.di.localPlatformModule
+import junjange.core.local.di.providerModule
 import junjange.core.ocr.di.ocrModule
 import junjange.core.remote.di.remoteDataSourceModule
 import junjange.core.remote.di.remoteModule
@@ -59,7 +57,7 @@ class KoinModulesTest : KoinTest {
         navigatorModule.verify()
 
         // Core modules
-        localModule.verify()
+        localPlatformModule.verify()
         localDataSourceModule.verify()
         remoteModule.verify()
         remoteDataSourceModule.verify()
@@ -73,9 +71,7 @@ class KoinModulesTest : KoinTest {
 
         // Other core modules
         kakaoDataSourceModule.verify()
-        notificationModule.verify()
         ocrModule.verify()
-        workManagerModule.verify()
         providerModule.verify()
 
         // Feature ViewModels

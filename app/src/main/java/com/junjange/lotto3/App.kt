@@ -13,10 +13,8 @@ import junjange.core.firebase.di.firebaseModule
 import junjange.core.firebase.di.googleModule
 import junjange.core.kakao.di.kakaoDataSourceModule
 import junjange.core.local.di.localDataSourceModule
-import junjange.core.local.di.localModule
-import junjange.core.local.di.workManagerModule
-import junjange.core.local.provider.providerModule
-import junjange.core.notification.di.notificationModule
+import junjange.core.local.di.localPlatformModule
+import junjange.core.local.di.providerModule
 import junjange.core.ocr.di.ocrModule
 import junjange.core.remote.di.remoteDataSourceModule
 import junjange.core.remote.di.remoteModule
@@ -56,7 +54,7 @@ class App :
                 navigatorModule,
 
                 // Core modules
-                localModule,
+                localPlatformModule,
                 localDataSourceModule,
                 remoteModule,
                 remoteDataSourceModule,
@@ -70,9 +68,7 @@ class App :
 
                 // Other core modules
                 kakaoDataSourceModule,
-                notificationModule,
                 ocrModule,
-                workManagerModule,
                 providerModule,
 
                 // Feature ViewModels

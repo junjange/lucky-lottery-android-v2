@@ -1,0 +1,8 @@
+<resources>
+    <string name="lotto_number_not_found_message">해당 회차의 로또 당첨 번호를 찾을 수 없어요.</string>
+    <string name="pension_number_not_found_message">해당 회차의 연금복권 당첨 번호를 찾을 수 없어요.</string>
+
+    <!-- Error Screen -->
+    <string name="error_network_title">인터넷 연결이 불안정해요.</string>
+    <string name="error_network_description">Wi-Fi나 셀룰러 데이터 연결 상태를\n확인하고 다시 시도해주세요.</string>
+</resources>

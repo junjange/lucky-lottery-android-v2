@@ -2,7 +2,7 @@ import java.io.FileInputStream
 import java.util.Properties
 
 plugins {
-    id("junjange.core.module")
+    id("junjange.compose.multiplatform")
 }
 
 val localPropertiesFile = rootProject.file("local.properties")
@@ -32,33 +32,30 @@ android {
             )
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
     buildFeatures {
-        compose = true
         buildConfig = true
     }
 }
 
-dependencies {
-    implementation(projects.core.navigation)
-    implementation(projects.core.domain)
+compose.resources {
+    publicResClass = true
+    packageOfResClass = "junjange.core.ui.resources"
+    generateResClass = always
+}
 
-    implementation(platform(libs.compose.bom))
-    implementation(libs.bundles.android)
-    implementation(libs.bundles.compose)
-    implementation(libs.bundles.common)
-
-    // google
-    implementation(libs.bundles.google)
-
-    debugImplementation(libs.compose.ui.test)
-    debugImplementation(libs.compose.ui.tooling.debug)
-
-    androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            api(projects.core.domain)
+            api(libs.coil3.compose)
+            implementation(libs.coil3.network.ktor3)
+        }
+        androidMain.dependencies {
+            implementation(projects.core.navigation)
+            implementation(libs.bundles.google)
+            implementation(libs.core.ktx)
+            implementation(libs.appcompat)
+            implementation(libs.compose.navigation)
+        }
+    }
 }

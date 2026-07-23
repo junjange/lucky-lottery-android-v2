@@ -1,8 +1,0 @@
-package junjange.feature.mynumber
-
-enum class MyNumberMessage {
-    LOTTERY_INSERT_SUCCESS,
-    LOTTERY_INSERT_FAILED,
-    PENSION_LOTTERY_INSERT_SUCCESS,
-    PENSION_LOTTERY_INSERT_FAILED,
-}

@@ -1,0 +1,5 @@
+<resources>
+    <string name="register">프로필 설정</string>
+    <string name="register_help">프로필 사진과 닉네임을 설정합니다.</string>
+    <string name="done">완료</string>
+</resources>

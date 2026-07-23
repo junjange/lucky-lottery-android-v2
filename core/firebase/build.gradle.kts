@@ -2,54 +2,60 @@ import java.io.FileInputStream
 import java.util.Properties
 
 plugins {
-    id("junjange.core.module")
-    alias(libs.plugins.parcelize)
+    id("junjange.kotlin.multiplatform.library")
     alias(libs.plugins.ksp)
-    alias(libs.plugins.kotlinx.serialization)
     alias(libs.plugins.ktorfit)
 }
 
 val localPropertiesFile = rootProject.file("local.properties")
 val localProperties = Properties()
-localProperties.load(FileInputStream(localPropertiesFile))
+if (localPropertiesFile.exists()) {
+    localProperties.load(FileInputStream(localPropertiesFile))
+}
 
 val googleClientId = localProperties.getProperty("GOOGLE_CLIENT_ID") ?: "\"\""
 
 android {
     namespace = "junjange.core.firebase"
-    compileSdk = libs.versions.compile.sdk.get().toInt()
 
     defaultConfig {
-        minSdk = libs.versions.min.sdk.get().toInt()
-
         buildConfigField("String", "GOOGLE_CLIENT_ID", googleClientId)
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
     }
 
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro",
-            )
-        }
-    }
     buildFeatures {
         buildConfig = true
     }
 }
+
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            implementation(project(":core:data"))
+
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.client.logging)
+            implementation(libs.ktor.serialization.kotlinx.json)
+            implementation(libs.ktorfit.lib)
+        }
+
+        androidMain.dependencies {
+            implementation(project(":core:local"))
+            implementation(libs.koin.android)
+            implementation(libs.core.ktx)
+            implementation(libs.ktor.client.okhttp)
+            implementation(libs.bundles.google)
+        }
+
+        iosMain.dependencies {
+            implementation(libs.ktor.client.darwin)
+        }
+    }
+}
+
 dependencies {
-    implementation(projects.core.data)
-    implementation(projects.core.local)
-
-    implementation(libs.bundles.common)
-    implementation(libs.bundles.google)
-    implementation(libs.bundles.network)
-    implementation(libs.kotlinx.serialization)
-
-    // Ktorfit KSP processor
-    ksp(libs.ktorfit.ksp)
+    add("kspAndroid", libs.ktorfit.ksp)
+    add("kspIosX64", libs.ktorfit.ksp)
+    add("kspIosArm64", libs.ktorfit.ksp)
+    add("kspIosSimulatorArm64", libs.ktorfit.ksp)
 }
