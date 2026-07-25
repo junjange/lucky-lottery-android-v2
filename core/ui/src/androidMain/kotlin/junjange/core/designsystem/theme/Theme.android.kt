@@ -8,12 +8,13 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.ViewCompat
 
 @Composable
-actual fun PlatformThemeEffect() {
+actual fun PlatformThemeEffect(darkTheme: Boolean) {
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
-            (view.context as Activity).window.statusBarColor = LightColorScheme.background.toArgb()
-            ViewCompat.getWindowInsetsController(view)?.isAppearanceLightStatusBars = true
+            val scheme = if (darkTheme) DarkColorScheme else LightColorScheme
+            (view.context as Activity).window.statusBarColor = scheme.background.toArgb()
+            ViewCompat.getWindowInsetsController(view)?.isAppearanceLightStatusBars = !darkTheme
         }
     }
 }

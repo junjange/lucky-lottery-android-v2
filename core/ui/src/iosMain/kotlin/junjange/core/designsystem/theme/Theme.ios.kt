@@ -3,6 +3,6 @@ package junjange.core.designsystem.theme
 import androidx.compose.runtime.Composable
 
 @Composable
-actual fun PlatformThemeEffect() {
-    // iOS status bar configuration is handled by the system
+actual fun PlatformThemeEffect(darkTheme: Boolean) {
+    // iOS status bar appearance follows the system light/dark mode
 }

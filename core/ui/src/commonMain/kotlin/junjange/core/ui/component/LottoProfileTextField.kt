@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,7 +19,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import junjange.core.designsystem.theme.LottoTheme
-import junjange.core.designsystem.theme.White
 import junjange.core.ui.resources.*
 import org.jetbrains.compose.resources.stringResource
 
@@ -43,7 +43,7 @@ fun LottoProfileTextField(
                     Modifier
                         .fillMaxWidth()
                         .height(59.dp),
-                color = White,
+                color = MaterialTheme.colorScheme.surfaceContainerHighest,
                 shape = RoundedCornerShape(16.dp),
             ) {
                 Row(
@@ -63,7 +63,7 @@ fun LottoProfileTextField(
                             Text(
                                 text = stringResource(Res.string.profile_textfield_hint),
                                 style = LottoTheme.typography.body1,
-                                color = LottoTheme.colors.gray400,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 modifier = Modifier.align(Alignment.CenterStart),
                             )
                         }
@@ -73,9 +73,9 @@ fun LottoProfileTextField(
                         iconRes = Res.drawable.ic_close,
                         tint =
                             if (value.isEmpty()) {
-                                LottoTheme.colors.gray400
+                                MaterialTheme.colorScheme.onSurfaceVariant
                             } else {
-                                LottoTheme.colors.lottoBlack
+                                MaterialTheme.colorScheme.onSurface
                             },
                         size = 24.dp,
                         onClick = { if (value.isNotEmpty()) onClear() },

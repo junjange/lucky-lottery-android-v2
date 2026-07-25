@@ -121,7 +121,7 @@ fun PensionLotteryNumberEntry(
                             Icon(
                                 imageVector = Icons.Filled.Close,
                                 contentDescription = stringResource(Res.string.remove_number),
-                                tint = LottoTheme.colors.gray400,
+                                tint = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant,
                                 modifier =
                                     Modifier
                                         .size(24.dp)

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -39,7 +40,7 @@ fun SplashScreen(
             modifier =
                 Modifier
                     .fillMaxSize()
-                    .background(LottoTheme.colors.lottoWhite),
+                    .background(MaterialTheme.colorScheme.background),
         ) {
             Column(
                 modifier = Modifier.align(Alignment.Center),
@@ -59,7 +60,7 @@ fun SplashScreen(
                 Text(
                     text = "일상속에서 행운을 찾다",
                     style = LottoTheme.typography.headline3,
-                    color = LottoTheme.colors.lottoBlack,
+                    color = MaterialTheme.colorScheme.onBackground,
                 )
             }
         }

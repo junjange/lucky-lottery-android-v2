@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -37,7 +38,7 @@ fun LottoEditProfileBottomSheet(callback: (editProfileType: EditProfileType) -> 
                     .clip(shape = RoundedCornerShape(100.dp))
                     .width(32.dp)
                     .height(4.dp)
-                    .background(color = LottoTheme.colors.gray500),
+                    .background(color = MaterialTheme.colorScheme.onSurfaceVariant),
         )
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -53,7 +54,7 @@ fun LottoEditProfileBottomSheet(callback: (editProfileType: EditProfileType) -> 
                     ),
                 text = stringResource(Res.string.edit_profile_img),
                 style = LottoTheme.typography.headline3,
-                color = LottoTheme.colors.lottoBlack,
+                color = MaterialTheme.colorScheme.onSurface,
             )
             Spacer(modifier = Modifier.height(8.dp))
             LottoButtonBar(
@@ -71,7 +72,7 @@ fun LottoEditProfileBottomSheet(callback: (editProfileType: EditProfileType) -> 
                     ),
                 text = stringResource(Res.string.profile_default_image_select),
                 style = LottoTheme.typography.body1,
-                color = LottoTheme.colors.lottoBlack,
+                color = MaterialTheme.colorScheme.onSurface,
             )
         }
     }

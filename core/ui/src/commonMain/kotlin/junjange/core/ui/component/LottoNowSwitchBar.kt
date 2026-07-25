@@ -5,8 +5,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -39,25 +39,18 @@ fun LottoSwitchBar(
             Text(
                 text = stringResource(textRes),
                 style = LottoTheme.typography.body1,
-                color = LottoTheme.colors.lottoBlack,
+                color = MaterialTheme.colorScheme.onSurface,
             )
             Text(
                 text = stringResource(descriptionTextRes),
                 style = LottoTheme.typography.caption2,
-                color = LottoTheme.colors.gray600,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
 
         Switch(
             checked = isSwitchedOn,
             onCheckedChange = { if (it) onSwitchOn() else onSwitchOff() },
-            colors =
-                SwitchDefaults.colors(
-                    checkedThumbColor = LottoTheme.colors.white,
-                    checkedTrackColor = LottoTheme.colors.green,
-                    uncheckedThumbColor = LottoTheme.colors.gray500,
-                    uncheckedTrackColor = LottoTheme.colors.gray300,
-                ),
         )
     }
 }

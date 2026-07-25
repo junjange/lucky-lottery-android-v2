@@ -27,11 +27,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.runtime.collectAsState
 import junjange.core.designsystem.components.dialog.LottoTwoButtonDialog
-import junjange.core.designsystem.theme.Gray800
-import junjange.core.designsystem.theme.Gray900
-import junjange.core.designsystem.theme.Green
 import junjange.core.designsystem.theme.LottoTheme
-import junjange.core.designsystem.theme.White
 import junjange.core.ui.component.LottoSimpleTopBar
 import junjange.core.ui.component.LottoSwitchBar
 import junjange.core.ui.resources.Res as CoreRes

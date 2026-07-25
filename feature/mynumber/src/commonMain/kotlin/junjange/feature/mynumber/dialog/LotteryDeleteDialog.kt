@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,20 +42,20 @@ private fun LotteryDeleteDialogContent(okClick: () -> Unit) {
                 .height(200.dp),
         shape = RoundedCornerShape(16.dp),
         shadowElevation = 15.dp,
-        color = LottoTheme.colors.white,
+        color = MaterialTheme.colorScheme.surfaceContainerHigh,
     ) {
         Column {
             Text(
                 text = stringResource(Res.string.dialog_delete_title),
                 modifier = Modifier.padding(16.dp),
                 style = LottoTheme.typography.headline3,
-                color = LottoTheme.colors.lottoBlack,
+                color = MaterialTheme.colorScheme.onSurface,
             )
             Text(
                 text = stringResource(Res.string.dialog_delete_message),
                 modifier = Modifier.padding(horizontal = 16.dp),
                 style = LottoTheme.typography.body3,
-                color = LottoTheme.colors.gray700,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             Box(
                 modifier =
@@ -71,7 +72,7 @@ private fun LotteryDeleteDialogContent(okClick: () -> Unit) {
                             .clickable { okClick() },
                     text = stringResource(Res.string.button_done),
                     style = LottoTheme.typography.body2,
-                    color = LottoTheme.colors.lottoBlue,
+                    color = MaterialTheme.colorScheme.primary,
                 )
             }
         }

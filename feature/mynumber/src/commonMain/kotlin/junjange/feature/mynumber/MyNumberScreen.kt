@@ -31,6 +31,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -507,7 +508,7 @@ fun MyLotteryContent(
                             Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = 18.dp, vertical = 12.dp),
-                        colors = CardDefaults.cardColors(containerColor = LottoTheme.colors.gray200),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
                         shape = RoundedCornerShape(size = 8.dp),
                     ) {
                         Column(
@@ -657,7 +658,7 @@ fun MyPensionLotteryContent(
                             Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = 18.dp, vertical = 12.dp),
-                        colors = CardDefaults.cardColors(containerColor = LottoTheme.colors.gray200),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
                         shape = RoundedCornerShape(size = 8.dp),
                     ) {
                         Column(
@@ -767,7 +768,7 @@ fun RowScope.TableCell(
             Modifier
                 .weight(weight)
                 .height(40.dp)
-                .border(1.dp, LottoTheme.colors.gray400),
+                .border(1.dp, MaterialTheme.colorScheme.outlineVariant),
         contentAlignment = Alignment.Center,
     ) {
         Text(
@@ -788,7 +789,7 @@ fun RowScope.TableCell(
     Row(
         modifier =
             Modifier
-                .border(width = 1.dp, color = LottoTheme.colors.gray400)
+                .border(width = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)
                 .weight(weight)
                 .height(40.dp),
         horizontalArrangement = Arrangement.Center,
@@ -825,7 +826,7 @@ fun RowScope.TableCell(
     Row(
         modifier =
             Modifier
-                .border(width = 1.dp, color = LottoTheme.colors.gray400)
+                .border(width = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)
                 .weight(weight)
                 .height(40.dp),
         horizontalArrangement = Arrangement.Center,
@@ -846,7 +847,7 @@ fun RowScope.TableCell(
             if (index == 1) {
                 Surface(
                     modifier = Modifier.size(30.dp),
-                    color = LottoTheme.colors.gray200,
+                    color = MaterialTheme.colorScheme.surfaceContainerHighest,
                 ) {
                     Box(
                         modifier = Modifier.fillMaxSize(),
@@ -883,8 +884,8 @@ fun MyLotteryBall(
     lottoTitle: String,
     color: androidx.compose.ui.graphics.Color,
 ) {
-    val backgroundColor = if (isSuccess) color else LottoTheme.colors.gray200
-    val textColor = if (isSuccess) LottoTheme.colors.white else LottoTheme.colors.black
+    val backgroundColor = if (isSuccess) color else MaterialTheme.colorScheme.surfaceContainerHighest
+    val textColor = if (isSuccess) androidx.compose.ui.graphics.Color.White else MaterialTheme.colorScheme.onSurface
 
     Surface(
         modifier = Modifier.size(30.dp),
@@ -920,13 +921,13 @@ fun MyPensionLotteryBall(
         if (isSuccess) {
             BorderStroke(
                 width = 4.dp,
-                color = if (index == null) LottoTheme.colors.gray200 else lotteryColors[index],
+                color = if (index == null) MaterialTheme.colorScheme.surfaceContainerHighest else lotteryColors[index],
             )
         } else {
             null
         }
-    val backgroundColor = if (isSuccess) LottoTheme.colors.white else LottoTheme.colors.gray200
-    val textColor = if (isSuccess) LottoTheme.colors.black else LottoTheme.colors.black
+    val backgroundColor = if (isSuccess) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.surfaceContainerHighest
+    val textColor = MaterialTheme.colorScheme.onSurface
 
     Surface(
         modifier = Modifier.size(30.dp),

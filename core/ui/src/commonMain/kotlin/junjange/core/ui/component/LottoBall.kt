@@ -41,7 +41,7 @@ fun LottoBall(
             modifier =
                 Modifier
                     .fillMaxSize()
-                    .background(color = if (lottoType == LottoType.LOTTO720) LottoTheme.colors.white else lottoColor),
+                    .background(color = if (lottoType == LottoType.LOTTO720) Color.White else lottoColor),
         ) {
             Text(
                 modifier = Modifier.align(Alignment.Center),
@@ -50,7 +50,7 @@ fun LottoBall(
                 style =
                     LottoTheme.typography.body3.copy(
                         fontWeight = FontWeight.Bold,
-                        color = if (lottoType == LottoType.LOTTO720) LottoTheme.colors.black else LottoTheme.colors.white,
+                        color = if (lottoType == LottoType.LOTTO720) Color.Black else Color.White,
                     ),
             )
         }

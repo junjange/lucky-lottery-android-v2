@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,7 +22,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import junjange.core.designsystem.theme.LottoBlack
+import junjange.core.designsystem.theme.LottoBlue
+import junjange.core.designsystem.theme.LottoError
+import junjange.core.designsystem.theme.LottoGray
+import junjange.core.designsystem.theme.LottoOrange
+import junjange.core.designsystem.theme.LottoPurple
 import junjange.core.designsystem.theme.LottoTheme
+import junjange.core.designsystem.theme.LottoYellow
 import junjange.core.designsystem.theme.lotteryColors
 import junjange.core.designsystem.theme.toLotteryColor
 import junjange.core.domain.model.LotteryNumbers
@@ -95,7 +103,7 @@ fun LottoContent(
                     .padding(
                         start = 20.dp,
                         end = 20.dp,
-                    ).background(color = LottoTheme.colors.gray400),
+                    ).background(color = MaterialTheme.colorScheme.outlineVariant),
         )
 
         Row(
@@ -290,24 +298,24 @@ fun Lotto645Content(winningLotteryNumbers: WinningLotteryNumbers) {
 fun Lotto720Content(pensionLotteryHome: PensionLotteryHome) {
     val pensionLotteryContent =
         listOf(
-            LottoTheme.colors.lottoGray to pensionLotteryHome.lotteryGroup,
-            LottoTheme.colors.lottoError to pensionLotteryHome.winningFirstNum,
-            LottoTheme.colors.lottoOrange to pensionLotteryHome.winningSecondNum,
-            LottoTheme.colors.lottoYellow to pensionLotteryHome.winningThirdNum,
-            LottoTheme.colors.lottoBlue to pensionLotteryHome.winningFourthNum,
-            LottoTheme.colors.lottoPurple to pensionLotteryHome.winningFifthNum,
-            LottoTheme.colors.lottoBlack to pensionLotteryHome.winningSixthNum,
+            LottoGray to pensionLotteryHome.lotteryGroup,
+            LottoError to pensionLotteryHome.winningFirstNum,
+            LottoOrange to pensionLotteryHome.winningSecondNum,
+            LottoYellow to pensionLotteryHome.winningThirdNum,
+            LottoBlue to pensionLotteryHome.winningFourthNum,
+            LottoPurple to pensionLotteryHome.winningFifthNum,
+            LottoBlack to pensionLotteryHome.winningSixthNum,
         )
 
     val pensionBonusLotteryContent =
         listOf(
-            LottoTheme.colors.lottoGray to "각",
-            LottoTheme.colors.lottoError to pensionLotteryHome.bonusFirstNum,
-            LottoTheme.colors.lottoOrange to pensionLotteryHome.bonusSecondNum,
-            LottoTheme.colors.lottoYellow to pensionLotteryHome.bonusThirdNum,
-            LottoTheme.colors.lottoBlue to pensionLotteryHome.bonusFourthNum,
-            LottoTheme.colors.lottoPurple to pensionLotteryHome.bonusFifthNum,
-            LottoTheme.colors.lottoBlack to pensionLotteryHome.bonusSixthNum,
+            LottoGray to "각",
+            LottoError to pensionLotteryHome.bonusFirstNum,
+            LottoOrange to pensionLotteryHome.bonusSecondNum,
+            LottoYellow to pensionLotteryHome.bonusThirdNum,
+            LottoBlue to pensionLotteryHome.bonusFourthNum,
+            LottoPurple to pensionLotteryHome.bonusFifthNum,
+            LottoBlack to pensionLotteryHome.bonusSixthNum,
         )
 
     Row(

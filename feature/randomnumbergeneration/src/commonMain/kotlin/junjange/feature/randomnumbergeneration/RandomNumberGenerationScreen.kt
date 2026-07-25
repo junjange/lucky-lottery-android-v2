@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarDuration
@@ -37,6 +38,7 @@ import org.jetbrains.compose.resources.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.collectAsState
+import junjange.core.designsystem.theme.BallNeutral
 import junjange.core.designsystem.theme.LottoTheme
 import junjange.core.designsystem.theme.lotteryColors
 import junjange.core.designsystem.theme.toLotteryColor
@@ -119,7 +121,7 @@ fun RandomNumberGenerationScreen(
             SnackbarHost(hostState = snackbarHostState) { data ->
                 Snackbar(
                     snackbarData = data,
-                    actionColor = LottoTheme.colors.green,
+                    actionColor = MaterialTheme.colorScheme.inversePrimary,
                 )
             }
         },
@@ -192,7 +194,7 @@ fun RandomNumberGenerationContent(
                     }
             } ?: run {
                 List(6) { 0 }.forEach { number ->
-                    LottoBall(lottoType = LottoType.LOTTO645, lottoColor = LottoTheme.colors.gray400, lottoTitle = number.toString())
+                    LottoBall(lottoType = LottoType.LOTTO645, lottoColor = BallNeutral, lottoTitle = number.toString())
                     Spacer(modifier = Modifier.width(4.dp))
                 }
             }
@@ -231,7 +233,6 @@ fun RandomNumberGenerationContent(
         LottoRoundedCornerButton(
             modifier = Modifier.clip(shape = RoundedCornerShape(8.dp)).height(40.dp).width(140.dp),
             buttonText = stringResource(Res.string.create_title),
-            backgroundColor = LottoTheme.colors.green,
             isEnabled = true,
             onClick = { onCreateClicked() },
         )
@@ -239,7 +240,6 @@ fun RandomNumberGenerationContent(
         LottoRoundedCornerButton(
             modifier = Modifier.clip(shape = RoundedCornerShape(8.dp)).height(40.dp).width(140.dp),
             buttonText = stringResource(Res.string.save_title),
-            backgroundColor = LottoTheme.colors.green,
             isEnabled = state.saveIsEnabled,
             onClick = { onSaveClicked() },
         )

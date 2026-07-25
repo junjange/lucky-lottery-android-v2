@@ -41,7 +41,7 @@ fun PensionLotteryBallTextField(
             modifier =
                 Modifier
                     .fillMaxSize()
-                    .background(color = LottoTheme.colors.white),
+                    .background(color = Color.White),
         ) {
             BasicTextField(
                 value = value,
@@ -50,7 +50,7 @@ fun PensionLotteryBallTextField(
                 textStyle =
                     LottoTheme.typography.body3.copy(
                         fontWeight = FontWeight.Bold,
-                        color = LottoTheme.colors.black,
+                        color = Color.Black,
                         textAlign = TextAlign.Center,
                     ),
                 keyboardActions = keyboardActions,

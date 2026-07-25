@@ -16,6 +16,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -123,9 +124,9 @@ fun RandomNumberCard(
             CardDefaults.cardElevation(
                 defaultElevation = 8.dp,
             ),
-        colors = CardDefaults.cardColors(containerColor = LottoTheme.colors.white),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         shape = RoundedCornerShape(size = 8.dp),
-        border = BorderStroke(width = 1.dp, color = LottoTheme.colors.gray200),
+        border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.outlineVariant),
     ) {
         Row(
             modifier = modifier.fillMaxSize(),

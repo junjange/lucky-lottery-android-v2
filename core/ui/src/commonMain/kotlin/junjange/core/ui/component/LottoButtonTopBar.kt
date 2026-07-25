@@ -54,7 +54,7 @@ fun LottoButtonTopBar(
         ) {
             LottoIconButton(
                 iconRes = backIconRes,
-                tint = LottoTheme.colors.lottoBlack,
+                tint = MaterialTheme.colorScheme.onSurface,
                 size = 24.dp,
                 onClick = onBack,
             )
@@ -62,7 +62,7 @@ fun LottoButtonTopBar(
             Text(
                 text = stringResource(titleRes),
                 style = LottoTheme.typography.headline2,
-                color = LottoTheme.colors.lottoBlack,
+                color = MaterialTheme.colorScheme.onSurface,
             )
             Spacer(modifier = Modifier.weight(1f))
             Button(

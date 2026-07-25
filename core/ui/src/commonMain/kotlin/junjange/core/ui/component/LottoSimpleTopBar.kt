@@ -50,7 +50,7 @@ fun LottoSimpleTopBar(
             backIconRes?.let {
                 LottoIconButton(
                     iconRes = backIconRes,
-                    tint = LottoTheme.colors.lottoBlack,
+                    tint = MaterialTheme.colorScheme.onSurface,
                     size = 24.dp,
                     onClick = onBack ?: {},
                 )
@@ -60,13 +60,13 @@ fun LottoSimpleTopBar(
             Text(
                 text = stringResource(titleRes),
                 style = LottoTheme.typography.headline2,
-                color = LottoTheme.colors.lottoBlack,
+                color = MaterialTheme.colorScheme.onSurface,
             )
             Spacer(modifier = Modifier.weight(1f))
             actionIconRes?.let {
                 LottoIconButton(
                     iconRes = it,
-                    tint = LottoTheme.colors.lottoBlack,
+                    tint = MaterialTheme.colorScheme.onSurface,
                     size = 24.dp,
                     onClick = onAction ?: {},
                 )
