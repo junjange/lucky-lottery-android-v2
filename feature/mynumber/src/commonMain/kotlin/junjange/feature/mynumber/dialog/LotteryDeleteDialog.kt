@@ -42,7 +42,7 @@ private fun LotteryDeleteDialogContent(okClick: () -> Unit) {
                 .height(200.dp),
         shape = RoundedCornerShape(16.dp),
         shadowElevation = 15.dp,
-        color = MaterialTheme.colorScheme.surfaceContainerHigh,
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
     ) {
         Column {
             Text(

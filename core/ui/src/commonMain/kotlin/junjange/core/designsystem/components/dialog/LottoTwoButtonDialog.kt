@@ -32,7 +32,7 @@ fun LottoTwoButtonDialog(
     Dialog(onDismissRequest = onCancel) {
         Surface(
             shape = RoundedCornerShape(10.dp),
-            color = MaterialTheme.colorScheme.surfaceContainerHigh,
+            color = MaterialTheme.colorScheme.surfaceContainerLow,
         ) {
             Column(
                 modifier =
