@@ -15,6 +15,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -136,6 +138,13 @@ private enum class Tab(
     SETTING("설정", Res.drawable.ic_settings, Res.drawable.ic_settings_outlined),
 }
 
+/** 열거형은 KMP 공통 코드에서 자동 저장 대상이 아니라 이름 문자열로 저장한다. */
+private val TabSaver: Saver<Tab, String> =
+    Saver(
+        save = { it.name },
+        restore = { name -> Tab.entries.firstOrNull { it.name == name } },
+    )
+
 @Composable
 private fun MainTabs(
     requestedMyNumberPage: String?,
@@ -144,8 +153,8 @@ private fun MainTabs(
     onNavigateToRandomGeneration: (LottoType) -> Unit,
     onNavigateToNotification: (lottoNotificationState: Boolean, pensionLottoNotificationState: Boolean) -> Unit,
 ) {
-    var selectedTab by remember { mutableStateOf(Tab.HOME) }
-    var myNumberInitialPage by remember { mutableStateOf(0) }
+    var selectedTab by rememberSaveable(stateSaver = TabSaver) { mutableStateOf(Tab.HOME) }
+    var myNumberInitialPage by rememberSaveable { mutableStateOf(0) }
 
     LaunchedEffect(requestedMyNumberPage) {
         requestedMyNumberPage ?: return@LaunchedEffect
