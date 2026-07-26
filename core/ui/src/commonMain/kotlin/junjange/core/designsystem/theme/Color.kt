@@ -20,19 +20,24 @@ val BallNeutral = Color(0xFFEEEEEE)
 /** 브랜드 프라이머리. 컴포넌트는 OS 기본을 따르고 색만 브랜드 팔레트로 주입한다. */
 val BrandPrimary = Color(0xFF30AA5B)
 
+/** 다크 모드용 브랜드 톤. 어두운 배경에서 대비를 확보하기 위해 밝게 조정한 값. */
+val DarkBrandPrimary = Color(0xFF97D5A6)
+
 // 기존 브랜드 팔레트(흰 배경/검정 텍스트/그레이 톤/그린·블루 포인트)를 M3 역할에 매핑.
 // 배경·서피스는 기존 룩 그대로, 포인트만 브랜드 컬러를 쓴다.
 val LightColorScheme =
     lightColorScheme(
         primary = BrandPrimary,
         onPrimary = Color(0xFFFFFFFF),
-        primaryContainer = Color(0xFFB7EFC4),
-        onPrimaryContainer = Color(0xFF00210D),
+        // 컨테이너 계열도 같은 브랜드 초록을 쓴다. FAB(primaryContainer)와
+        // 하단 탭 선택 인디케이터(secondaryContainer)가 연한 톤으로 갈리지 않게 하기 위함.
+        primaryContainer = BrandPrimary,
+        onPrimaryContainer = Color(0xFFFFFFFF),
         inversePrimary = Color(0xFF97D5A6),
-        secondary = Color(0xFF4F6353),
+        secondary = BrandPrimary,
         onSecondary = Color(0xFFFFFFFF),
-        secondaryContainer = Color(0xFFDCEFE0),
-        onSecondaryContainer = Color(0xFF0C1F13),
+        secondaryContainer = BrandPrimary,
+        onSecondaryContainer = Color(0xFFFFFFFF),
         tertiary = Color(0xFF00668A),
         onTertiary = Color(0xFFFFFFFF),
         tertiaryContainer = Color(0xFFBFE9F6),
@@ -56,15 +61,16 @@ val LightColorScheme =
 
 val DarkColorScheme =
     darkColorScheme(
-        primary = Color(0xFF97D5A6),
+        primary = DarkBrandPrimary,
         onPrimary = Color(0xFF00391B),
-        primaryContainer = Color(0xFF0F5229),
-        onPrimaryContainer = Color(0xFFB2F1C0),
+        // 라이트와 같은 원칙 — 다크에서도 초록은 이 톤 하나만 쓴다.
+        primaryContainer = DarkBrandPrimary,
+        onPrimaryContainer = Color(0xFF00391B),
         inversePrimary = BrandPrimary,
-        secondary = Color(0xFFB6CCB8),
-        onSecondary = Color(0xFF223527),
-        secondaryContainer = Color(0xFF3A4A3E),
-        onSecondaryContainer = Color(0xFFD2E8D4),
+        secondary = DarkBrandPrimary,
+        onSecondary = Color(0xFF00391B),
+        secondaryContainer = DarkBrandPrimary,
+        onSecondaryContainer = Color(0xFF00391B),
         tertiary = Color(0xFF85CFF1),
         onTertiary = Color(0xFF00344A),
         tertiaryContainer = Color(0xFF004C69),
