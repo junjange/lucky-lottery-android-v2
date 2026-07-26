@@ -49,7 +49,6 @@ struct ContentView: View {
                 .tag(Tab.myNumber)
 
             RandomNumberTab(
-                onFinished: { selectedTab = .home },
                 onSaved: { page in
                     myNumberPage = Int32(page) ?? 0
                     myNumberEpoch += 1
@@ -66,38 +65,32 @@ struct ContentView: View {
     }
 }
 
-/// 랜덤 번호 탭: 목록(루트) → 번호 생성(푸시). 화면 자체 상단바를 쓰므로 시스템 내비바는 숨긴다.
+/// 랜덤 번호 탭: 목록(루트, 탭바 노출) → 번호 생성(fullScreenCover 전체화면).
+/// 생성 화면은 Android의 탭 밖 전체화면 라우트와 동일하게 하단 내비게이션 없이 뜬다.
 private struct RandomNumberTab: View {
-    let onFinished: () -> Void
     let onSaved: (String) -> Void
 
     @SwiftUI.State private var generationLottoType: String?
 
     var body: some View {
-        NavigationStack {
+        ComposeScreen {
+            IosShellKt.randomNumberViewController(
+                navigateToGeneration: { lottoType in generationLottoType = lottoType }
+            )
+        }
+        .ignoresSafeArea(.all)
+        .fullScreenCover(isPresented: isGenerationPresented) {
             ComposeScreen {
-                IosShellKt.randomNumberViewController(
-                    navigateToGeneration: { lottoType in generationLottoType = lottoType },
-                    onBack: onFinished
+                IosShellKt.randomNumberGenerationViewController(
+                    lottoType: generationLottoType ?? "",
+                    navigateToMyNumber: { page in
+                        generationLottoType = nil
+                        onSaved(page)
+                    },
+                    onBack: { generationLottoType = nil }
                 )
             }
             .ignoresSafeArea(.all)
-            .toolbar(.hidden, for: .navigationBar)
-            .navigationDestination(isPresented: isGenerationPresented) {
-                ComposeScreen {
-                    IosShellKt.randomNumberGenerationViewController(
-                        lottoType: generationLottoType ?? "",
-                        navigateToMyNumber: { page in
-                            generationLottoType = nil
-                            onSaved(page)
-                        },
-                        onBack: { generationLottoType = nil }
-                    )
-                }
-                .ignoresSafeArea(.all)
-                .toolbar(.hidden, for: .navigationBar)
-                .toolbar(.hidden, for: .tabBar)
-            }
         }
     }
 

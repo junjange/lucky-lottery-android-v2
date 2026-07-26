@@ -14,8 +14,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -35,7 +33,6 @@ import junjange.core.domain.model.LottoType
 import junjange.core.ui.util.singleClick
 import junjange.feature.randomnumber.RandomNumberContract.*
 import junjange.feature.randomnumber.resources.*
-import junjange.feature.randomnumber.resources.ic_chevron_left
 import junjange.feature.randomnumber.resources.lotto_645_random_description
 import junjange.feature.randomnumber.resources.lotto_645_random_title
 import junjange.feature.randomnumber.resources.lotto_720_random_description
@@ -48,12 +45,10 @@ import kotlinx.coroutines.flow.collectLatest
 fun RandomNumberScreen(
     viewModel: RandomNumberViewModel,
     navigateRandomNumberGeneration: (lottoType: LottoType) -> Unit,
-    onBack: () -> Unit,
 ) {
     LaunchedEffect(viewModel.effect) {
         viewModel.effect.collectLatest { effect ->
             when (effect) {
-                is Effect.Finish -> onBack()
                 is Effect.NavigateToRandomNumberGeneration -> navigateRandomNumberGeneration(effect.lottoType)
             }
         }
@@ -68,15 +63,6 @@ fun RandomNumberScreen(
                     text = stringResource(Res.string.random_number_generation),
                     style = LottoTheme.typography.headline3,
                 )
-            }, navigationIcon = {
-                IconButton(
-                    onClick = { viewModel.event(Event.Back) },
-                ) {
-                    Icon(
-                        painter = painterResource(Res.drawable.ic_chevron_left),
-                        contentDescription = null,
-                    )
-                }
             })
         },
     ) { innerPadding ->

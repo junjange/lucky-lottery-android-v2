@@ -22,6 +22,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.savedstate.read
+import junjange.core.domain.model.LottoType
 import junjange.core.ui.resources.Res
 import junjange.core.ui.resources.ic_clover
 import junjange.core.ui.resources.ic_clover_outlined
@@ -56,7 +57,6 @@ import org.koin.core.parameter.parametersOf
 object Routes {
     const val SPLASH = "splash"
     const val MAIN = "main"
-    const val RANDOM_NUMBER = "random_number"
     const val RANDOM_GENERATION = "random_generation/{lottoType}"
     const val NOTIFICATION = "notification"
 
@@ -89,18 +89,10 @@ fun LotteryNavHost(
                 requestedMyNumberPage = requestedMyNumberPage,
                 onMyNumberPageConsumed = { backStackEntry.savedStateHandle[KEY_MY_NUMBER_PAGE] = null },
                 onLaunchQrScanner = onLaunchQrScanner,
-                onNavigateToRandomNumber = { navController.navigate(Routes.RANDOM_NUMBER) },
-                onNavigateToNotification = { _, _ -> navController.navigate(Routes.NOTIFICATION) },
-            )
-        }
-
-        composable(Routes.RANDOM_NUMBER) {
-            RandomNumberScreen(
-                viewModel = remember { RandomNumberViewModel() },
-                navigateRandomNumberGeneration = { lottoType ->
+                onNavigateToRandomGeneration = { lottoType ->
                     navController.navigate(Routes.randomGeneration(lottoType.name))
                 },
-                onBack = { navController.popBackStack() },
+                onNavigateToNotification = { _, _ -> navController.navigate(Routes.NOTIFICATION) },
             )
         }
 
@@ -149,7 +141,7 @@ private fun MainTabs(
     requestedMyNumberPage: String?,
     onMyNumberPageConsumed: () -> Unit,
     onLaunchQrScanner: (() -> Unit)?,
-    onNavigateToRandomNumber: () -> Unit,
+    onNavigateToRandomGeneration: (LottoType) -> Unit,
     onNavigateToNotification: (lottoNotificationState: Boolean, pensionLottoNotificationState: Boolean) -> Unit,
 ) {
     var selectedTab by remember { mutableStateOf(Tab.HOME) }
@@ -177,13 +169,7 @@ private fun MainTabs(
                         },
                         label = { Text(tab.label) },
                         selected = selected,
-                        onClick = {
-                            if (tab == Tab.RANDOM_NUMBER) {
-                                onNavigateToRandomNumber()
-                            } else {
-                                selectedTab = tab
-                            }
-                        },
+                        onClick = { selectedTab = tab },
                     )
                 }
             }
@@ -210,7 +196,11 @@ private fun MainTabs(
                         initialPage = myNumberInitialPage,
                     )
 
-                Tab.RANDOM_NUMBER -> Unit
+                Tab.RANDOM_NUMBER ->
+                    RandomNumberScreen(
+                        viewModel = remember { RandomNumberViewModel() },
+                        navigateRandomNumberGeneration = onNavigateToRandomGeneration,
+                    )
 
                 Tab.SETTING -> {
                     val settingActions = junjange.feature.setting.rememberSettingActions()

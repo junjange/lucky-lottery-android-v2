@@ -85,15 +85,11 @@ fun myNumberViewController(initialPage: Int): UIViewController =
         )
     }
 
-fun randomNumberViewController(
-    navigateToGeneration: (String) -> Unit,
-    onBack: () -> Unit,
-): UIViewController =
+fun randomNumberViewController(navigateToGeneration: (String) -> Unit): UIViewController =
     themed {
         RandomNumberScreen(
             viewModel = remember { RandomNumberViewModel() },
             navigateRandomNumberGeneration = { lottoType: LottoType -> navigateToGeneration(lottoType.name) },
-            onBack = onBack,
         )
     }
 
