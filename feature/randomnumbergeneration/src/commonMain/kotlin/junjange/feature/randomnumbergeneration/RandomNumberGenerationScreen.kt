@@ -62,6 +62,7 @@ fun RandomNumberGenerationScreen(
 
     val lottoSubmittedMsg = stringResource(Res.string.lotto_number_submitted)
     val pensionSubmittedMsg = stringResource(Res.string.pension_lottery_number_submitted)
+    val checkNumberLabel = stringResource(Res.string.action_check_number)
 
     LaunchedEffect(viewModel.effect) {
         viewModel.effect.collectLatest { effect ->
@@ -78,7 +79,7 @@ fun RandomNumberGenerationScreen(
                     val result =
                         snackbarHostState.showSnackbar(
                             message = message,
-                            actionLabel = "",
+                            actionLabel = checkNumberLabel,
                             duration = SnackbarDuration.Short,
                         )
                     when (result) {
