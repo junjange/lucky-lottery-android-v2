@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 라이트/다크에 따라 런치 윈도우 상태바 아이콘 명암을 뒤집는다(values-night에서 false). -->
+    <bool name="light_status_bar">true</bool>
+</resources>
