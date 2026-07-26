@@ -5,8 +5,15 @@ build/
 # Local configuration file (sdk path, etc)
 local.properties
 
+# 로컬 JDK 심볼릭 링크 (개발자 머신마다 경로 다름)
+openjdk.jdk
+
 # iOS local build setting overrides (AdMob ID 등)
 iosApp/iosApp/Configuration/Ads.local.xcconfig
+
+# Xcode 개인 로컬 상태 (창 위치, 스킴 관리 등)
+**/xcuserdata/
+*.xcuserstate
 
 # Log/OS Files
 *.log

@@ -63,7 +63,6 @@ kotlin {
             api(projects.core.data)
             api(projects.core.remote)
             api(projects.core.ui)
-            api(projects.core.navigation)
             api(libs.navigation.compose.multiplatform)
             implementation(projects.core.local)
             implementation(projects.core.ocr)
@@ -74,7 +73,6 @@ kotlin {
             implementation(projects.feature.randomnumber)
             implementation(projects.feature.randomnumbergeneration)
             implementation(projects.feature.setting)
-            implementation(projects.feature.main)
         }
         androidMain.dependencies {
             implementation(libs.koin.android)
