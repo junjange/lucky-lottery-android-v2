@@ -51,7 +51,6 @@ kotlin {
             implementation(libs.coil3.network.ktor3)
         }
         androidMain.dependencies {
-            implementation(projects.core.navigation)
             implementation(libs.google.admob.ads)
             implementation(libs.core.ktx)
             implementation(libs.compose.navigation)

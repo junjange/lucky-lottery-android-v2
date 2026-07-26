@@ -30,7 +30,6 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.core.domain)
             implementation(projects.core.ui)
-            implementation(projects.core.navigation)
         }
         androidMain.dependencies {
         }

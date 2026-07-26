@@ -26,7 +26,6 @@ kotlin {
             implementation(projects.core.ui)
         }
         androidMain.dependencies {
-            implementation(projects.core.navigation)
         }
     }
 }
