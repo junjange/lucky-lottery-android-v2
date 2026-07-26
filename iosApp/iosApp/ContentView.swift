@@ -1,9 +1,6 @@
 import SwiftUI
 import LuckyLotteryShared
 
-/// 브랜드 시드 컬러 (#30AA5B) — 셸의 tint로만 주입하고 나머지는 OS 기본을 따른다.
-private let brandPrimary = Color(red: 0x30 / 255.0, green: 0xAA / 255.0, blue: 0x5B / 255.0)
-
 /// SwiftUI 셸: TabView/NavigationStack(Liquid Glass) + .tint(브랜드그린).
 /// 탭 콘텐츠는 commonMain Compose 화면을 ComposeUIViewController로 embed한다.
 struct ContentView: View {
@@ -32,7 +29,7 @@ struct ContentView: View {
                 .transition(.opacity)
             }
         }
-        .tint(brandPrimary)
+        .tint(Color.brandPrimary)
     }
 
     private var tabShell: some View {

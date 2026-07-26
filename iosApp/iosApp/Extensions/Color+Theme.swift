@@ -1,7 +1,11 @@
 import SwiftUI
 
 extension Color {
-    static let lottoGreen = Color(red: 0.0, green: 0.72, blue: 0.42)
+    /// 브랜드 시드 컬러 #30AA5B — Compose 스킴의 BrandPrimary, Android XML의 brand_primary와 같은 값.
+    static let brandPrimary = Color(red: 0x30 / 255.0, green: 0xAA / 255.0, blue: 0x5B / 255.0)
+
+    /// 기존 이름 유지용 별칭. 별도의 초록을 쓰지 않고 브랜드 시드 하나로 수렴시킨다.
+    static let lottoGreen = brandPrimary
     static let lottoBackground = Color(UIColor.systemGroupedBackground)
     static let lottoDarkSurface = Color(red: 0.15, green: 0.15, blue: 0.15)
     static let lottoGray100 = Color(red: 0.96, green: 0.96, blue: 0.96)
