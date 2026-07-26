@@ -39,13 +39,15 @@ struct ContentView: View {
         TabView(selection: $selectedTab) {
             ComposeScreen { IosShellKt.homeViewController() }
                 .ignoresSafeArea(.all)
-                .tabItem { Label("홈", systemImage: "house.fill") }
+                .tabItem { Label("홈", image: "ic_home") }
                 .tag(Tab.home)
 
             ComposeScreen { IosShellKt.myNumberViewController(initialPage: myNumberPage) }
                 .id(myNumberEpoch)
                 .ignoresSafeArea(.all)
-                .tabItem { Label("내 번호", systemImage: "ticket.fill") }
+                .tabItem {
+                    Label("내 번호", image: selectedTab == .myNumber ? "ic_clover" : "ic_clover_outlined")
+                }
                 .tag(Tab.myNumber)
 
             RandomNumberTab(
@@ -55,11 +57,11 @@ struct ContentView: View {
                     selectedTab = .myNumber
                 }
             )
-            .tabItem { Label("랜덤 번호", systemImage: "dice.fill") }
+            .tabItem { Label("랜덤 번호", image: "ic_plus") }
             .tag(Tab.randomNumber)
 
             SettingTab()
-                .tabItem { Label("설정", systemImage: "gearshape.fill") }
+                .tabItem { Label("설정", image: "ic_settings") }
                 .tag(Tab.setting)
         }
     }

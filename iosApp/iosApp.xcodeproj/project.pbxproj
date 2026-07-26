@@ -30,6 +30,7 @@
 		B70000010000000000000200 /* AdBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = B70000020000000000000200 /* AdBridge.swift */; };
 		B70000010000000000000201 /* QrScannerBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = B70000020000000000000201 /* QrScannerBridge.swift */; };
 		B70000010000000000000202 /* PhotoPickerBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = B70000020000000000000202 /* PhotoPickerBridge.swift */; };
+		B70000010000000000000400 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B70000020000000000000400 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +40,7 @@
 		B70000020000000000000201 /* QrScannerBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QrScannerBridge.swift; sourceTree = "<group>"; };
 		B70000020000000000000202 /* PhotoPickerBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPickerBridge.swift; sourceTree = "<group>"; };
 		B70000020000000000000003 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B70000020000000000000400 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B70000020000000000000010 /* iosApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iosApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B70000020000000000000100 /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
 		B70000020000000000000101 /* Color+Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Theme.swift"; sourceTree = "<group>"; };
@@ -88,6 +90,7 @@
 				B70000020000000000000201 /* QrScannerBridge.swift */,
 				B70000020000000000000202 /* PhotoPickerBridge.swift */,
 				B70000020000000000000003 /* Info.plist */,
+				B70000020000000000000400 /* Assets.xcassets */,
 				B70000040000000000000010 /* Navigation */,
 				B70000040000000000000011 /* Extensions */,
 				B70000040000000000000012 /* Components */,
@@ -263,6 +266,7 @@
 				B70000080000000000000001 /* Build Kotlin Framework */,
 				B70000060000000000000001 /* Sources */,
 				B70000030000000000000001 /* Frameworks */,
+				B700000C0000000000000001 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -307,6 +311,17 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		B700000C0000000000000001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B70000010000000000000400 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
 		B70000080000000000000001 /* Build Kotlin Framework */ = {
