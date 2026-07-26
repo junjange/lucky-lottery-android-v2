@@ -13,6 +13,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
@@ -20,9 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -33,7 +33,6 @@ import junjange.core.designsystem.theme.LottoTheme
 import junjange.core.ui.component.LottoContent
 import junjange.core.ui.component.LottoHomeTopBar
 import junjange.core.ui.platform.PlatformAdBanner
-import junjange.core.ui.platform.PlatformToastEffect
 import junjange.feature.home.HomeContract.*
 import junjange.feature.home.resources.*
 import kotlinx.coroutines.flow.collectLatest
@@ -46,7 +45,7 @@ fun HomeScreen(
 ) {
     val state by viewModel.state.collectAsState()
     val refreshState = rememberPullToRefreshState()
-    var toastMessage by remember { mutableStateOf<String?>(null) }
+    val snackbarHostState = remember { SnackbarHostState() }
 
     val lottoNotFound = stringResource(Res.string.lotto_number_not_found_message)
     val pensionNotFound = stringResource(Res.string.pension_number_not_found_message)
@@ -55,19 +54,19 @@ fun HomeScreen(
         viewModel.effect.collectLatest { effect ->
             when (effect) {
                 is Effect.ShowMessage -> {
-                    toastMessage = when (effect.message) {
+                    val message = when (effect.message) {
                         HomeMessage.LOTTO_NUMBER_NOT_FOUND -> lottoNotFound
                         HomeMessage.PENSION_NUMBER_NOT_FOUND -> pensionNotFound
                     }
+                    snackbarHostState.showSnackbar(message)
                 }
             }
         }
     }
 
-    PlatformToastEffect(toastMessage)
-
     Scaffold(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = navigateToQRScanner,

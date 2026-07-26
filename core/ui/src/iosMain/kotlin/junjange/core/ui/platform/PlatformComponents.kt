@@ -30,8 +30,3 @@ actual fun PlatformAdBanner(modifier: Modifier) {
         Box(modifier = modifier)
     }
 }
-
-@Composable
-actual fun PlatformToastEffect(message: String?) {
-    // iOS: no-op, could use snackbar in the future
-}
