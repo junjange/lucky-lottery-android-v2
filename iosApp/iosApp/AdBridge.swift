@@ -3,25 +3,14 @@ import GoogleMobileAds
 import LuckyLotteryShared
 import UIKit
 
-/// AdMob 광고 단위 설정. 릴리스 빌드 전 AdMob 콘솔에서 발급한 iOS 광고 단위 ID로 교체할 것.
+/// AdMob 광고 단위 설정. 실제 값은 Configuration/{Debug,Release}.xcconfig에 있고,
+/// Info.plist를 거쳐 번들에 주입된다(Debug는 Google 테스트 ID, Release는 iOS 전용 ID).
 enum AdConfig {
-    static let bannerAdUnitID = ""
-    static let interstitialAdUnitID = ""
+    static let bannerAdUnitID = infoPlistString("BannerAdUnitID")
+    static let interstitialAdUnitID = infoPlistString("InterstitialAdUnitID")
 
-    static var resolvedBannerAdUnitID: String {
-        #if DEBUG
-        return "ca-app-pub-3940256099942544/2934735716" // Google 공식 iOS 테스트 배너
-        #else
-        return bannerAdUnitID
-        #endif
-    }
-
-    static var resolvedInterstitialAdUnitID: String {
-        #if DEBUG
-        return "ca-app-pub-3940256099942544/4411468910" // Google 공식 iOS 테스트 전면광고
-        #else
-        return interstitialAdUnitID
-        #endif
+    private static func infoPlistString(_ key: String) -> String {
+        Bundle.main.object(forInfoDictionaryKey: key) as? String ?? ""
     }
 }
 
@@ -33,7 +22,7 @@ enum AdBridgeSetup {
         IosAdBridge.shared.bannerFactory = {
             let banner = BannerView(adSize: AdSizeBanner)
             banner.backgroundColor = .clear
-            banner.adUnitID = AdConfig.resolvedBannerAdUnitID
+            banner.adUnitID = AdConfig.bannerAdUnitID
             banner.rootViewController = rootViewController()
             banner.load(Request())
             return banner
@@ -69,7 +58,7 @@ final class InterstitialAdManager: NSObject, FullScreenContentDelegate {
 
     func preload() {
         InterstitialAd.load(
-            with: AdConfig.resolvedInterstitialAdUnitID,
+            with: AdConfig.interstitialAdUnitID,
             request: Request()
         ) { [weak self] ad, _ in
             ad?.fullScreenContentDelegate = self

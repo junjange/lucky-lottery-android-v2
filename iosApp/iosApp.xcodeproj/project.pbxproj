@@ -40,6 +40,8 @@
 		B70000020000000000000201 /* QrScannerBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QrScannerBridge.swift; sourceTree = "<group>"; };
 		B70000020000000000000202 /* PhotoPickerBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPickerBridge.swift; sourceTree = "<group>"; };
 		B70000020000000000000003 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B70000020000000000000500 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
+		B70000020000000000000501 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		B70000020000000000000400 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B70000020000000000000010 /* iosApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iosApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B70000020000000000000100 /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
@@ -95,8 +97,18 @@
 				B70000040000000000000011 /* Extensions */,
 				B70000040000000000000012 /* Components */,
 				B70000040000000000000013 /* Screens */,
+				B70000040000000000000014 /* Configuration */,
 			);
 			path = iosApp;
+			sourceTree = "<group>";
+		};
+		B70000040000000000000014 /* Configuration */ = {
+			isa = PBXGroup;
+			children = (
+				B70000020000000000000500 /* Debug.xcconfig */,
+				B70000020000000000000501 /* Release.xcconfig */,
+			);
+			path = Configuration;
 			sourceTree = "<group>";
 		};
 		B70000040000000000000003 /* Products */ = {
@@ -432,6 +444,7 @@
 		};
 		B700000B0000000000000001 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B70000020000000000000500 /* Debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -462,6 +475,7 @@
 		};
 		B700000B0000000000000002 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B70000020000000000000501 /* Release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;

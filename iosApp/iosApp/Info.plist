@@ -23,7 +23,11 @@
     <key>NSCameraUsageDescription</key>
     <string>복권 QR 코드를 스캔하기 위해 카메라를 사용합니다.</string>
     <key>GADApplicationIdentifier</key>
-    <string>ca-app-pub-3940256099942544~1458002511</string>
+    <string>$(GAD_APPLICATION_IDENTIFIER)</string>
+    <key>BannerAdUnitID</key>
+    <string>$(BANNER_AD_UNIT_ID)</string>
+    <key>InterstitialAdUnitID</key>
+    <string>$(INTERSTITIAL_AD_UNIT_ID)</string>
     <key>SKAdNetworkItems</key>
     <array>
         <dict>
