@@ -1,0 +1,17 @@
+<resources>
+    <!--
+      앱 유일의 XML 테마. Compose가 그려지기 전 윈도우(런치/스플래시)와
+      View 기반 화면에만 적용된다. 브랜드 색은 Compose 스킴과 같은 값을 참조하고,
+      라이트/다크 차이는 values-night의 color/bool 리소스로만 처리한다.
+    -->
+    <style name="Theme.Lotto3" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/brand_primary</item>
+        <item name="colorOnPrimary">@color/brand_on_primary</item>
+        <item name="colorSecondary">@color/brand_primary</item>
+        <item name="colorOnSecondary">@color/brand_on_primary</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">@bool/light_status_bar</item>
+    </style>
+
+    <style name="Theme.Lotto3.Splash" parent="Theme.Lotto3" />
+</resources>

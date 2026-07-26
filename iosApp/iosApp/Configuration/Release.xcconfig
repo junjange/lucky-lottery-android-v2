@@ -1,0 +1,10 @@
+// Release 빌드 설정 — 실 서비스 iOS 광고 ID(Android와 별도 단위).
+// 값은 Info.plist를 통해 앱 번들로 전달되고, AdBridge.swift의 AdConfig가 읽는다.
+
+// TODO: AdMob 콘솔의 iOS 앱 ID로 교체 (현재는 Google 테스트 앱 ID)
+GAD_APPLICATION_IDENTIFIER = ca-app-pub-3940256099942544~1458002511
+BANNER_AD_UNIT_ID = ca-app-pub-8474199369670344/9047776033
+INTERSTITIAL_AD_UNIT_ID = ca-app-pub-8474199369670344/3715412512
+
+// 로컬에서만 다른 ID로 실험하려면 Ads.local.xcconfig(git 미추적)에 같은 키를 정의한다.
+#include? "Ads.local.xcconfig"

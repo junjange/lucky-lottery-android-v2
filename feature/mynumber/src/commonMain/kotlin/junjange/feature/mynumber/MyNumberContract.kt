@@ -1,0 +1,119 @@
+package junjange.feature.mynumber
+
+import junjange.core.domain.model.LotteryGetContent
+import junjange.core.domain.model.PensionLotteryGetContent
+
+sealed interface MyNumberContract {
+    enum class PageLoadState {
+        Idle,
+        Loading,
+        Error,
+    }
+
+    data class PagedContent<T>(
+        val items: List<T> = emptyList(),
+        val loadState: PageLoadState = PageLoadState.Loading,
+        val endReached: Boolean = false,
+        val isRefreshing: Boolean = false,
+    )
+
+    data class State(
+        val isLoading: Boolean = false,
+        val isDeleteLotteryDialogShowing: Boolean = false,
+        val lottery: PagedContent<LotteryGetContent> = PagedContent(),
+        val pensionLottery: PagedContent<PensionLotteryGetContent> = PagedContent(),
+    )
+
+    data class UserRoundId(
+        val round: Int,
+        val id: Long,
+    )
+
+    sealed interface Event {
+        data object PickedImage : Event
+
+        data object RefreshLottery : Event
+
+        data object RefreshPensionLottery : Event
+
+        data object LoadMoreLottery : Event
+
+        data object LoadMorePensionLottery : Event
+
+        data class InsertLotteries(
+            val lotteries: List<List<String>>,
+        ) : Event
+
+        data class InsertPensionLotteries(
+            val pensionLotteries: List<List<String>>,
+        ) : Event
+
+        data class LottoTextOfImage(
+            val imagePath: String,
+        ) : Event
+
+        data class PensionLottoTextOfImage(
+            val imagePath: String,
+        ) : Event
+
+        data class ShowDialog(
+            val isDialogShowing: Boolean,
+        ) : Event
+
+        data class DeleteLottery(
+            val userRoundIds: List<UserRoundId>,
+        ) : Event
+
+        data class DeletePensionLottery(
+            val userRoundIds: List<UserRoundId>,
+        ) : Event
+
+        data object DeleteAllLottery : Event
+
+        data object DeleteAllPensionLottery : Event
+    }
+
+    sealed interface Effect {
+        data object NavigateToGallery : Effect
+
+        data class ShowMessage(
+            val message: MyNumberMessage,
+        ) : Effect
+    }
+}
+
+fun String?.toRankTitle(): String =
+    when (this) {
+        "FIRST" -> "1등"
+        "SECOND" -> "2등"
+        "THIRD" -> "3등"
+        "FOURTH" -> "4등"
+        "FIFTH" -> "5등"
+        "SIXTH" -> "6등"
+        "SEVENTH" -> "7등"
+        "NONE" -> "꽝"
+        else -> "미발표"
+    }
+
+fun String.extractLottoNumbers(): List<List<String>> = this.split("\n").map { it.split(" ") }
+
+fun String.extractPensionLottoNumbers(): List<List<String>> =
+    this.split("\n").map {
+        it.replace(" ", "").replace("조", "").map { it.toString() }
+    }
+
+fun List<List<String>>.isValidLottoNumbers(): Boolean =
+    all { lottoNumbers ->
+        lottoNumbers.size == 6 &&
+            lottoNumbers.all { lottoNumber ->
+                lottoNumber.toIntOrNull() != null && lottoNumber.toInt() in 1..45
+            }
+    }
+
+fun List<List<String>>.isValidPensionLottoNumbers(): Boolean =
+    all { lottoNumbers ->
+        lottoNumbers.size == 7 &&
+            lottoNumbers.all { lottoNumber ->
+                lottoNumber.toIntOrNull() != null && lottoNumber.toInt() in 0..9
+            }
+    }

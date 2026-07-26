@@ -1,18 +1,12 @@
 plugins {
-    id("junjange.kotlin.jvm")
-    alias(libs.plugins.ksp)
+    id("junjange.kotlin.multiplatform")
 }
 
-dependencies {
-    implementation(project(Modules.CORE_DOMAIN))
-
-    implementation(libs.coroutines.core)
-
-    implementation(libs.hilt.core)
-
-    // ksp
-    ksp(libs.ksp.hilt)
-
-    // okhttp
-    implementation(libs.okhttp.core)
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            api(project(":core:domain"))
+            implementation(libs.ktor.client.core)
+        }
+    }
 }

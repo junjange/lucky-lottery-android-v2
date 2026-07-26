@@ -1,0 +1,16 @@
+<resources>
+    <string name="random_number_generation">랜덤 번호 생성</string>
+    <string name="lotto_645_random_title">로또 6/45 번호 생성</string>
+    <string name="lotto_645_random_description">랜덤으로 로또 번호를 생성합니다</string>
+    <string name="lotto_720_random_title">연금복권 +720 번호 생성</string>
+    <string name="lotto_720_random_description">랜덤으로 연금복권 번호를 생성합니다</string>
+    <string name="create_title">생성</string>
+    <string name="save_title">저장</string>
+    <string name="group_title">조</string>
+    <string name="addition">번호 관리</string>
+    <string name="write_directly">직접 작성하기</string>
+    <string name="load_photo">사진 불러오기</string>
+    <string name="action_check_number">번호 확인</string>
+    <string name="lotto_720_title">연금복권 720+</string>
+
+</resources>

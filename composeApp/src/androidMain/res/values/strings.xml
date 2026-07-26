@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">행운복권</string>
+    <string name="qr_scanner_hint">QR 코드를 스캔하여 주세요:)</string>
+</resources>

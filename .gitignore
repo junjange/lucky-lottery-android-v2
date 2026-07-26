@@ -5,6 +5,9 @@ build/
 # Local configuration file (sdk path, etc)
 local.properties
 
+# iOS local build setting overrides (AdMob ID 등)
+iosApp/iosApp/Configuration/Ads.local.xcconfig
+
 # Log/OS Files
 *.log
 

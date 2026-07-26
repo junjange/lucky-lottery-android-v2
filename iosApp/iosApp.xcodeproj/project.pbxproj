@@ -1,0 +1,551 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		B70000010000000000000001 /* LuckyLotteryApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B70000020000000000000001 /* LuckyLotteryApp.swift */; };
+		B70000010000000000000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B70000020000000000000002 /* ContentView.swift */; };
+		B70000010000000000000100 /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B70000020000000000000100 /* AppRouter.swift */; };
+		B70000010000000000000101 /* Color+Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = B70000020000000000000101 /* Color+Theme.swift */; };
+		B70000010000000000000102 /* LottoBall.swift in Sources */ = {isa = PBXBuildFile; fileRef = B70000020000000000000102 /* LottoBall.swift */; };
+		B70000010000000000000103 /* CommonComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = B70000020000000000000103 /* CommonComponents.swift */; };
+		B70000010000000000000104 /* SplashScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = B70000020000000000000104 /* SplashScreen.swift */; };
+		B70000010000000000000105 /* LoginScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = B70000020000000000000105 /* LoginScreen.swift */; };
+		B70000010000000000000106 /* RegisterScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = B70000020000000000000106 /* RegisterScreen.swift */; };
+		B70000010000000000000107 /* HomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = B70000020000000000000107 /* HomeScreen.swift */; };
+		B70000010000000000000108 /* MyNumberScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = B70000020000000000000108 /* MyNumberScreen.swift */; };
+		B70000010000000000000109 /* RandomNumberScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = B70000020000000000000109 /* RandomNumberScreen.swift */; };
+		B7000001000000000000010A /* RandomNumberGenerationScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7000002000000000000010A /* RandomNumberGenerationScreen.swift */; };
+		B7000001000000000000010B /* NotificationScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7000002000000000000010B /* NotificationScreen.swift */; };
+		B7000001000000000000010C /* MyScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7000002000000000000010C /* MyScreen.swift */; };
+		B7000001000000000000010D /* EditProfileScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7000002000000000000010D /* EditProfileScreen.swift */; };
+		B7000001000000000000010E /* WithdrawalScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7000002000000000000010E /* WithdrawalScreen.swift */; };
+		B7000001000000000000010F /* SettingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7000002000000000000010F /* SettingScreen.swift */; };
+		B70000010000000000000110 /* MainScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = B70000020000000000000110 /* MainScreen.swift */; };
+		B7000000000000000000AD03 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = B7000000000000000000AD02 /* GoogleMobileAds */; };
+		B70000010000000000000200 /* AdBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = B70000020000000000000200 /* AdBridge.swift */; };
+		B70000010000000000000201 /* QrScannerBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = B70000020000000000000201 /* QrScannerBridge.swift */; };
+		B70000010000000000000202 /* PhotoPickerBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = B70000020000000000000202 /* PhotoPickerBridge.swift */; };
+		B70000010000000000000400 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B70000020000000000000400 /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		B70000020000000000000001 /* LuckyLotteryApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuckyLotteryApp.swift; sourceTree = "<group>"; };
+		B70000020000000000000002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		B70000020000000000000200 /* AdBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdBridge.swift; sourceTree = "<group>"; };
+		B70000020000000000000201 /* QrScannerBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QrScannerBridge.swift; sourceTree = "<group>"; };
+		B70000020000000000000202 /* PhotoPickerBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPickerBridge.swift; sourceTree = "<group>"; };
+		B70000020000000000000003 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B70000020000000000000500 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
+		B70000020000000000000501 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
+		B70000020000000000000400 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B70000020000000000000010 /* iosApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iosApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B70000020000000000000100 /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
+		B70000020000000000000101 /* Color+Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Theme.swift"; sourceTree = "<group>"; };
+		B70000020000000000000102 /* LottoBall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottoBall.swift; sourceTree = "<group>"; };
+		B70000020000000000000103 /* CommonComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonComponents.swift; sourceTree = "<group>"; };
+		B70000020000000000000104 /* SplashScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreen.swift; sourceTree = "<group>"; };
+		B70000020000000000000105 /* LoginScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginScreen.swift; sourceTree = "<group>"; };
+		B70000020000000000000106 /* RegisterScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterScreen.swift; sourceTree = "<group>"; };
+		B70000020000000000000107 /* HomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreen.swift; sourceTree = "<group>"; };
+		B70000020000000000000108 /* MyNumberScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNumberScreen.swift; sourceTree = "<group>"; };
+		B70000020000000000000109 /* RandomNumberScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomNumberScreen.swift; sourceTree = "<group>"; };
+		B7000002000000000000010A /* RandomNumberGenerationScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomNumberGenerationScreen.swift; sourceTree = "<group>"; };
+		B7000002000000000000010B /* NotificationScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationScreen.swift; sourceTree = "<group>"; };
+		B7000002000000000000010C /* MyScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyScreen.swift; sourceTree = "<group>"; };
+		B7000002000000000000010D /* EditProfileScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileScreen.swift; sourceTree = "<group>"; };
+		B7000002000000000000010E /* WithdrawalScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithdrawalScreen.swift; sourceTree = "<group>"; };
+		B7000002000000000000010F /* SettingScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingScreen.swift; sourceTree = "<group>"; };
+		B70000020000000000000110 /* MainScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainScreen.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		B70000030000000000000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B7000000000000000000AD03 /* GoogleMobileAds in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		B70000040000000000000001 = {
+			isa = PBXGroup;
+			children = (
+				B70000040000000000000002 /* iosApp */,
+				B70000040000000000000003 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		B70000040000000000000002 /* iosApp */ = {
+			isa = PBXGroup;
+			children = (
+				B70000020000000000000001 /* LuckyLotteryApp.swift */,
+				B70000020000000000000002 /* ContentView.swift */,
+				B70000020000000000000200 /* AdBridge.swift */,
+				B70000020000000000000201 /* QrScannerBridge.swift */,
+				B70000020000000000000202 /* PhotoPickerBridge.swift */,
+				B70000020000000000000003 /* Info.plist */,
+				B70000020000000000000400 /* Assets.xcassets */,
+				B70000040000000000000010 /* Navigation */,
+				B70000040000000000000011 /* Extensions */,
+				B70000040000000000000012 /* Components */,
+				B70000040000000000000013 /* Screens */,
+				B70000040000000000000014 /* Configuration */,
+			);
+			path = iosApp;
+			sourceTree = "<group>";
+		};
+		B70000040000000000000014 /* Configuration */ = {
+			isa = PBXGroup;
+			children = (
+				B70000020000000000000500 /* Debug.xcconfig */,
+				B70000020000000000000501 /* Release.xcconfig */,
+			);
+			path = Configuration;
+			sourceTree = "<group>";
+		};
+		B70000040000000000000003 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B70000020000000000000010 /* iosApp.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B70000040000000000000010 /* Navigation */ = {
+			isa = PBXGroup;
+			children = (
+				B70000020000000000000100 /* AppRouter.swift */,
+			);
+			path = Navigation;
+			sourceTree = "<group>";
+		};
+		B70000040000000000000011 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				B70000020000000000000101 /* Color+Theme.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		B70000040000000000000012 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				B70000020000000000000102 /* LottoBall.swift */,
+				B70000020000000000000103 /* CommonComponents.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		B70000040000000000000013 /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				B70000040000000000000020 /* Splash */,
+				B70000040000000000000021 /* Login */,
+				B70000040000000000000022 /* Register */,
+				B70000040000000000000023 /* Home */,
+				B70000040000000000000024 /* Main */,
+				B70000040000000000000025 /* MyNumber */,
+				B70000040000000000000026 /* RandomNumber */,
+				B70000040000000000000027 /* RandomNumberGeneration */,
+				B70000040000000000000028 /* Notification */,
+				B70000040000000000000029 /* My */,
+				B7000004000000000000002A /* EditProfile */,
+				B7000004000000000000002B /* Withdrawal */,
+				B7000004000000000000002C /* Setting */,
+			);
+			path = Screens;
+			sourceTree = "<group>";
+		};
+		B70000040000000000000020 /* Splash */ = {
+			isa = PBXGroup;
+			children = (
+				B70000020000000000000104 /* SplashScreen.swift */,
+			);
+			path = Splash;
+			sourceTree = "<group>";
+		};
+		B70000040000000000000021 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				B70000020000000000000105 /* LoginScreen.swift */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
+		B70000040000000000000022 /* Register */ = {
+			isa = PBXGroup;
+			children = (
+				B70000020000000000000106 /* RegisterScreen.swift */,
+			);
+			path = Register;
+			sourceTree = "<group>";
+		};
+		B70000040000000000000023 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				B70000020000000000000107 /* HomeScreen.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		B70000040000000000000024 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				B70000020000000000000110 /* MainScreen.swift */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
+		B70000040000000000000025 /* MyNumber */ = {
+			isa = PBXGroup;
+			children = (
+				B70000020000000000000108 /* MyNumberScreen.swift */,
+			);
+			path = MyNumber;
+			sourceTree = "<group>";
+		};
+		B70000040000000000000026 /* RandomNumber */ = {
+			isa = PBXGroup;
+			children = (
+				B70000020000000000000109 /* RandomNumberScreen.swift */,
+			);
+			path = RandomNumber;
+			sourceTree = "<group>";
+		};
+		B70000040000000000000027 /* RandomNumberGeneration */ = {
+			isa = PBXGroup;
+			children = (
+				B7000002000000000000010A /* RandomNumberGenerationScreen.swift */,
+			);
+			path = RandomNumberGeneration;
+			sourceTree = "<group>";
+		};
+		B70000040000000000000028 /* Notification */ = {
+			isa = PBXGroup;
+			children = (
+				B7000002000000000000010B /* NotificationScreen.swift */,
+			);
+			path = Notification;
+			sourceTree = "<group>";
+		};
+		B70000040000000000000029 /* My */ = {
+			isa = PBXGroup;
+			children = (
+				B7000002000000000000010C /* MyScreen.swift */,
+			);
+			path = My;
+			sourceTree = "<group>";
+		};
+		B7000004000000000000002A /* EditProfile */ = {
+			isa = PBXGroup;
+			children = (
+				B7000002000000000000010D /* EditProfileScreen.swift */,
+			);
+			path = EditProfile;
+			sourceTree = "<group>";
+		};
+		B7000004000000000000002B /* Withdrawal */ = {
+			isa = PBXGroup;
+			children = (
+				B7000002000000000000010E /* WithdrawalScreen.swift */,
+			);
+			path = Withdrawal;
+			sourceTree = "<group>";
+		};
+		B7000004000000000000002C /* Setting */ = {
+			isa = PBXGroup;
+			children = (
+				B7000002000000000000010F /* SettingScreen.swift */,
+			);
+			path = Setting;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B70000050000000000000001 /* iosApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B70000070000000000000001 /* Build configuration list for PBXNativeTarget "iosApp" */;
+			buildPhases = (
+				B70000080000000000000001 /* Build Kotlin Framework */,
+				B70000060000000000000001 /* Sources */,
+				B70000030000000000000001 /* Frameworks */,
+				B700000C0000000000000001 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = iosApp;
+			packageProductDependencies = (
+				B7000000000000000000AD02 /* GoogleMobileAds */,
+			);
+			productName = iosApp;
+			productReference = B70000020000000000000010 /* iosApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B70000090000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1540;
+				LastUpgradeCheck = 1540;
+			};
+			buildConfigurationList = B70000070000000000000002 /* Build configuration list for PBXProject "iosApp" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = ko;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				ko,
+				Base,
+			);
+			mainGroup = B70000040000000000000001;
+			packageReferences = (
+				B7000000000000000000AD01 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
+			);
+			productRefGroup = B70000040000000000000003 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B70000050000000000000001 /* iosApp */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		B700000C0000000000000001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B70000010000000000000400 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		B70000080000000000000001 /* Build Kotlin Framework */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Build Kotlin Framework";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd \"$SRCROOT/..\"\n./gradlew :composeApp:embedAndSignAppleFrameworkForXcode\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B70000060000000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B70000010000000000000200 /* AdBridge.swift in Sources */,
+				B70000010000000000000201 /* QrScannerBridge.swift in Sources */,
+				B70000010000000000000202 /* PhotoPickerBridge.swift in Sources */,
+				B70000010000000000000001 /* LuckyLotteryApp.swift in Sources */,
+				B70000010000000000000002 /* ContentView.swift in Sources */,
+				B70000010000000000000100 /* AppRouter.swift in Sources */,
+				B70000010000000000000101 /* Color+Theme.swift in Sources */,
+				B70000010000000000000102 /* LottoBall.swift in Sources */,
+				B70000010000000000000103 /* CommonComponents.swift in Sources */,
+				B70000010000000000000104 /* SplashScreen.swift in Sources */,
+				B70000010000000000000105 /* LoginScreen.swift in Sources */,
+				B70000010000000000000106 /* RegisterScreen.swift in Sources */,
+				B70000010000000000000107 /* HomeScreen.swift in Sources */,
+				B70000010000000000000108 /* MyNumberScreen.swift in Sources */,
+				B70000010000000000000109 /* RandomNumberScreen.swift in Sources */,
+				B7000001000000000000010A /* RandomNumberGenerationScreen.swift in Sources */,
+				B7000001000000000000010B /* NotificationScreen.swift in Sources */,
+				B7000001000000000000010C /* MyScreen.swift in Sources */,
+				B7000001000000000000010D /* EditProfileScreen.swift in Sources */,
+				B7000001000000000000010E /* WithdrawalScreen.swift in Sources */,
+				B7000001000000000000010F /* SettingScreen.swift in Sources */,
+				B70000010000000000000110 /* MainScreen.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		B700000A0000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		B700000A0000000000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		B700000B0000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B70000020000000000000500 /* Debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SRCROOT)/../shared/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)",
+				);
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = iosApp/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "행운 복권";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					LuckyLotteryShared,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.junjange.luckylottery;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B700000B0000000000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B70000020000000000000501 /* Release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SRCROOT)/../shared/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)",
+				);
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = iosApp/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "행운 복권";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					LuckyLotteryShared,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.junjange.luckylottery;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		B70000070000000000000001 /* Build configuration list for PBXNativeTarget "iosApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B700000B0000000000000001 /* Debug */,
+				B700000B0000000000000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B70000070000000000000002 /* Build configuration list for PBXProject "iosApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B700000A0000000000000001 /* Debug */,
+				B700000A0000000000000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B7000000000000000000AD01 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B7000000000000000000AD02 /* GoogleMobileAds */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B7000000000000000000AD01 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
+			productName = GoogleMobileAds;
+		};
+/* End XCSwiftPackageProductDependency section */
+
+	};
+	rootObject = B70000090000000000000001 /* Project object */;
+}

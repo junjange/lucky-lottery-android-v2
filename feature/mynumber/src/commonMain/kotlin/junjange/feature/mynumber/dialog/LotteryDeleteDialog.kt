@@ -1,0 +1,80 @@
+package junjange.feature.mynumber.dialog
+
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import org.jetbrains.compose.resources.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import junjange.core.designsystem.theme.LottoTheme
+import junjange.feature.mynumber.resources.*
+import junjange.feature.mynumber.resources.button_done
+import junjange.feature.mynumber.resources.dialog_delete_message
+import junjange.feature.mynumber.resources.dialog_delete_title
+
+@Composable
+fun LotteryDeleteDialog(
+    onDismiss: () -> Unit,
+    okClick: () -> Unit,
+) {
+    Dialog(onDismissRequest = { onDismiss() }) {
+        LotteryDeleteDialogContent(okClick)
+    }
+}
+
+@Composable
+private fun LotteryDeleteDialogContent(okClick: () -> Unit) {
+    Surface(
+        modifier =
+            Modifier
+                .width(312.dp)
+                .height(200.dp),
+        shape = RoundedCornerShape(16.dp),
+        shadowElevation = 15.dp,
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
+    ) {
+        Column {
+            Text(
+                text = stringResource(Res.string.dialog_delete_title),
+                modifier = Modifier.padding(16.dp),
+                style = LottoTheme.typography.headline3,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+            Text(
+                text = stringResource(Res.string.dialog_delete_message),
+                modifier = Modifier.padding(horizontal = 16.dp),
+                style = LottoTheme.typography.body3,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Box(
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(bottom = 16.dp, end = 12.dp),
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(
+                    modifier =
+                        Modifier
+                            .align(Alignment.BottomEnd)
+                            .padding(18.dp)
+                            .clickable { okClick() },
+                    text = stringResource(Res.string.button_done),
+                    style = LottoTheme.typography.body2,
+                    color = MaterialTheme.colorScheme.primary,
+                )
+            }
+        }
+    }
+}

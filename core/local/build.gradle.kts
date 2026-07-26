@@ -1,45 +1,38 @@
 plugins {
-    id("junjange.core.module")
-    alias(libs.plugins.parcelize)
+    id("junjange.kotlin.multiplatform.library")
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.room)
 }
 
 android {
     namespace = "junjange.core.local"
-    compileSdk = Versions.COMPILE_SDK
+}
 
-    defaultConfig {
-        minSdk = Versions.MIN_SDK
+room {
+    schemaDirectory("$projectDir/schemas")
+}
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
-    }
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            implementation(project(":core:data"))
 
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro",
-            )
+            implementation(libs.room.runtime)
+            implementation(libs.sqlite.bundled)
+            implementation(libs.multiplatform.settings)
+        }
+
+        androidMain.dependencies {
+            implementation(libs.koin.android)
+            implementation(libs.core.ktx)
+            implementation(libs.work.runtime.ktx)
         }
     }
-    // Java/Kotlin options provided by convention plugin
 }
+
 dependencies {
-    implementation(project(Modules.CORE_DATA))
-    implementation(project(Modules.CORE_NOTIFICATION))
-
-    implementation(libs.bundles.kotlin)
-    implementation(libs.bundles.common)
-    implementation(libs.bundles.room)
-    implementation(libs.junit.ktx)
-
-    // WorkManager
-    implementation("androidx.work:work-runtime-ktx:2.9.0")
-    implementation("androidx.hilt:hilt-work:1.1.0")
-    ksp("androidx.hilt:hilt-compiler:1.1.0")
-
-    ksp(libs.ksp.hilt)
-    ksp(libs.room.compiler)
-    annotationProcessor(libs.room.compiler)
+    add("kspAndroid", libs.room.compiler)
+    add("kspIosX64", libs.room.compiler)
+    add("kspIosArm64", libs.room.compiler)
+    add("kspIosSimulatorArm64", libs.room.compiler)
 }

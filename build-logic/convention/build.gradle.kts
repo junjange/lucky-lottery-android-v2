@@ -21,31 +21,24 @@ kotlin {
 dependencies {
     implementation(libs.android.gradle.plugin)
     implementation(libs.kotlin.gradle.plugin)
+    implementation(libs.compose.multiplatform.gradle.plugin)
     compileOnly(libs.kotlinx.serialization)
     compileOnly(libs.compose.compiler.gradle.plugin)
 }
 
 gradlePlugin {
     plugins {
-        create("androidApplication") {
-            id = "junjange.android.application"
-            implementationClass = "junjange.build_logic.convention.AndroidApplicationConventionPlugin"
+        create("kotlinMultiplatform") {
+            id = "junjange.kotlin.multiplatform"
+            implementationClass = "junjange.build_logic.convention.KotlinMultiplatformConventionPlugin"
         }
-        create("androidLibrary") {
-            id = "junjange.android.library"
-            implementationClass = "junjange.build_logic.convention.AndroidLibraryConventionPlugin"
+        create("kotlinMultiplatformLibrary") {
+            id = "junjange.kotlin.multiplatform.library"
+            implementationClass = "junjange.build_logic.convention.KmpLibraryConventionPlugin"
         }
-        create("coreModule") {
-            id = "junjange.core.module"
-            implementationClass = "junjange.build_logic.convention.CoreModuleConventionPlugin"
-        }
-        create("featureModule") {
-            id = "junjange.feature.module"
-            implementationClass = "junjange.build_logic.convention.FeatureModuleConventionPlugin"
-        }
-        create("kotlinJvm") {
-            id = "junjange.kotlin.jvm"
-            implementationClass = "junjange.build_logic.convention.KotlinJvmConventionPlugin"
+        create("composeMultiplatform") {
+            id = "junjange.compose.multiplatform"
+            implementationClass = "junjange.build_logic.convention.ComposeMultiplatformConventionPlugin"
         }
     }
 }

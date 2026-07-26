@@ -1,0 +1,9 @@
+// Debug 빌드 설정 — Google 공식 테스트 광고 ID를 사용한다.
+// 값은 Info.plist를 통해 앱 번들로 전달되고, AdBridge.swift의 AdConfig가 읽는다.
+
+GAD_APPLICATION_IDENTIFIER = ca-app-pub-3940256099942544~1458002511
+BANNER_AD_UNIT_ID = ca-app-pub-3940256099942544/2934735716
+INTERSTITIAL_AD_UNIT_ID = ca-app-pub-3940256099942544/4411468910
+
+// 로컬에서만 다른 ID로 실험하려면 Ads.local.xcconfig(git 미추적)에 같은 키를 정의한다.
+#include? "Ads.local.xcconfig"

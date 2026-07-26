@@ -1,0 +1,146 @@
+import SwiftUI
+import LuckyLotteryShared
+
+/// SwiftUI 셸: TabView/NavigationStack(Liquid Glass) + .tint(브랜드그린).
+/// 탭 콘텐츠는 commonMain Compose 화면을 ComposeUIViewController로 embed한다.
+struct ContentView: View {
+    private enum Tab: Hashable {
+        case home, myNumber, randomNumber, setting
+    }
+
+    @SwiftUI.State private var showSplash = true
+    @SwiftUI.State private var selectedTab: Tab = .home
+    @SwiftUI.State private var myNumberPage: Int32 = 0
+    @SwiftUI.State private var myNumberEpoch = 0
+
+    var body: some View {
+        ZStack {
+            tabShell
+
+            if showSplash {
+                ComposeScreen {
+                    IosShellKt.splashViewController {
+                        withAnimation(.easeOut(duration: 0.3)) {
+                            showSplash = false
+                        }
+                    }
+                }
+                .ignoresSafeArea(.all)
+                .transition(.opacity)
+            }
+        }
+        .tint(Color.brandPrimary)
+    }
+
+    private var tabShell: some View {
+        TabView(selection: $selectedTab) {
+            ComposeScreen { IosShellKt.homeViewController() }
+                .ignoresSafeArea(.all)
+                .tabItem { Label("홈", image: "ic_home") }
+                .tag(Tab.home)
+
+            ComposeScreen { IosShellKt.myNumberViewController(initialPage: myNumberPage) }
+                .id(myNumberEpoch)
+                .ignoresSafeArea(.all)
+                .tabItem {
+                    Label("내 번호", image: selectedTab == .myNumber ? "ic_clover" : "ic_clover_outlined")
+                }
+                .tag(Tab.myNumber)
+
+            RandomNumberTab(
+                onSaved: { page in
+                    myNumberPage = Int32(page) ?? 0
+                    myNumberEpoch += 1
+                    selectedTab = .myNumber
+                }
+            )
+            .tabItem { Label("랜덤 번호", image: "ic_plus") }
+            .tag(Tab.randomNumber)
+
+            SettingTab()
+                .tabItem { Label("설정", image: "ic_settings") }
+                .tag(Tab.setting)
+        }
+    }
+}
+
+/// 랜덤 번호 탭: 목록(루트, 탭바 노출) → 번호 생성(fullScreenCover 전체화면).
+/// 생성 화면은 Android의 탭 밖 전체화면 라우트와 동일하게 하단 내비게이션 없이 뜬다.
+private struct RandomNumberTab: View {
+    let onSaved: (String) -> Void
+
+    @SwiftUI.State private var generationLottoType: String?
+
+    var body: some View {
+        ComposeScreen {
+            IosShellKt.randomNumberViewController(
+                navigateToGeneration: { lottoType in generationLottoType = lottoType }
+            )
+        }
+        .ignoresSafeArea(.all)
+        .fullScreenCover(isPresented: isGenerationPresented) {
+            ComposeScreen {
+                IosShellKt.randomNumberGenerationViewController(
+                    lottoType: generationLottoType ?? "",
+                    navigateToMyNumber: { page in
+                        generationLottoType = nil
+                        onSaved(page)
+                    },
+                    onBack: { generationLottoType = nil }
+                )
+            }
+            .ignoresSafeArea(.all)
+        }
+    }
+
+    private var isGenerationPresented: Binding<Bool> {
+        Binding(
+            get: { generationLottoType != nil },
+            set: { if !$0 { generationLottoType = nil } }
+        )
+    }
+}
+
+/// 설정 탭: 설정(루트) → 알림 설정(푸시).
+private struct SettingTab: View {
+    @SwiftUI.State private var showNotification = false
+
+    var body: some View {
+        NavigationStack {
+            ComposeScreen {
+                IosShellKt.settingViewController(
+                    navigateToNotification: { showNotification = true }
+                )
+            }
+            .ignoresSafeArea(.all)
+            .toolbar(.hidden, for: .navigationBar)
+            .navigationDestination(isPresented: $showNotification) {
+                ComposeScreen {
+                    IosShellKt.notificationViewController(onBack: { showNotification = false })
+                }
+                .ignoresSafeArea(.all)
+                .toolbar(.hidden, for: .navigationBar)
+                .toolbar(.hidden, for: .tabBar)
+            }
+        }
+    }
+}
+
+/// Compose 화면 embed용 래퍼.
+struct ComposeScreen: UIViewControllerRepresentable {
+    let factory: () -> UIViewController
+
+    init(factory: @escaping () -> UIViewController) {
+        self.factory = factory
+    }
+
+    func makeUIViewController(context: Context) -> UIViewController {
+        factory()
+    }
+
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {}
+}
+
+#Preview {
+    ContentView()
+}

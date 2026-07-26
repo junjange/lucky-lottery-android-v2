@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 다크 모드 브랜드 톤. Compose DarkColorScheme의 primary/onPrimary와 동일해야 한다. -->
+    <color name="brand_primary">#FF97D5A6</color>
+    <color name="brand_on_primary">#FF00391B</color>
+</resources>

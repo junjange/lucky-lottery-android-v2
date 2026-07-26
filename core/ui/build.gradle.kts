@@ -2,22 +2,22 @@ import java.io.FileInputStream
 import java.util.Properties
 
 plugins {
-    id("junjange.core.module")
+    id("junjange.compose.multiplatform")
 }
 
 val localPropertiesFile = rootProject.file("local.properties")
 val localProperties = Properties()
 localProperties.load(FileInputStream(localPropertiesFile))
 
-val fullScreenAdUnitId = localProperties.getProperty("FULL_SCREEN_AD_UNIT_ID") ?: ""
-val bannerAdUnitId = localProperties.getProperty("BANNER_AD_UNIT_ID") ?: ""
+val fullScreenAdUnitId = localProperties.getProperty("FULL_SCREEN_AD_UNIT_ID") ?: "\"\""
+val bannerAdUnitId = localProperties.getProperty("BANNER_AD_UNIT_ID") ?: "\"\""
 
 android {
     namespace = "junjange.core.ui"
-    compileSdk = Versions.COMPILE_SDK
+    compileSdk = libs.versions.compile.sdk.get().toInt()
 
     defaultConfig {
-        minSdk = Versions.MIN_SDK
+        minSdk = libs.versions.min.sdk.get().toInt()
 
         buildConfigField("String", "FULL_SCREEN_AD_UNIT_ID", fullScreenAdUnitId)
         buildConfigField("String", "BANNER_AD_UNIT_ID", bannerAdUnitId)
@@ -32,37 +32,29 @@ android {
             )
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
     buildFeatures {
-        compose = true
         buildConfig = true
     }
 }
 
-dependencies {
-    implementation(project(Modules.CORE_DESIGNSYSTEM))
-    implementation(project(Modules.CORE_NAVIGATION))
-    implementation(project(Modules.CORE_DOMAIN))
+compose.resources {
+    publicResClass = true
+    packageOfResClass = "junjange.core.ui.resources"
+    generateResClass = always
+}
 
-    implementation(platform(libs.compose.bom))
-    implementation(libs.bundles.android)
-    implementation(libs.bundles.compose)
-    implementation(libs.bundles.common)
-
-    // google
-    implementation(libs.bundles.google)
-
-    // ksp
-    ksp(libs.ksp.hilt)
-
-    debugImplementation(libs.compose.ui.test)
-    debugImplementation(libs.compose.ui.tooling.debug)
-
-    androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            api(projects.core.domain)
+            api(libs.coil3.compose)
+            implementation(libs.coil3.network.ktor3)
+        }
+        androidMain.dependencies {
+            implementation(projects.core.navigation)
+            implementation(libs.google.admob.ads)
+            implementation(libs.core.ktx)
+            implementation(libs.compose.navigation)
+        }
+    }
 }

@@ -1,9 +1,11 @@
 plugins {
-    id("junjange.kotlin.jvm")
+    id("junjange.kotlin.multiplatform")
 }
 
-dependencies {
-    implementation(libs.javax.inject)
-    // okhttp
-    implementation(libs.okhttp.core)
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            implementation(libs.ktor.client.core)
+        }
+    }
 }

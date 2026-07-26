@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 브랜드 시드 컬러. Compose 스킴의 BrandPrimary(#30AA5B)와 동일해야 한다. -->
+    <color name="brand_primary">#FF30AA5B</color>
+    <color name="brand_on_primary">#FFFFFFFF</color>
+
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+</resources>
