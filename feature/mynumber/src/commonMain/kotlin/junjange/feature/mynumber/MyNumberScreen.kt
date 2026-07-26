@@ -847,7 +847,7 @@ fun RowScope.TableCell(
             if (index == 1) {
                 Surface(
                     modifier = Modifier.size(30.dp),
-                    color = MaterialTheme.colorScheme.surfaceContainerHighest,
+                    color = MaterialTheme.colorScheme.surfaceContainerHigh,
                 ) {
                     Box(
                         modifier = Modifier.fillMaxSize(),
@@ -884,7 +884,7 @@ fun MyLotteryBall(
     lottoTitle: String,
     color: androidx.compose.ui.graphics.Color,
 ) {
-    val backgroundColor = if (isSuccess) color else MaterialTheme.colorScheme.surfaceContainerHighest
+    val backgroundColor = if (isSuccess) color else MaterialTheme.colorScheme.surfaceContainerHigh
     val textColor = if (isSuccess) androidx.compose.ui.graphics.Color.White else MaterialTheme.colorScheme.onSurface
 
     Surface(
@@ -921,12 +921,12 @@ fun MyPensionLotteryBall(
         if (isSuccess) {
             BorderStroke(
                 width = 4.dp,
-                color = if (index == null) MaterialTheme.colorScheme.surfaceContainerHighest else lotteryColors[index],
+                color = if (index == null) MaterialTheme.colorScheme.surfaceContainerHigh else lotteryColors[index],
             )
         } else {
             null
         }
-    val backgroundColor = if (isSuccess) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.surfaceContainerHighest
+    val backgroundColor = if (isSuccess) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.surfaceContainerHigh
     val textColor = MaterialTheme.colorScheme.onSurface
 
     Surface(
