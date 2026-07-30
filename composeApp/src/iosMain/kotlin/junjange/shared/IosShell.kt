@@ -77,11 +77,19 @@ fun homeViewController(): UIViewController =
         )
     }
 
-fun myNumberViewController(initialPage: Int): UIViewController =
+/**
+ * @param onChromeHidden 탭 바를 내려야 하는 상태인지. 삭제할 번호를 고르는 중이거나,
+ *   번호를 담는 전체 화면이 떠 있을 때 true가 온다.
+ */
+fun myNumberViewController(
+    initialPage: Int,
+    onChromeHidden: (Boolean) -> Unit,
+): UIViewController =
     themed {
         MyNumberScreen(
             viewModel = koinInject(),
             initialPage = initialPage,
+            onChromeHidden = onChromeHidden,
         )
     }
 

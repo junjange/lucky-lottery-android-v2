@@ -1,5 +1,12 @@
 package junjange.shared.navigation
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -101,6 +108,10 @@ fun LotteryNavHost(
         composable(
             route = Routes.RANDOM_GENERATION,
             arguments = listOf(navArgument("lottoType") { type = NavType.StringType }),
+            enterTransition = { slideInHorizontally(initialOffsetX = { it }) },
+            exitTransition = { slideOutHorizontally(targetOffsetX = { -it / 4 }) },
+            popEnterTransition = { slideInHorizontally(initialOffsetX = { -it / 4 }) },
+            popExitTransition = { slideOutHorizontally(targetOffsetX = { it }) },
         ) { backStackEntry ->
             val lottoType = backStackEntry.arguments?.read { getStringOrNull("lottoType") }.orEmpty()
             RandomNumberGenerationScreen(
@@ -116,7 +127,15 @@ fun LotteryNavHost(
             )
         }
 
-        composable(Routes.NOTIFICATION) {
+        // 뒤로 가기(←)로 빠져나가는 화면은 오른쪽에서 들어온다. 아래에서 올라오는 것은
+        // 닫기(X)로 빠져나가는 화면(번호 담기)의 방향이라 둘을 구분한다.
+        composable(
+            route = Routes.NOTIFICATION,
+            enterTransition = { slideInHorizontally(initialOffsetX = { it }) },
+            exitTransition = { slideOutHorizontally(targetOffsetX = { -it / 4 }) },
+            popEnterTransition = { slideInHorizontally(initialOffsetX = { -it / 4 }) },
+            popExitTransition = { slideOutHorizontally(targetOffsetX = { it }) },
+        ) {
             NotificationRoute(
                 viewModel = koinInject<NotificationViewModel>(),
                 finish = { navController.popBackStack() },
@@ -156,6 +175,11 @@ private fun MainTabs(
     var selectedTab by rememberSaveable(stateSaver = TabSaver) { mutableStateOf(Tab.HOME) }
     var myNumberInitialPage by rememberSaveable { mutableStateOf(0) }
 
+    // 탭 바를 내려야 하는 화면이 떠 있는지. 삭제 모드에서는 하단에 삭제 버튼만 남아야 하고,
+    // 번호를 담는 화면은 전체 화면이라 탭 바가 남아 있으면 아래가 두 겹이 되고
+    // 고르던 중에 다른 탭으로 새어나갈 수 있다.
+    var isChromeHidden by remember { mutableStateOf(false) }
+
     LaunchedEffect(requestedMyNumberPage) {
         requestedMyNumberPage ?: return@LaunchedEffect
         myNumberInitialPage = requestedMyNumberPage.toIntOrNull() ?: 0
@@ -166,20 +190,28 @@ private fun MainTabs(
     Scaffold(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         bottomBar = {
-            NavigationBar {
-                Tab.entries.forEach { tab ->
-                    val selected = selectedTab == tab
-                    NavigationBarItem(
-                        icon = {
-                            Icon(
-                                painter = painterResource(if (selected) tab.selectedIcon else tab.unselectedIcon),
-                                contentDescription = tab.label,
-                            )
-                        },
-                        label = { Text(tab.label) },
-                        selected = selected,
-                        onClick = { selectedTab = tab },
-                    )
+            AnimatedVisibility(
+                visible = !isChromeHidden,
+                // 아래로 미끄러져 나가면서 자리도 함께 접는다. 슬라이드만 주면 애니메이션이 끝나는
+                // 순간 비어 있던 자리가 한 번에 사라져 위 콘텐츠가 툭 내려앉는다.
+                enter = expandVertically() + slideInVertically(initialOffsetY = { it }),
+                exit = slideOutVertically(targetOffsetY = { it }) + shrinkVertically(),
+            ) {
+                NavigationBar {
+                    Tab.entries.forEach { tab ->
+                        val selected = selectedTab == tab
+                        NavigationBarItem(
+                            icon = {
+                                Icon(
+                                    painter = painterResource(if (selected) tab.selectedIcon else tab.unselectedIcon),
+                                    contentDescription = tab.label,
+                                )
+                            },
+                            label = { Text(tab.label) },
+                            selected = selected,
+                            onClick = { selectedTab = tab },
+                        )
+                    }
                 }
             }
         },
@@ -203,6 +235,7 @@ private fun MainTabs(
                     MyNumberScreen(
                         viewModel = koinInject(),
                         initialPage = myNumberInitialPage,
+                        onChromeHidden = { isChromeHidden = it },
                     )
 
                 Tab.RANDOM_NUMBER ->
