@@ -38,12 +38,15 @@ import org.jetbrains.compose.resources.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.collectAsState
-import junjange.core.designsystem.theme.BallNeutral
+import junjange.core.designsystem.theme.LottoSpacing
 import junjange.core.designsystem.theme.LottoTheme
-import junjange.core.designsystem.theme.lotteryColors
 import junjange.core.designsystem.theme.toLotteryColor
 import junjange.core.domain.model.LottoType
 import junjange.core.ui.component.LottoBall
+import junjange.core.ui.component.LottoBallLargeSize
+import junjange.core.ui.component.LottoBallPlaceholder
+import junjange.core.ui.component.LottoGroupChip
+import junjange.core.ui.component.LottoPensionBalls
 import junjange.core.ui.component.LottoRoundedCornerButton
 import junjange.core.ui.platform.PlatformAdBanner
 import junjange.feature.randomnumbergeneration.RandomNumberGenerationContract.*
@@ -180,66 +183,73 @@ fun RandomNumberGenerationContent(
         style = LottoTheme.typography.body1.copy(fontWeight = FontWeight.Bold),
     )
 
-    Spacer(modifier = Modifier.height(30.dp))
+    Spacer(modifier = Modifier.height(LottoSpacing.xxl))
 
+    // 이 화면의 주인공이므로 볼을 홈보다 크게 둔다.
     Row(
-        modifier = Modifier.padding(horizontal = 4.dp),
+        horizontalArrangement = Arrangement.spacedBy(LottoSpacing.sm),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (state.isLotto645) {
-            state.lotteryRandomNumbers?.let {
-                listOf(it.firstNum, it.secondNum, it.thirdNum, it.fourthNum, it.fifthNum, it.sixthNum)
-                    .forEach { number ->
-                        LottoBall(lottoType = LottoType.LOTTO645, lottoColor = number.toLotteryColor(), lottoTitle = number.toString())
-                        Spacer(modifier = Modifier.width(4.dp))
-                    }
-            } ?: run {
-                List(6) { 0 }.forEach { number ->
-                    LottoBall(lottoType = LottoType.LOTTO645, lottoColor = BallNeutral, lottoTitle = number.toString())
-                    Spacer(modifier = Modifier.width(4.dp))
+            val numbers =
+                state.lotteryRandomNumbers?.let {
+                    listOf(it.firstNum, it.secondNum, it.thirdNum, it.fourthNum, it.fifthNum, it.sixthNum)
+                }
+            if (numbers == null) {
+                repeat(6) { LottoBallPlaceholder(lottoTitle = "?", size = LottoBallLargeSize) }
+            } else {
+                numbers.forEach { number ->
+                    LottoBall(
+                        lottoType = LottoType.LOTTO645,
+                        lottoColor = number.toLotteryColor(),
+                        lottoTitle = number.toString(),
+                        size = LottoBallLargeSize,
+                    )
                 }
             }
         } else {
-            state.pensionLotteryRandom?.let {
-                listOf(it.pensionGroup, it.pensionFirstNum, it.pensionSecondNum, it.pensionThirdNum, it.pensionFourthNum, it.pensionFourthNum, it.pensionSixthNum)
-                    .forEachIndexed { index, s ->
-                        if (index == 1) {
-                            Spacer(modifier = Modifier.width(4.dp))
-                            Text(text = stringResource(Res.string.group_title), style = LottoTheme.typography.headline3)
-                            Spacer(modifier = Modifier.width(8.dp))
-                        }
-                        LottoBall(lottoType = LottoType.LOTTO720, lottoColor = lotteryColors[index], lottoTitle = s.toString())
-                        Spacer(modifier = Modifier.width(4.dp))
-                    }
-            } ?: run {
-                List(7) { 0 }.forEachIndexed { index, s ->
-                    if (index == 1) {
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text(text = stringResource(Res.string.group_title), style = LottoTheme.typography.headline3)
-                        Spacer(modifier = Modifier.width(8.dp))
-                    }
-                    LottoBall(lottoType = LottoType.LOTTO720, lottoColor = lotteryColors[index], lottoTitle = s.toString())
-                    Spacer(modifier = Modifier.width(4.dp))
+            val random = state.pensionLotteryRandom
+            if (random == null) {
+                LottoGroupChip(group = "?", height = LottoBallLargeSize)
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(LottoSpacing.xs),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    repeat(6) { LottoBallPlaceholder(lottoTitle = "?", size = LottoBallLargeSize) }
                 }
+            } else {
+                LottoPensionBalls(
+                    group = random.pensionGroup.toString(),
+                    numbers =
+                        listOf(
+                            random.pensionFirstNum,
+                            random.pensionSecondNum,
+                            random.pensionThirdNum,
+                            random.pensionFourthNum,
+                            random.pensionFifthNum,
+                            random.pensionSixthNum,
+                        ).map { it.toString() },
+                    size = LottoBallLargeSize,
+                )
             }
         }
     }
 
-    Spacer(modifier = Modifier.height(20.dp))
+    Spacer(modifier = Modifier.height(LottoSpacing.xxl))
 
     Row(
-        modifier = Modifier.padding(20.dp),
+        modifier = Modifier.padding(horizontal = LottoSpacing.screenHorizontal),
+        horizontalArrangement = Arrangement.spacedBy(LottoSpacing.md),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         LottoRoundedCornerButton(
-            modifier = Modifier.clip(shape = RoundedCornerShape(8.dp)).height(40.dp).width(140.dp),
+            modifier = Modifier.weight(1f).height(52.dp),
             buttonText = stringResource(Res.string.create_title),
             isEnabled = true,
             onClick = { onCreateClicked() },
         )
-        Spacer(modifier = Modifier.width(20.dp))
         LottoRoundedCornerButton(
-            modifier = Modifier.clip(shape = RoundedCornerShape(8.dp)).height(40.dp).width(140.dp),
+            modifier = Modifier.weight(1f).height(52.dp),
             buttonText = stringResource(Res.string.save_title),
             isEnabled = state.saveIsEnabled,
             onClick = { onSaveClicked() },
