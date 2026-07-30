@@ -2,18 +2,20 @@ package junjange.feature.randomnumbergeneration
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -24,7 +26,9 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -32,14 +36,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.collectAsState
+import junjange.core.designsystem.theme.LottoShapeTokens
 import junjange.core.designsystem.theme.LottoSpacing
-import junjange.core.designsystem.theme.LottoTheme
 import junjange.core.designsystem.theme.toLotteryColor
 import junjange.core.domain.model.LottoType
 import junjange.core.ui.component.LottoBall
@@ -47,7 +49,6 @@ import junjange.core.ui.component.LottoBallLargeSize
 import junjange.core.ui.component.LottoBallPlaceholder
 import junjange.core.ui.component.LottoGroupChip
 import junjange.core.ui.component.LottoPensionBalls
-import junjange.core.ui.component.LottoRoundedCornerButton
 import junjange.core.ui.platform.PlatformAdBanner
 import junjange.feature.randomnumbergeneration.RandomNumberGenerationContract.*
 import junjange.feature.randomnumbergeneration.resources.*
@@ -102,24 +103,72 @@ fun RandomNumberGenerationScreen(
         } else {
             stringResource(Res.string.lotto_720_title)
         }
+    val hasNumbers = state.lotteryRandomNumbers != null || state.pensionLotteryRandom != null
+
     Scaffold(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         topBar = {
-            TopAppBar(title = {
-                Text(
-                    text = title,
-                    style = LottoTheme.typography.headline3,
-                )
-            }, navigationIcon = {
-                IconButton(
-                    onClick = { viewModel.event(Event.Back) },
+            TopAppBar(
+                title = { Text(text = title, maxLines = 1) },
+                navigationIcon = {
+                    IconButton(onClick = { viewModel.event(Event.Back) }) {
+                        Icon(
+                            painter = painterResource(Res.drawable.ic_chevron_left),
+                            contentDescription = stringResource(Res.string.action_back),
+                        )
+                    }
+                },
+                // 번호 담기 화면과 같은 자리 나눔이다. 반복하는 동작은 하단 고정,
+                // 마지막 동작(저장)은 상단 오른쪽에 둔다.
+                actions = {
+                    TextButton(
+                        onClick = {
+                            if (state.isLotto645) {
+                                viewModel.event(Event.SaveLottery)
+                            } else {
+                                viewModel.event(Event.SavePensionLottery)
+                            }
+                        },
+                        enabled = state.saveIsEnabled,
+                    ) {
+                        Text(
+                            text = stringResource(Res.string.save_title),
+                            style = MaterialTheme.typography.titleMedium,
+                        )
+                    }
+                },
+            )
+        },
+        bottomBar = {
+            Surface(color = MaterialTheme.colorScheme.surface) {
+                Button(
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom))
+                            .padding(
+                                horizontal = LottoSpacing.screenHorizontal,
+                                vertical = LottoSpacing.md,
+                            ).height(56.dp),
+                    onClick = {
+                        if (state.isLotto645) {
+                            viewModel.event(Event.GenerateRandomLottery)
+                        } else {
+                            viewModel.event(Event.GenerateRandomPensionLottery)
+                        }
+                    },
+                    shape = LottoShapeTokens.button,
                 ) {
-                    Icon(
-                        painter = painterResource(Res.drawable.ic_chevron_left),
-                        contentDescription = null,
+                    Text(
+                        // 다시 누르면 지금 번호가 바뀐다는 것을 라벨로 알린다.
+                        text =
+                            stringResource(
+                                if (hasNumbers) Res.string.random_regenerate else Res.string.random_generate,
+                            ),
+                        style = MaterialTheme.typography.titleMedium,
                     )
                 }
-            })
+            }
         },
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState) { data ->
@@ -130,57 +179,39 @@ fun RandomNumberGenerationScreen(
             }
         },
     ) { innerPadding ->
-        Box(
+        Column(
             modifier =
                 Modifier
                     .fillMaxSize()
                     .padding(innerPadding),
         ) {
+            // 배너를 형제로 두어 자리를 차지하게 한다. 예전에는 본문과 같은 Box에 겹쳐 있어서
+            // 아무도 배너 자리를 비워두지 않았고, 내용이 길어지면 그 위를 덮었다.
             PlatformAdBanner(modifier = Modifier.fillMaxWidth())
+
             Column(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxWidth().weight(1f),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                RandomNumberGenerationContent(
-                    state = state,
-                    onCreateClicked = {
-                        if (state.isLotto645) {
-                            viewModel.event(Event.GenerateRandomLottery)
-                        } else {
-                            viewModel.event(Event.GenerateRandomPensionLottery)
-                        }
-                    },
-                    onSaveClicked = {
-                        if (state.isLotto645) {
-                            viewModel.event(Event.SaveLottery)
-                        } else {
-                            viewModel.event(Event.SavePensionLottery)
-                        }
-                    },
-                )
+                RandomNumberGenerationContent(state = state)
             }
         }
     }
 }
 
+/**
+ * 만들어진 번호를 보여주는 본문.
+ *
+ * 복권 이름은 상단 바가 이미 달고 있어서 본문에서 뺐다. 전체 화면 푸시라 상단 바가 늘 보이는데
+ * 같은 이름을 두 번 읽게 할 이유가 없다.
+ */
 @Composable
-fun RandomNumberGenerationContent(
-    state: State,
-    onCreateClicked: () -> Unit,
-    onSaveClicked: () -> Unit,
-) {
+fun RandomNumberGenerationContent(state: State) {
     Image(
         modifier = Modifier.size(140.dp),
         painter = painterResource(Res.drawable.ic_random_poster),
         contentDescription = null,
-    )
-
-    Spacer(modifier = Modifier.height(10.dp))
-
-    Text(
-        text = stringResource(if (state.isLotto645) Res.string.lotto_645_title else Res.string.lotto_720_title),
-        style = LottoTheme.typography.body1.copy(fontWeight = FontWeight.Bold),
     )
 
     Spacer(modifier = Modifier.height(LottoSpacing.xxl))
@@ -233,26 +264,5 @@ fun RandomNumberGenerationContent(
                 )
             }
         }
-    }
-
-    Spacer(modifier = Modifier.height(LottoSpacing.xxl))
-
-    Row(
-        modifier = Modifier.padding(horizontal = LottoSpacing.screenHorizontal),
-        horizontalArrangement = Arrangement.spacedBy(LottoSpacing.md),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        LottoRoundedCornerButton(
-            modifier = Modifier.weight(1f).height(52.dp),
-            buttonText = stringResource(Res.string.create_title),
-            isEnabled = true,
-            onClick = { onCreateClicked() },
-        )
-        LottoRoundedCornerButton(
-            modifier = Modifier.weight(1f).height(52.dp),
-            buttonText = stringResource(Res.string.save_title),
-            isEnabled = state.saveIsEnabled,
-            onClick = { onSaveClicked() },
-        )
     }
 }
