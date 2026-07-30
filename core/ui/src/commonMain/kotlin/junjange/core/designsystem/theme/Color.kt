@@ -23,8 +23,21 @@ val BrandPrimary = Color(0xFF30AA5B)
 /** 다크 모드용 브랜드 톤. 어두운 배경에서 대비를 확보하기 위해 밝게 조정한 값. */
 val DarkBrandPrimary = Color(0xFF97D5A6)
 
-// 기존 브랜드 팔레트(흰 배경/검정 텍스트/그레이 톤/그린·블루 포인트)를 M3 역할에 매핑.
-// 배경·서피스는 기존 룩 그대로, 포인트만 브랜드 컬러를 쓴다.
+// 뉴트럴 스케일.
+// 채도를 0으로 두지 않고 파랑을 약간 섞은 회색을 쓴다. 순회색은 값이 낮아질수록 탁해 보인다.
+private val Grey50 = Color(0xFFF9FAFB)
+private val Grey100 = Color(0xFFF2F4F6)
+private val Grey200 = Color(0xFFE5E8EB)
+private val Grey300 = Color(0xFFD1D6DB)
+private val Grey400 = Color(0xFFB0B8C1)
+private val Grey500 = Color(0xFF8B95A1)
+private val Grey600 = Color(0xFF6B7684)
+private val Grey700 = Color(0xFF4E5968)
+private val Grey800 = Color(0xFF333D4B)
+private val Grey900 = Color(0xFF191F28)
+
+// 뉴트럴만으로 위계를 만들고 색은 브랜드 그린 한 가지만 쓴다.
+// 서피스 계열은 "회색 캔버스 + 흰 카드" 구조 — surface가 배경, surfaceContainerLowest/Low가 카드다.
 val LightColorScheme =
     lightColorScheme(
         primary = BrandPrimary,
@@ -33,31 +46,41 @@ val LightColorScheme =
         // 하단 탭 선택 인디케이터(secondaryContainer)가 연한 톤으로 갈리지 않게 하기 위함.
         primaryContainer = BrandPrimary,
         onPrimaryContainer = Color(0xFFFFFFFF),
-        inversePrimary = Color(0xFF97D5A6),
+        inversePrimary = DarkBrandPrimary,
         secondary = BrandPrimary,
         onSecondary = Color(0xFFFFFFFF),
         secondaryContainer = BrandPrimary,
         onSecondaryContainer = Color(0xFFFFFFFF),
-        tertiary = Color(0xFF00668A),
+        tertiary = Grey700,
         onTertiary = Color(0xFFFFFFFF),
-        tertiaryContainer = Color(0xFFBFE9F6),
-        onTertiaryContainer = Color(0xFF001F26),
-        background = Color(0xFFF9F9F9),
-        onBackground = Color(0xFF1F2128),
-        surface = Color(0xFFF9F9F9),
-        onSurface = Color(0xFF1F2128),
-        surfaceVariant = Color(0xFFF5F5F5),
-        onSurfaceVariant = Color(0xFF757575),
-        inverseSurface = Color(0xFF313033),
-        inverseOnSurface = Color(0xFFF4F4F4),
-        outline = Color(0xFF9E9E9E),
-        outlineVariant = Color(0xFFBDBDBD),
+        tertiaryContainer = Grey100,
+        onTertiaryContainer = Grey800,
+        background = Grey100,
+        onBackground = Grey900,
+        surface = Grey100,
+        onSurface = Grey900,
+        surfaceVariant = Grey100,
+        onSurfaceVariant = Grey600,
+        inverseSurface = Grey900,
+        inverseOnSurface = Grey50,
+        outline = Grey400,
+        outlineVariant = Grey200,
         surfaceContainerLowest = Color(0xFFFFFFFF),
         surfaceContainerLow = Color(0xFFFFFFFF),
-        surfaceContainer = Color(0xFFF5F5F5),
-        surfaceContainerHigh = Color(0xFFEEEEEE),
-        surfaceContainerHighest = Color(0xFFE0E0E0),
+        surfaceContainer = Grey100,
+        surfaceContainerHigh = Grey200,
+        surfaceContainerHighest = Grey300,
     )
+
+// 다크 뉴트럴도 같은 원칙 — 캔버스가 가장 어둡고 카드가 한 단계 밝다.
+private val DarkGrey900 = Color(0xFF17171C)
+private val DarkGrey800 = Color(0xFF1F1F26)
+private val DarkGrey700 = Color(0xFF262630)
+private val DarkGrey600 = Color(0xFF2E2E3A)
+private val DarkGrey500 = Color(0xFF3A3A47)
+private val DarkGrey400 = Color(0xFF6B7280)
+private val DarkGrey200 = Color(0xFF9AA0A9)
+private val DarkGrey50 = Color(0xFFEDEDF0)
 
 val DarkColorScheme =
     darkColorScheme(
@@ -71,25 +94,25 @@ val DarkColorScheme =
         onSecondary = Color(0xFF00391B),
         secondaryContainer = DarkBrandPrimary,
         onSecondaryContainer = Color(0xFF00391B),
-        tertiary = Color(0xFF85CFF1),
-        onTertiary = Color(0xFF00344A),
-        tertiaryContainer = Color(0xFF004C69),
-        onTertiaryContainer = Color(0xFFBFE9F6),
-        background = Color(0xFF141414),
-        onBackground = Color(0xFFE4E4E4),
-        surface = Color(0xFF141414),
-        onSurface = Color(0xFFE4E4E4),
-        surfaceVariant = Color(0xFF3F3F3F),
-        onSurfaceVariant = Color(0xFFC6C6C6),
-        inverseSurface = Color(0xFFE4E4E4),
-        inverseOnSurface = Color(0xFF313131),
-        outline = Color(0xFF8F8F8F),
-        outlineVariant = Color(0xFF3F3F3F),
-        surfaceContainerLowest = Color(0xFF0E0E0E),
-        surfaceContainerLow = Color(0xFF1B1B1B),
-        surfaceContainer = Color(0xFF1F1F1F),
-        surfaceContainerHigh = Color(0xFF2A2A2A),
-        surfaceContainerHighest = Color(0xFF353535),
+        tertiary = DarkGrey200,
+        onTertiary = DarkGrey900,
+        tertiaryContainer = DarkGrey600,
+        onTertiaryContainer = DarkGrey50,
+        background = DarkGrey900,
+        onBackground = DarkGrey50,
+        surface = DarkGrey900,
+        onSurface = DarkGrey50,
+        surfaceVariant = DarkGrey700,
+        onSurfaceVariant = DarkGrey200,
+        inverseSurface = DarkGrey50,
+        inverseOnSurface = DarkGrey900,
+        outline = DarkGrey400,
+        outlineVariant = DarkGrey600,
+        surfaceContainerLowest = DarkGrey900,
+        surfaceContainerLow = DarkGrey800,
+        surfaceContainer = DarkGrey700,
+        surfaceContainerHigh = DarkGrey600,
+        surfaceContainerHighest = DarkGrey500,
     )
 
 val lotteryColors =
