@@ -1,5 +1,4 @@
 <resources>
-    <string name="notification_title">알림 설정</string>
     <string name="lotto_notification_title">로또6/45 알림</string>
     <string name="lotto_notification_description">매주 토요일 밤 9시 알림을 받을 수 있어요</string>
     <string name="pension_lotto_notification_title">연금복권720+ 알림</string>

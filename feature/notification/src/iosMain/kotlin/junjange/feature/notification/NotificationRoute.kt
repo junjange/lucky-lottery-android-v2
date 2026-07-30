@@ -20,13 +20,12 @@ import platform.darwin.dispatch_async
 import platform.darwin.dispatch_get_main_queue
 
 /**
- * NotificationScreen의 iOS 래퍼 — UNUserNotificationCenter 알림 인가를 담당한다.
+ * NotificationSection의 iOS 래퍼 — UNUserNotificationCenter 알림 인가를 담당한다.
  */
 @OptIn(ExperimentalForeignApi::class)
 @Composable
 actual fun NotificationRoute(
     viewModel: NotificationViewModel,
-    finish: () -> Unit,
 ) {
     var showPermissionSettingsDialog by remember { mutableStateOf(false) }
 
@@ -54,9 +53,8 @@ actual fun NotificationRoute(
         }
     }
 
-    NotificationScreen(
+    NotificationSection(
         viewModel = viewModel,
-        finish = finish,
         onRequestLottoNotification = {
             requestNotification { viewModel.setLottoNotification(true) }
         },

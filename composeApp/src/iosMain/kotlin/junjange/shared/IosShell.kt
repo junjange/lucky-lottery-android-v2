@@ -114,22 +114,17 @@ fun randomNumberGenerationViewController(
         )
     }
 
-fun settingViewController(navigateToNotification: () -> Unit): UIViewController =
+fun settingViewController(): UIViewController =
     themed {
         val settingActions = rememberSettingActions()
         SettingScreen(
             viewModel = koinInject<SettingViewModel>(),
-            navigateToNotification = { _, _ -> navigateToNotification() },
+            // 알림 권한 요청이 플랫폼마다 달라 셸이 래퍼를 넣어 준다.
+            notificationSection = {
+                NotificationRoute(viewModel = koinInject<NotificationViewModel>())
+            },
             onOpenUrl = settingActions.openUrl,
             onOpenReview = settingActions.openReview,
             versionName = settingActions.versionName,
-        )
-    }
-
-fun notificationViewController(onBack: () -> Unit): UIViewController =
-    themed {
-        NotificationRoute(
-            viewModel = koinInject<NotificationViewModel>(),
-            finish = onBack,
         )
     }

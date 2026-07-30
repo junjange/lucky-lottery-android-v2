@@ -17,17 +17,6 @@ class SettingViewModel
         private val _effect = Channel<SettingEffect>(Channel.BUFFERED)
         val effect get() = _effect.receiveAsFlow()
 
-        fun onClickedNotification() {
-            launch {
-                _effect.send(
-                    SettingEffect.NavigateToNotification(
-                        lottoNotificationState = uiState.value.lotteryNotificationStatus,
-                        pensionLottoNotificationState = uiState.value.pensionLotteryNotificationStatus,
-                    ),
-                )
-            }
-        }
-
         fun onClickedReview() {
             launch {
                 _effect.send(SettingEffect.NavigateToReview)

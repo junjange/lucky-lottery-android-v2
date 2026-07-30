@@ -67,7 +67,6 @@ object Routes {
     const val SPLASH = "splash"
     const val MAIN = "main"
     const val RANDOM_GENERATION = "random_generation/{lottoType}"
-    const val NOTIFICATION = "notification"
 
     fun randomGeneration(lottoType: String): String = "random_generation/$lottoType"
 }
@@ -101,7 +100,6 @@ fun LotteryNavHost(
                 onNavigateToRandomGeneration = { lottoType ->
                     navController.navigate(Routes.randomGeneration(lottoType.name))
                 },
-                onNavigateToNotification = { _, _ -> navController.navigate(Routes.NOTIFICATION) },
             )
         }
 
@@ -124,21 +122,6 @@ fun LotteryNavHost(
                     navController.popBackStack(Routes.MAIN, inclusive = false)
                 },
                 onBack = { navController.popBackStack() },
-            )
-        }
-
-        // 뒤로 가기(←)로 빠져나가는 화면은 오른쪽에서 들어온다. 아래에서 올라오는 것은
-        // 닫기(X)로 빠져나가는 화면(번호 담기)의 방향이라 둘을 구분한다.
-        composable(
-            route = Routes.NOTIFICATION,
-            enterTransition = { slideInHorizontally(initialOffsetX = { it }) },
-            exitTransition = { slideOutHorizontally(targetOffsetX = { -it / 4 }) },
-            popEnterTransition = { slideInHorizontally(initialOffsetX = { -it / 4 }) },
-            popExitTransition = { slideOutHorizontally(targetOffsetX = { it }) },
-        ) {
-            NotificationRoute(
-                viewModel = koinInject<NotificationViewModel>(),
-                finish = { navController.popBackStack() },
             )
         }
     }
@@ -170,7 +153,6 @@ private fun MainTabs(
     onMyNumberPageConsumed: () -> Unit,
     onLaunchQrScanner: (() -> Unit)?,
     onNavigateToRandomGeneration: (LottoType) -> Unit,
-    onNavigateToNotification: (lottoNotificationState: Boolean, pensionLottoNotificationState: Boolean) -> Unit,
 ) {
     var selectedTab by rememberSaveable(stateSaver = TabSaver) { mutableStateOf(Tab.HOME) }
     var myNumberInitialPage by rememberSaveable { mutableStateOf(0) }
@@ -248,7 +230,10 @@ private fun MainTabs(
                     val settingActions = junjange.feature.setting.rememberSettingActions()
                     SettingScreen(
                         viewModel = koinInject<SettingViewModel>(),
-                        navigateToNotification = onNavigateToNotification,
+                        // 알림 권한 요청이 플랫폼마다 달라 셸이 래퍼를 넣어 준다.
+                        notificationSection = {
+                            NotificationRoute(viewModel = koinInject<NotificationViewModel>())
+                        },
                         onOpenUrl = settingActions.openUrl,
                         onOpenReview = settingActions.openReview,
                         versionName = settingActions.versionName,

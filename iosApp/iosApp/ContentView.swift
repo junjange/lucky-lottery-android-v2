@@ -11,7 +11,6 @@ struct ContentView: View {
     /// 탭 밖 전체화면 목적지. Android `LotteryNavHost`가 탭(`MAIN`) 밖에 둔 라우트와 같은 것들이다.
     private enum Route: Hashable {
         case randomGeneration(lottoType: String)
-        case notification
     }
 
     @SwiftUI.State private var showSplash = true
@@ -87,11 +86,7 @@ struct ContentView: View {
             .tabItem { Label("랜덤 번호", image: "ic_plus") }
             .tag(Tab.randomNumber)
 
-            ComposeScreen {
-                IosShellKt.settingViewController(
-                    navigateToNotification: { path.append(.notification) }
-                )
-            }
+            ComposeScreen { IosShellKt.settingViewController() }
             .ignoresSafeArea(.all)
             .tabItem { Label("설정", image: "ic_settings") }
             .tag(Tab.setting)
@@ -116,13 +111,6 @@ struct ContentView: View {
                     },
                     onBack: { popRoute() }
                 )
-            }
-            .ignoresSafeArea(.all)
-            .toolbar(.hidden, for: .navigationBar)
-
-        case .notification:
-            ComposeScreen {
-                IosShellKt.notificationViewController(onBack: { popRoute() })
             }
             .ignoresSafeArea(.all)
             .toolbar(.hidden, for: .navigationBar)

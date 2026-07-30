@@ -26,12 +26,11 @@ private enum class NotificationType {
 }
 
 /**
- * NotificationScreen의 Android 래퍼 — POST_NOTIFICATIONS 런타임 권한 처리를 담당한다.
+ * NotificationSection의 Android 래퍼 — POST_NOTIFICATIONS 런타임 권한 처리를 담당한다.
  */
 @Composable
 actual fun NotificationRoute(
     viewModel: NotificationViewModel,
-    finish: () -> Unit,
 ) {
     val context = LocalContext.current
     val activity = LocalActivity.current
@@ -61,9 +60,8 @@ actual fun NotificationRoute(
         onPauseOrDispose {}
     }
 
-    NotificationScreen(
+    NotificationSection(
         viewModel = viewModel,
-        finish = finish,
         onRequestLottoNotification = {
             if (checkNotificationPermission(context)) {
                 viewModel.setLottoNotification(true)
