@@ -49,6 +49,8 @@ kotlin {
             api(projects.core.domain)
             api(libs.coil3.compose)
             implementation(libs.coil3.network.ktor3)
+            // 번호 담기 화면이 시스템 뒤로 가기(iOS는 왼쪽 엣지 스와이프)를 직접 받는다.
+            implementation(libs.compose.ui.backhandler)
         }
         androidMain.dependencies {
             implementation(libs.google.admob.ads)

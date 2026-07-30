@@ -1,6 +1,5 @@
 package junjange.core.ui.component
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,179 +7,241 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.Icon
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.unit.dp
-import junjange.core.designsystem.theme.LottoTheme
+import androidx.compose.ui.graphics.Color
+import junjange.core.designsystem.theme.LottoSpacing
 import junjange.core.designsystem.theme.lotteryColors
-import junjange.core.ui.resources.*
+import junjange.core.domain.model.LottoType
+import junjange.core.ui.resources.Res
+import junjange.core.ui.resources.add_number
+import junjange.core.ui.resources.create_title
+import junjange.core.ui.resources.enter_pension_lottery_number
+import junjange.core.ui.resources.lotto_entry_games_count
+import junjange.core.ui.resources.lotto_entry_max_games
+import junjange.core.ui.resources.lotto_entry_remove_game
+import junjange.core.ui.resources.pension_entry_group_label
+import junjange.core.ui.resources.pension_entry_guide
 import org.jetbrains.compose.resources.stringResource
 
-private class PensionLotteryEntryGame {
-    val numbers = mutableStateListOf("", "", "", "", "", "", "")
-    val focusRequesters = List(7) { FocusRequester() }
-}
+/** 조를 뺀 번호 자리 수. */
+private const val DIGITS_PER_GAME = 6
 
+/** 조는 1조부터 5조까지만 발행된다. */
+private const val GROUP_COUNT = 5
+
+/** 로또와 같은 상한. 게임 이름이 알파벳을 벗어나지 않는 26(A~Z)까지 담는다. */
+private const val MAX_GAMES = 26
+
+/**
+ * 키패드 열 수.
+ *
+ * 로또는 45개를 넣어야 해서 6열까지 좁혔지만 여기는 열 개뿐이라 좁힐 이유가 없다.
+ * 5열이면 360dp 화면에서 한 칸이 (320 − 4×4)/5 = 60.8dp라 48dp 키가 넉넉히 들어간다.
+ */
+private const val KEYPAD_COLUMNS = 5
+
+/** 로또 격자와 같은 간격을 써서 두 화면의 리듬을 맞춘다. */
+private val KeypadGap = LottoSpacing.xs
+
+/**
+ * 연금복권 번호 직접 담기.
+ *
+ * 로또와 같이 눌러서 담는다. 예전에는 조까지 포함한 일곱 칸에 타이핑하는 방식이었고 두 가지가 문제였다.
+ * 조 칸이 0~9를 다 받아놓고 저장할 때가 되어서야 "1~5를 입력해주세요"라고 거절했고,
+ * iOS 숫자 키패드에는 리턴 키가 없어 키보드를 내릴 방법이 없었다.
+ *
+ * 조는 1~5 세그먼트로 바꿔 유효하지 않은 값을 고를 수 없게 했고, 여섯 자리는 0~9 키패드로 채운다.
+ * 그래서 이 화면에도 키보드가 뜨지 않고, iOS 전용 완료 버튼(`inputAccessoryView`)을 위한
+ * `expect/actual`을 새로 뚫을 필요도 없어졌다.
+ *
+ * 자리를 누르면 커서만 옮겨오고, 키패드를 누르면 그 자리가 바뀐다. 로또와 같은 방식이다.
+ * 다만 연금복권 번호는 112233처럼 같은 숫자가 여러 자리에 올 수 있어서, 로또와 달리
+ * 중복을 막지 않고 그대로 덮어쓴다.
+ */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PensionLotteryNumberEntry(
+    onClose: () -> Unit,
     onSubmit: (List<List<String>>) -> Unit,
-    onInvalidGroup: () -> Unit,
 ) {
-    val games = remember { mutableStateListOf(PensionLotteryEntryGame()) }
-    val enabled = games.all { game -> game.numbers.all { it.isNotBlank() } }
-    var previousGameCount by remember { mutableIntStateOf(0) }
+    // 담기를 마친 게임들. 각 항목은 [조, 여섯 자리] 순서로, 저장 형식과 같게 보관한다.
+    val games = remember { mutableStateListOf<List<Int>>() }
 
-    LaunchedEffect(games.size) {
-        if (games.size > previousGameCount) {
-            games.last().focusRequesters[0].requestFocus()
-        }
-        previousGameCount = games.size
+    var group by remember { mutableStateOf<Int?>(null) }
+    val digits = remember { mutableStateListOf<Int?>(null, null, null, null, null, null) }
+
+    // 다음 숫자가 들어갈 자리.
+    var activeIndex by remember { mutableIntStateOf(0) }
+
+    val tapFeedback = rememberNumberTapFeedback()
+
+    val filledCount = digits.count { it != null }
+    val isPickingComplete = group != null && filledCount == DIGITS_PER_GAME
+    val completeGameCount = games.size + if (isPickingComplete) 1 else 0
+    val isFull = completeGameCount >= MAX_GAMES
+
+    fun currentGame(): List<Int> = listOf(group!!) + digits.map { it!! }
+
+    fun resetPicking() {
+        group = null
+        digits.indices.forEach { digits[it] = null }
+        activeIndex = 0
     }
 
-    Column(
-        modifier =
-            Modifier
-                .padding(horizontal = 20.dp)
-                .verticalScroll(rememberScrollState()),
+    NumberEntryScaffold(
+        title = stringResource(Res.string.enter_pension_lottery_number),
+        addLabel = stringResource(Res.string.add_number),
+        addEnabled = isPickingComplete && !isFull,
+        confirmLabel = stringResource(Res.string.create_title),
+        confirmEnabled = completeGameCount > 0,
+        // 담아 둔 게임뿐 아니라 고르는 중인 조·자리도 저장 전이므로 함께 센다.
+        hasUnsaved = games.isNotEmpty() || group != null || filledCount > 0,
+        onClose = onClose,
+        onAdd = {
+            games.add(currentGame())
+            resetPicking()
+        },
+        // 담기를 누르지 않고 바로 생성해도 지금 고른 게임을 함께 저장한다.
+        onConfirm = {
+            val result = games + if (isPickingComplete) listOf(currentGame()) else emptyList()
+            onSubmit(result.map { numbers -> numbers.map { it.toString() } })
+        },
     ) {
-        Text(
-            stringResource(Res.string.enter_pension_lottery_number),
-            style = LottoTheme.typography.headline3,
+        Spacer(modifier = Modifier.height(LottoSpacing.base))
+
+        // 안내는 화면을 열었을 때 가장 먼저 읽히도록 제목 바로 아래에 둔다.
+        EntryGuide(
+            text =
+                if (isFull) {
+                    stringResource(Res.string.lotto_entry_max_games)
+                } else {
+                    stringResource(Res.string.pension_entry_guide)
+                },
         )
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(LottoSpacing.xl))
 
-        games.forEachIndexed { gameIndex, game ->
-            key(game) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement =
-                        Arrangement.spacedBy(
-                            8.dp,
-                            Alignment.CenterHorizontally,
-                        ),
+        if (games.isNotEmpty()) {
+            EntrySectionLabel(text = stringResource(Res.string.lotto_entry_games_count, games.size))
+
+            games.forEachIndexed { index, numbers ->
+                CommittedGameRow(
+                    label = gameLabel(index),
+                    onRemove = { games.removeAt(index) },
+                    // 칩 높이를 옆 볼과 같게 맞춘다.
+                    leading = { LottoGroupChip(group = numbers.first().toString(), height = LottoBallDefaultSize) },
                 ) {
-                    for (i in game.numbers.indices) {
-                        if (i == 1) {
-                            Text(
-                                text = stringResource(Res.string.group_title),
-                                style = LottoTheme.typography.headline3,
-                            )
-                        }
-
-                        PensionLotteryBallTextField(
-                            value = game.numbers[i],
-                            onValueChange = { newValue ->
-                                if (newValue.isBlank() || (newValue.all { it.isDigit() } && newValue.toIntOrNull() in 0..9)) {
-                                    game.numbers[i] = newValue
-                                }
-                                if (game.numbers[i].length == 1 && i < 6) {
-                                    game.focusRequesters.getOrNull(i + 1)?.requestFocus()
-                                }
-                            },
-                            keyboardActions =
-                                KeyboardActions(
-                                    onDone = {
-                                        if (i < 6) {
-                                            game.focusRequesters.getOrNull(i + 1)?.requestFocus()
-                                        }
-                                    },
-                                ),
-                            color = lotteryColors[i],
-                            modifier = Modifier.focusRequester(game.focusRequesters[i]),
+                    numbers.drop(1).forEachIndexed { digitIndex, digit ->
+                        LottoBall(
+                            lottoType = LottoType.LOTTO720,
+                            lottoColor = lotteryColors[digitIndex + 1],
+                            lottoTitle = digit.toString(),
                         )
                     }
-
-                    Box(modifier = Modifier.size(24.dp)) {
-                        if (games.size > 1) {
-                            Icon(
-                                imageVector = Icons.Filled.Close,
-                                contentDescription = stringResource(Res.string.remove_number),
-                                tint = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant,
-                                modifier =
-                                    Modifier
-                                        .size(24.dp)
-                                        .clip(CircleShape)
-                                        .clickable { games.removeAt(gameIndex) },
-                            )
-                        }
-                    }
                 }
+            }
 
-                Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(LottoSpacing.xl))
+        }
+
+        EntrySectionLabel(text = stringResource(Res.string.pension_entry_group_label))
+
+        SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
+            repeat(GROUP_COUNT) { index ->
+                val value = index + 1
+                SegmentedButton(
+                    selected = group == value,
+                    onClick = {
+                        group = value
+                        tapFeedback(false)
+                    },
+                    shape = SegmentedButtonDefaults.itemShape(index = index, count = GROUP_COUNT),
+                    enabled = !isFull || group == value,
+                ) {
+                    Text(text = value.toString())
+                }
             }
         }
 
-        Row(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .clip(shape = RoundedCornerShape(8.dp))
-                    .clickable { games.add(PensionLotteryEntryGame()) }
-                    .padding(vertical = 8.dp),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Icon(
-                imageVector = Icons.Filled.Add,
-                contentDescription = null,
-                tint = androidx.compose.material3.MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(20.dp),
-            )
-            Spacer(modifier = Modifier.width(4.dp))
-            Text(
-                text = stringResource(Res.string.add_number),
-                style = LottoTheme.typography.body3,
-                color = androidx.compose.material3.MaterialTheme.colorScheme.primary,
-            )
+        Spacer(modifier = Modifier.height(LottoSpacing.base))
+
+        // 키패드와 같은 간격을 써서 여섯 자리가 키패드 열과 세로로 맞물리게 한다.
+        PickingSlots(count = DIGITS_PER_GAME, gap = KeypadGap) { index ->
+            val digit = digits[index]
+
+            PickingSlot(
+                isActive = activeIndex == index,
+                onClick = { activeIndex = index },
+            ) {
+                if (digit != null) {
+                    LottoBall(
+                        lottoType = LottoType.LOTTO720,
+                        lottoColor = lotteryColors[index + 1],
+                        lottoTitle = digit.toString(),
+                        size = LottoBallLargeSize,
+                    )
+                } else {
+                    LottoBallPlaceholder(lottoTitle = "", size = LottoBallLargeSize)
+                }
+            }
         }
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(LottoSpacing.base))
 
-        LottoRoundedCornerButton(
-            modifier =
-                Modifier
-                    .clip(shape = RoundedCornerShape(8.dp))
-                    .height(40.dp)
-                    .fillMaxWidth(),
-            buttonText = stringResource(Res.string.create_title),
-            isEnabled = enabled,
-            onClick = {
-                if (enabled) {
-                    if (games.all { it.numbers.first().toInt() in 1..5 }) {
-                        onSubmit(games.map { it.numbers.toList() })
-                    } else {
-                        onInvalidGroup()
-                    }
-                }
+        DigitKeypad(
+            enabled = !isFull,
+            onDigit = { digit ->
+                // 로또의 writeAt과 달리 맞바꾸지 않는다. 같은 숫자가 여러 자리에 올 수 있다.
+                digits[activeIndex] = digit
+                activeIndex = digits.indexOfFirst { it == null }.takeIf { it >= 0 } ?: activeIndex
+                tapFeedback(group != null && digits.all { it != null })
             },
         )
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(LottoSpacing.base))
+    }
+}
+
+/** 0~9 키패드. 로또 격자와 같은 칸 크기·같은 간격을 쓴다. */
+@Composable
+private fun DigitKeypad(
+    enabled: Boolean,
+    onDigit: (Int) -> Unit,
+) {
+    Column(verticalArrangement = Arrangement.spacedBy(KeypadGap)) {
+        (0..9).chunked(KEYPAD_COLUMNS).forEach { row ->
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(KeypadGap),
+            ) {
+                row.forEach { digit ->
+                    Box(
+                        modifier = Modifier.weight(1f).height(LottoSpacing.minTouchTarget),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        NumberCell(
+                            text = digit.toString(),
+                            isPicked = false,
+                            enabled = enabled,
+                            pickedColor = Color.Transparent,
+                            onClick = { onDigit(digit) },
+                        )
+                    }
+                }
+            }
+        }
     }
 }

@@ -26,6 +26,8 @@ kotlin {
             implementation(projects.core.domain)
             implementation(projects.core.ui)
             implementation(projects.core.ocr)
+            // 번호 담기 화면·삭제 모드에서 시스템 뒤로 가기를 가로챈다.
+            implementation(libs.compose.ui.backhandler)
         }
         androidMain.dependencies {
             implementation(libs.image.cropper)
