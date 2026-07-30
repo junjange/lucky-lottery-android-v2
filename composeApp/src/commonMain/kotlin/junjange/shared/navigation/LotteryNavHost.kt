@@ -12,8 +12,10 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,12 +36,9 @@ import androidx.savedstate.read
 import junjange.core.domain.model.LottoType
 import junjange.core.ui.resources.Res
 import junjange.core.ui.resources.ic_clover
-import junjange.core.ui.resources.ic_clover_outlined
 import junjange.core.ui.resources.ic_home
-import junjange.core.ui.resources.ic_home_outlined
 import junjange.core.ui.resources.ic_plus
 import junjange.core.ui.resources.ic_settings
-import junjange.core.ui.resources.ic_settings_outlined
 import junjange.feature.home.HomeScreen
 import junjange.feature.home.HomeViewModel
 import junjange.feature.mynumber.MyNumberScreen
@@ -129,15 +128,21 @@ fun LotteryNavHost(
 
 private const val KEY_MY_NUMBER_PAGE = "myNumberPage"
 
+/**
+ * 하단 탭.
+ *
+ * 아이콘은 고르든 안 고르든 채워진 모양 하나만 쓴다. 예전에는 안 고른 탭에 윤곽선 아이콘을
+ * 썼는데, 색까지 흐린 회색이라 무엇인지 알아보기 어려웠다. 모양을 한 가지로 두고
+ * 고른 탭만 브랜드 색으로 칠하면 지금 어디에 있는지가 색 하나로 분명해진다.
+ */
 private enum class Tab(
     val label: String,
-    val selectedIcon: DrawableResource,
-    val unselectedIcon: DrawableResource,
+    val icon: DrawableResource,
 ) {
-    HOME("홈", Res.drawable.ic_home, Res.drawable.ic_home_outlined),
-    MY_NUMBER("내 번호", Res.drawable.ic_clover, Res.drawable.ic_clover_outlined),
-    RANDOM_NUMBER("랜덤 번호", Res.drawable.ic_plus, Res.drawable.ic_plus),
-    SETTING("설정", Res.drawable.ic_settings, Res.drawable.ic_settings_outlined),
+    HOME("홈", Res.drawable.ic_home),
+    MY_NUMBER("내 번호", Res.drawable.ic_clover),
+    RANDOM_NUMBER("랜덤 번호", Res.drawable.ic_plus),
+    SETTING("설정", Res.drawable.ic_settings),
 }
 
 /** 열거형은 KMP 공통 코드에서 자동 저장 대상이 아니라 이름 문자열로 저장한다. */
@@ -183,9 +188,16 @@ private fun MainTabs(
                     Tab.entries.forEach { tab ->
                         val selected = selectedTab == tab
                         NavigationBarItem(
+                            // 고르지 않은 탭도 검게 둔다. 기본값인 onSurfaceVariant(#6B7684)는
+                            // 네잎클로버처럼 선이 얇은 아이콘에서 흐릿하게 뭉쳐 보인다.
+                            colors =
+                                NavigationBarItemDefaults.colors(
+                                    unselectedIconColor = MaterialTheme.colorScheme.onSurface,
+                                    unselectedTextColor = MaterialTheme.colorScheme.onSurface,
+                                ),
                             icon = {
                                 Icon(
-                                    painter = painterResource(if (selected) tab.selectedIcon else tab.unselectedIcon),
+                                    painter = painterResource(tab.icon),
                                     contentDescription = tab.label,
                                 )
                             },

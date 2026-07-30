@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 import LuckyLotteryShared
 
 /// SwiftUI 셸: TabView/NavigationStack(Liquid Glass) + .tint(브랜드그린).
@@ -21,6 +22,15 @@ struct ContentView: View {
     /// 번호를 담는 전체 화면이 떠 있을 때. 이때는 탭 바를 내려 하단을 그 화면에 넘긴다.
     @SwiftUI.State private var myNumberChromeHidden = false
     @SwiftUI.State private var path: [Route] = []
+
+    init() {
+        // 고르지 않은 탭도 검게 둔다. 기본 회색은 네잎클로버처럼 선이 얇은 아이콘에서
+        // 흐릿하게 뭉쳐 보인다. `.label`이라 라이트에서 검정, 다크에서 흰색이 된다.
+        //
+        // `standardAppearance`를 새로 만들어 넣지 않는다. 그러면 배경까지 함께 지정되어
+        // iOS 26 탭 바의 Liquid Glass가 벗겨진다. 이 속성은 아이템 색만 건드린다.
+        UITabBar.appearance().unselectedItemTintColor = .label
+    }
 
     var body: some View {
         ZStack {
@@ -70,9 +80,9 @@ struct ContentView: View {
             .id(myNumberEpoch)
             .ignoresSafeArea(.all)
             .toolbar(myNumberChromeHidden ? .hidden : .visible, for: .tabBar)
-            .tabItem {
-                Label("내 번호", image: selectedTab == .myNumber ? "ic_clover" : "ic_clover_outlined")
-            }
+            // 다른 탭과 같이 채워진 아이콘 하나만 쓴다. 안 고른 탭에 윤곽선 아이콘을 쓰면
+            // 색까지 흐려져 무엇인지 알아보기 어렵다. 고른 탭은 브랜드 색이 알려 준다.
+            .tabItem { Label("내 번호", image: "ic_clover") }
             .tag(Tab.myNumber)
 
             ComposeScreen {
