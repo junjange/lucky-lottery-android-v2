@@ -72,6 +72,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import junjange.core.designsystem.components.ErrorRetryScreen
 import junjange.core.designsystem.theme.LottoShapeTokens
 import junjange.core.designsystem.theme.LottoShapes
@@ -184,10 +185,19 @@ fun MyNumberScreen(
         onDispose { onChromeHidden(false) }
     }
 
-    // 탭 재진입/저장 복귀 시 최신 목록으로 갱신
-    LaunchedEffect(Unit) {
+    // 화면이 다시 보일 때마다 갱신한다.
+    //
+    // LaunchedEffect(Unit)로는 첫 컴포지션에서 한 번만 돌았다. iOS에서 탭 콘텐츠는 SwiftUI가
+    // 살려 두므로, 랜덤 생성 화면에서 저장한 뒤 뒤로 가기로 나와 이 탭으로 돌아오면
+    // 컴포지션이 그대로 남아 있어 목록이 갱신되지 않았다(당겨서 새로고침해야 보였다).
+    // 저장 후 스낵바의 '번호 확인'으로 올 때만 셸이 화면을 다시 만들어 갱신됐다.
+    //
+    // CMP의 Lifecycle은 뷰 컨트롤러의 viewWillAppear를 따르므로 탭이 다시 보이는 순간
+    // RESUMED가 온다. Android도 같은 신호를 쓴다.
+    LifecycleResumeEffect(Unit) {
         viewModel.event(RefreshLottery)
         viewModel.event(RefreshPensionLottery)
+        onPauseOrDispose {}
     }
 
     LaunchedEffect(Unit) {
