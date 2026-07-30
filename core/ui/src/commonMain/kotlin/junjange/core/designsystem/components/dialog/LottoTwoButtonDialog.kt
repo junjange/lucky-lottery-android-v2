@@ -20,6 +20,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import junjange.core.designsystem.theme.LottoTheme
 
+/**
+ * 확인·취소 두 갈래 대화상자.
+ *
+ * 삭제처럼 되돌릴 수 없는 동작에도 확인 버튼 색을 바꾸지 않는다. 무엇이 일어나는지는 제목과
+ * 본문이 말하고, 앱 안의 확인 버튼은 한 가지 색으로 두는 편이 덜 낯설다.
+ */
 @Composable
 fun LottoTwoButtonDialog(
     title: String,
