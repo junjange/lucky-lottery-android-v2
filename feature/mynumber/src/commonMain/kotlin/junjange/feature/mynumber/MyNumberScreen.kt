@@ -67,6 +67,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.backhandler.BackHandler
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextAlign
@@ -775,10 +776,10 @@ fun MyLotteryNumber(
                         lotteryGetNumber.fifthNum,
                         lotteryGetNumber.sixthNum,
                     )
-                // 볼 여섯 개는 한 덩어리로 묶어 안쪽 간격을 따로 준다. 행 간격을 그대로 쓰면
-                // 360dp 화면(카드 안쪽 280dp)에서 284dp가 되어 마지막 볼이 잘린다.
+                // 볼 여섯 개는 한 덩어리로 묶어 안쪽 간격을 따로 준다.
+                // 360dp 기준 폭: 등수 52 + 행 간격 4 + (볼 30×6 + 간격 8×5) = 276dp ≤ 카드 안쪽 280dp.
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(LottoSpacing.xs),
+                    horizontalArrangement = Arrangement.spacedBy(LottoSpacing.sm),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     numbers.forEachIndexed { index, number ->
@@ -949,8 +950,10 @@ fun MyPensionLotteryNumber(
                         pensionLotteryNumber.sixthNum,
                     ).map { it.toString() }
 
+                // 360dp 기준 폭: 등수 52 + 4 + 조 칩 40 + 4 + (볼 26×6 + 간격 4×5) = 276dp.
+                // 조 칩까지 들어가는 행이라 앱에서 가장 빠듯하다. 6/45 행의 절반인 4dp가 상한이다.
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(LottoSpacing.xxs),
+                    horizontalArrangement = Arrangement.spacedBy(LottoSpacing.xs),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     numbers.forEachIndexed { index, title ->
@@ -1010,7 +1013,8 @@ private fun SavedNumberRow(
 ) {
     Surface(
         modifier =
-            Modifier.fillMaxWidth().then(
+            // 잘라 두지 않으면 리플이 둥근 모서리를 넘어 각진 사각형으로 번진다.
+            Modifier.fillMaxWidth().clip(LottoShapes.small).then(
                 if (isDeleteMode) {
                     Modifier.toggleable(
                         value = checked,
@@ -1098,8 +1102,14 @@ private fun RankBadge(rank: String?) {
     }
 }
 
-/** 등수 배지 자리 폭. "미발표"가 가장 긴 값이라 여기에 맞춘다. */
-private val RankSlotWidth = 56.dp
+/**
+ * 등수 배지 자리 폭.
+ *
+ * "미발표"가 가장 긴 값이다. labelMedium(12sp) 세 글자 36dp에 배지 좌우 여백 8dp씩을 더한 52dp가
+ * 정확한 크기다. 삭제 모드에 들어가는 체크박스(48dp)도 이 안에 들어간다.
+ * 예전 56dp는 4dp가 남는 자리였고, 그만큼 오른쪽 볼 사이 간격을 못 벌리고 있었다.
+ */
+private val RankSlotWidth = 52.dp
 
 /** 저장한 6/45 번호 볼 크기. 두 자리 숫자가 들어가므로 연금복권보다 크다. */
 private val SavedBallSize = 30.dp

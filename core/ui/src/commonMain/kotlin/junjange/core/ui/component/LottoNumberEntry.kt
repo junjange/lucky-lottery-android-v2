@@ -26,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextAlign
@@ -67,8 +68,13 @@ private const val MAX_GAMES = 26
  */
 private const val GRID_COLUMNS = 6
 
-/** 격자 원 지름. 한 칸 50dp 안에서 좌우 여유를 남기는 크기. */
-private val GridBallSize = 44.dp
+/**
+ * 담기 화면의 볼 지름.
+ *
+ * 격자 칸(50dp)과 고른 자리(48dp) 양쪽에서 좌우 여유를 남기는 크기다. 두 줄이 같은 크기를 써야
+ * 격자에서 고른 것이 위로 그대로 옮겨간 것으로 읽힌다.
+ */
+internal val EntryBallSize = 44.dp
 
 /** 격자 한 행의 높이. 원보다 크게 잡아 세로 터치 여유를 남긴다. */
 private val GridRowHeight = LottoSpacing.minTouchTarget
@@ -171,8 +177,7 @@ fun LottoNumberEntry(
             Spacer(modifier = Modifier.height(LottoSpacing.xl))
         }
 
-        // 격자와 같은 간격을 써서 여섯 자리가 격자 여섯 열과 세로로 맞물리게 한다.
-        PickingSlots(count = NUMBERS_PER_GAME, gap = GridGap) { index ->
+        PickingSlots(count = NUMBERS_PER_GAME) { index ->
             val number = picks[index]
 
             PickingSlot(
@@ -184,10 +189,10 @@ fun LottoNumberEntry(
                         lottoType = LottoType.LOTTO645,
                         lottoColor = number.toLotteryColor(),
                         lottoTitle = number.toString(),
-                        size = LottoBallLargeSize,
+                        size = EntryBallSize,
                     )
                 } else {
-                    LottoBallPlaceholder(lottoTitle = "", size = LottoBallLargeSize)
+                    LottoBallPlaceholder(lottoTitle = "", size = EntryBallSize)
                 }
             }
         }
@@ -244,8 +249,8 @@ internal fun EntrySectionLabel(text: String) {
 /**
  * 담기를 마친 게임 한 줄.
  *
- * 360dp 기준 폭: 라벨 24 + (볼 30×6 + 간격 4×5) + 간격 8×2 + 지우기 48 = 288dp ≤ 320dp.
- * 연금복권은 라벨 대신 조 칩이 들어가고 그쪽이 44dp라 308dp가 된다.
+ * 360dp 기준 폭: 라벨 24 + 간격 8 + (볼 30×6 + 간격 8×5) + 간격 8 + 지우기 48 = 308dp ≤ 320dp.
+ * 연금복권은 라벨 대신 40dp 조 칩이 들어가지만 볼이 26dp라 300dp로 더 여유가 있다.
  */
 @Composable
 internal fun CommittedGameRow(
@@ -271,8 +276,7 @@ internal fun CommittedGameRow(
             )
         }
 
-        // 볼은 한 덩어리로 묶어 안쪽 간격을 따로 준다. 행 간격 8dp를 그대로 쓰면 폭이 모자란다.
-        Row(horizontalArrangement = Arrangement.spacedBy(LottoSpacing.xs)) {
+        Row(horizontalArrangement = Arrangement.spacedBy(LottoSpacing.sm)) {
             balls()
         }
 
@@ -291,23 +295,26 @@ internal fun CommittedGameRow(
 /**
  * 지금 고르고 있는 자리들.
  *
- * 폭을 48dp로 못 박으면 48×6 + 간격 8×5 = 328dp라 360dp 화면의 가용 폭 320dp를 넘는다.
- * 남는 폭을 나눠 갖게 두면 360dp에서 49.3dp, 320dp에서도 43dp가 되어 36dp 볼이 들어간다.
+ * 자리 폭을 최소 터치 크기로 못 박고 줄 전체를 가운데로 모은다. 예전에는 남는 폭을 여섯이
+ * 나눠 갖게 두고 그 안에 36dp 볼을 넣었는데, 자리가 50dp까지 늘어나 볼 사이가 18dp로 벌어졌다.
+ * 아래 격자가 10dp인데 이 줄만 두 배여서 같은 화면 안에서 리듬이 어긋났다.
+ *
+ * 360dp 기준 폭: 48×6 + 간격 4×5 = 308dp ≤ 320dp. 볼이 44dp라 볼 사이는 8dp가 된다.
  */
 @Composable
 internal fun PickingSlots(
     count: Int,
-    gap: Dp = LottoSpacing.sm,
+    gap: Dp = LottoSpacing.xs,
     slot: @Composable (Int) -> Unit,
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(gap),
+        horizontalArrangement = Arrangement.spacedBy(gap, Alignment.CenterHorizontally),
     ) {
         repeat(count) { index ->
             Box(
-                modifier = Modifier.weight(1f).height(LottoSpacing.minTouchTarget),
+                modifier = Modifier.size(LottoSpacing.minTouchTarget),
                 contentAlignment = Alignment.Center,
             ) {
                 slot(index)
@@ -333,6 +340,8 @@ internal fun PickingSlot(
         modifier =
             Modifier
                 .size(LottoSpacing.minTouchTarget)
+                // 잘라 두지 않으면 리플이 48dp 정사각형으로 번져 안에 든 볼과 모양이 어긋난다.
+                .clip(CircleShape)
                 .then(
                     if (isActive) {
                         Modifier.border(
@@ -406,7 +415,7 @@ private fun NumberGrid(
                             isPicked = picks.contains(number),
                             enabled = enabled,
                             pickedColor = number.toLotteryColor(),
-                            size = GridBallSize,
+                            size = EntryBallSize,
                             onClick = { onNumberTap(number) },
                         )
                     }
@@ -432,6 +441,9 @@ internal fun NumberCell(
         modifier =
             Modifier
                 .size(size)
+                // Surface에 넘긴 modifier가 Surface 안쪽 clip보다 바깥에 놓여서, 여기서 잘라 두지 않으면
+                // 리플이 원을 벗어나 정사각형으로 번진다. 누름 표시를 담을 모양을 먼저 정한다.
+                .clip(CircleShape)
                 .toggleable(
                     value = isPicked,
                     enabled = enabled,

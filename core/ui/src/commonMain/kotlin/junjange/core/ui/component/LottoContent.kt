@@ -53,8 +53,11 @@ val pensionBallColors =
 /**
  * 조 칩 폭. 당첨행("1조")과 보너스행("각조")의 글자 폭이 달라도 아래위 볼이 같은 x에서 시작하도록
  * 폭을 고정한다. 폭을 내용에 맡기면 두 줄의 볼 간격과 시작 위치가 서로 어긋난다.
+ *
+ * 들어가는 글자는 항상 두 자다. titleSmall(14sp) 두 글자가 28dp라 좌우 6dp씩 남는다.
+ * 예전 44dp는 그만큼이 그냥 빈 자리였고, 연금복권 행은 그 4dp 때문에 볼 사이를 못 벌리고 있었다.
  */
-private val GroupChipWidth = 44.dp
+private val GroupChipWidth = 40.dp
 
 /**
  * 번호 한 줄과 그 아래 이름표.
@@ -105,6 +108,8 @@ private fun NumberCaption(text: String) {
  *
  * 볼은 [LottoBallDefaultSize]를 쓴다. 여섯 개 + '+' + 보너스 + 이름표가 한 줄에 들어가야 해서
  * 카드 폭에 여유를 남기려면 이 크기가 상한이다.
+ *
+ * 360dp 기준 폭: 볼 30×6 + 간격 8×5 + '+'(14+4×2) + 보너스 30 = 272dp ≤ 카드 안쪽 280dp.
  */
 @Composable
 fun Lotto645WinningSection(
@@ -119,7 +124,7 @@ fun Lotto645WinningSection(
         verticalAlignment = Alignment.Top,
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Row(horizontalArrangement = Arrangement.spacedBy(LottoSpacing.xs)) {
+            Row(horizontalArrangement = Arrangement.spacedBy(LottoSpacing.sm)) {
                 numbers.forEach { number ->
                     LottoBall(
                         lottoType = LottoType.LOTTO645,
@@ -167,18 +172,23 @@ fun Lotto645WinningSection(
 /**
  * 조 칩 + 연금복권 번호 여섯 개.
  *
- * 6/45보다 볼이 하나 많고 앞에 칩까지 붙어서 폭이 가장 빠듯한 행이다.
- * 볼 사이는 6/45보다 좁게 두고, 칩과 첫 볼 사이는 바깥 [LottoNumberSection]의 간격이 맡는다.
+ * 앞에 칩이 붙어서 폭이 가장 빠듯한 행이다. 칩과 첫 볼 사이는 바깥 [LottoNumberSection]의
+ * 간격이 맡는다.
+ *
+ * 볼은 6/45와 같은 [LottoBallDefaultSize]를 쓴다. 예전에는 32dp로 6/45보다 컸는데,
+ * 연금복권은 한 자리 숫자만 담아서 더 클 이유가 없었고 그 2dp씩이 볼 사이 간격을 잡아먹었다.
+ *
+ * 360dp 기준 폭: 칩 40 + 섹션 간격 8 + (볼 30×6 + 간격 8×5) = 268dp ≤ 카드 안쪽 280dp.
  */
 @Composable
 fun RowScope.LottoPensionBalls(
     group: String,
     numbers: List<String>,
-    size: Dp = LottoBallMediumSize,
+    size: Dp = LottoBallDefaultSize,
 ) {
     LottoGroupChip(group = group, height = size)
     Row(
-        horizontalArrangement = Arrangement.spacedBy(LottoSpacing.xs),
+        horizontalArrangement = Arrangement.spacedBy(LottoSpacing.sm),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         numbers.forEachIndexed { index, number ->

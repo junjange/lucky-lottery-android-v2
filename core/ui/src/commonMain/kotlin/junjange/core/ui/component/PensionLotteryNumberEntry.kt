@@ -22,6 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import junjange.core.designsystem.theme.LottoSpacing
 import junjange.core.designsystem.theme.lotteryColors
 import junjange.core.domain.model.LottoType
@@ -41,6 +42,14 @@ private const val DIGITS_PER_GAME = 6
 
 /** 조는 1조부터 5조까지만 발행된다. */
 private const val GROUP_COUNT = 5
+
+/**
+ * 담은 게임 줄의 볼 크기.
+ *
+ * 로또(30dp)보다 작다. 한 자리 숫자만 담는 데다 앞에 조 칩까지 붙어서, 같은 크기로 두면
+ * 볼 사이 간격을 로또 줄만큼 벌릴 수 없다.
+ */
+private val CommittedBallSize = 26.dp
 
 /** 로또와 같은 상한. 게임 이름이 알파벳을 벗어나지 않는 26(A~Z)까지 담는다. */
 private const val MAX_GAMES = 26
@@ -142,13 +151,14 @@ fun PensionLotteryNumberEntry(
                     label = gameLabel(index),
                     onRemove = { games.removeAt(index) },
                     // 칩 높이를 옆 볼과 같게 맞춘다.
-                    leading = { LottoGroupChip(group = numbers.first().toString(), height = LottoBallDefaultSize) },
+                    leading = { LottoGroupChip(group = numbers.first().toString(), height = CommittedBallSize) },
                 ) {
                     numbers.drop(1).forEachIndexed { digitIndex, digit ->
                         LottoBall(
                             lottoType = LottoType.LOTTO720,
                             lottoColor = lotteryColors[digitIndex + 1],
                             lottoTitle = digit.toString(),
+                            size = CommittedBallSize,
                         )
                     }
                 }
@@ -178,8 +188,7 @@ fun PensionLotteryNumberEntry(
 
         Spacer(modifier = Modifier.height(LottoSpacing.base))
 
-        // 키패드와 같은 간격을 써서 여섯 자리가 키패드 열과 세로로 맞물리게 한다.
-        PickingSlots(count = DIGITS_PER_GAME, gap = KeypadGap) { index ->
+        PickingSlots(count = DIGITS_PER_GAME) { index ->
             val digit = digits[index]
 
             PickingSlot(
@@ -191,10 +200,10 @@ fun PensionLotteryNumberEntry(
                         lottoType = LottoType.LOTTO720,
                         lottoColor = lotteryColors[index + 1],
                         lottoTitle = digit.toString(),
-                        size = LottoBallLargeSize,
+                        size = EntryBallSize,
                     )
                 } else {
-                    LottoBallPlaceholder(lottoTitle = "", size = LottoBallLargeSize)
+                    LottoBallPlaceholder(lottoTitle = "", size = EntryBallSize)
                 }
             }
         }
