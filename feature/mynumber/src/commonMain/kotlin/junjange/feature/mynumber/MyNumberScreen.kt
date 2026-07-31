@@ -743,6 +743,7 @@ fun MyLotteryContent(
                 onEditClicked = onEditClicked,
                 onGalleryClicked = onGalleryClicked,
                 expanded = firstVisibleItemScrollOffset.value == 0,
+                deleteEnabled = contents.items.isNotEmpty(),
                 onDeleteClicked = onDeleteClicked,
             )
         }
@@ -910,6 +911,7 @@ fun MyPensionLotteryContent(
                         .padding(bottom = LottoSpacing.base, end = LottoSpacing.base),
                 onEditClicked = onEditClicked,
                 onGalleryClicked = onGalleryClicked,
+                deleteEnabled = contents.items.isNotEmpty(),
                 onDeleteClicked = onDeleteClicked,
                 expanded = firstVisibleItemScrollOffset.value == 0,
             )

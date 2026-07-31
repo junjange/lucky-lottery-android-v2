@@ -45,10 +45,16 @@ import org.jetbrains.compose.resources.stringResource
  * 펼침 애니메이션·바깥 탭 닫기·드래그 닫기도 OS 기본 동작을 그대로 쓴다.
  *
  * @param expanded 라벨을 함께 보여줄지. 스크롤을 내리면 아이콘만 남겨 목록을 가리지 않는다.
+ * @param deleteEnabled 지울 번호가 있는지. 없을 때도 열리면 아무것도 없는 삭제 모드에 들어가서
+ *   취소를 눌러야만 빠져나올 수 있었다.
  */
+/** 누를 수 없는 항목의 투명도. M3 비활성 기준값. */
+private const val DISABLED_ROW_ALPHA = 0.38f
+
 @Composable
 fun NumberActionFab(
     expanded: Boolean,
+    deleteEnabled: Boolean,
     onEditClicked: () -> Unit,
     onGalleryClicked: () -> Unit,
     onDeleteClicked: () -> Unit,
@@ -72,6 +78,7 @@ fun NumberActionFab(
     if (isSheetOpen) {
         NumberActionSheet(
             onDismissRequest = { isSheetOpen = false },
+            deleteEnabled = deleteEnabled,
             onEditClicked = onEditClicked,
             onGalleryClicked = onGalleryClicked,
             onDeleteClicked = onDeleteClicked,
@@ -89,6 +96,7 @@ fun NumberActionFab(
 @Composable
 private fun NumberActionSheet(
     onDismissRequest: () -> Unit,
+    deleteEnabled: Boolean,
     onEditClicked: () -> Unit,
     onGalleryClicked: () -> Unit,
     onDeleteClicked: () -> Unit,
@@ -141,6 +149,7 @@ private fun NumberActionSheet(
                 icon = painterResource(Res.drawable.ic_delete),
                 title = stringResource(Res.string.delete_numbers),
                 onClick = { select(onDeleteClicked) },
+                enabled = deleteEnabled,
                 tint = MaterialTheme.colorScheme.error,
             )
             Spacer(modifier = Modifier.height(LottoSpacing.sm))
@@ -154,23 +163,27 @@ private fun ActionRow(
     title: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     tint: Color = MaterialTheme.colorScheme.onSurface,
 ) {
+    // 누를 수 없을 때는 아이콘과 글자를 함께 흐리게 둔다. 한쪽만 흐리면 색이 바랜 것처럼 보인다.
+    val contentColor = if (enabled) tint else tint.copy(alpha = DISABLED_ROW_ALPHA)
+
     ListItem(
-        modifier = modifier.clickable(onClick = onClick),
+        modifier = modifier.clickable(enabled = enabled, onClick = onClick),
         colors = ListItemDefaults.colors(containerColor = Color.Transparent),
         leadingContent = {
             Icon(
                 painter = icon,
                 contentDescription = null,
-                tint = tint,
+                tint = contentColor,
             )
         },
         headlineContent = {
             Text(
                 text = title,
                 style = MaterialTheme.typography.bodyLarge,
-                color = tint,
+                color = contentColor,
             )
         },
     )
