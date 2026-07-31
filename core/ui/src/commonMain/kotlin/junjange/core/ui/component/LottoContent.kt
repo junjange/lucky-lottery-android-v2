@@ -1,5 +1,10 @@
 package junjange.core.ui.component
 
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,8 +25,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import junjange.core.designsystem.theme.LottoBlack
@@ -45,6 +53,9 @@ import org.jetbrains.compose.resources.stringResource
 // ---------------------------------------------------------------------------
 // 번호를 보여주는 화면들이 공유하는 조각. 홈·내 번호가 같은 규칙을 쓰도록 여기에 모은다.
 // ---------------------------------------------------------------------------
+
+/** 더 갈 수 없는 회차 버튼의 아이콘 투명도. 자리는 지키되 눌리지 않는다는 것이 한눈에 보이는 값. */
+private const val DISABLED_ICON_ALPHA = 0.3f
 
 /** 연금복권 자리별 색. 실물 용지의 자리 색을 그대로 쓴다. */
 val pensionBallColors =
@@ -302,6 +313,10 @@ fun LottoContent(
     pensionLotteryHome: PensionLotteryHome?,
     changeLottery: (offset: Int) -> Unit,
     changePensionLottery: (offset: Int) -> Unit,
+    canGoPreviousLottery: Boolean,
+    canGoNextLottery: Boolean,
+    canGoPreviousPension: Boolean,
+    canGoNextPension: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -311,11 +326,19 @@ fun LottoContent(
                 .padding(horizontal = LottoSpacing.screenHorizontal),
         verticalArrangement = Arrangement.spacedBy(LottoSpacing.base),
     ) {
+        if (lotteryNumbers == null) LotteryCardSkeleton(ballCount = LOTTO_SKELETON_BALLS)
+
         lotteryNumbers?.let { numbers ->
             LotteryCard(
                 title = stringResource(Res.string.lotto_645_title),
                 subtitle = lotteryRoundSubtitle(numbers.round, numbers.winningDate),
-                trailing = { RoundStepper(onRoundChange = changeLottery) },
+                trailing = {
+                    RoundStepper(
+                        canGoPrevious = canGoPreviousLottery,
+                        canGoNext = canGoNextLottery,
+                        onRoundChange = changeLottery,
+                    )
+                },
             ) {
                 Lotto645WinningSection(
                     numbers =
@@ -342,11 +365,19 @@ fun LottoContent(
             }
         }
 
+        if (pensionLotteryHome == null) LotteryCardSkeleton(ballCount = PENSION_SKELETON_BALLS)
+
         pensionLotteryHome?.let { pension ->
             LotteryCard(
                 title = stringResource(Res.string.lotto_720_title),
                 subtitle = lotteryRoundSubtitle(pension.round, pension.winningDate),
-                trailing = { RoundStepper(onRoundChange = changePensionLottery) },
+                trailing = {
+                    RoundStepper(
+                        canGoPrevious = canGoPreviousPension,
+                        canGoNext = canGoNextPension,
+                        onRoundChange = changePensionLottery,
+                    )
+                },
             ) {
                 LottoNumberSection(label = stringResource(Res.string.winning_numbers_title)) {
                     LottoPensionBalls(
@@ -396,36 +427,60 @@ fun lotteryRoundSubtitle(
         stringResource(Res.string.round_with_date, round, winningDate.parseDateToKoreanFormat())
     }
 
+/**
+ * 회차 넘기기.
+ *
+ * 갈 수 없는 쪽은 잠근다. 최신 회차의 다음이나 1회차의 이전을 누르면 서버가 번호를 못 찾고
+ * "번호를 찾을 수 없습니다" 스낵바만 떴는데, 눌러 보기 전에는 끝이라는 것을 알 방법이 없었다.
+ */
 @Composable
-private fun RoundStepper(onRoundChange: (offset: Int) -> Unit) {
+private fun RoundStepper(
+    canGoPrevious: Boolean,
+    canGoNext: Boolean,
+    onRoundChange: (offset: Int) -> Unit,
+) {
     Row(horizontalArrangement = Arrangement.spacedBy(LottoSpacing.sm)) {
         RoundStepButton(
             icon = Res.drawable.ic_chevron_left,
             description = stringResource(Res.string.previous_round),
+            enabled = canGoPrevious,
             onClick = { onRoundChange(-1) },
         )
         RoundStepButton(
             icon = Res.drawable.ic_chevron_right,
             description = stringResource(Res.string.next_round),
+            enabled = canGoNext,
             onClick = { onRoundChange(+1) },
         )
     }
 }
 
-/** 회차 이동 버튼. OS 기본 IconButton에 뉴트럴 컨테이너 색만 준다. */
+/**
+ * 회차 이동 버튼. OS 기본 IconButton에 뉴트럴 컨테이너 색만 준다.
+ *
+ * 비활성 색은 기본값을 쓰지 않는다. M3 기본은 컨테이너가 `onSurface` 12%(≈#E3E4E6)인데
+ * 이 버튼이 얹히는 카드가 흰색이고 활성 컨테이너가 `surfaceContainer`(#F2F4F6)라,
+ * 비활성 쪽이 오히려 더 진해서 꺼진 것으로 보이지 않았다.
+ * 컨테이너를 지우고 아이콘만 흐리게 남겨 눌리는 것과 아닌 것을 확실히 갈라 둔다.
+ */
 @Composable
 private fun RoundStepButton(
     icon: DrawableResource,
     description: String,
+    enabled: Boolean,
     onClick: () -> Unit,
 ) {
     FilledIconButton(
         onClick = onClick,
         modifier = Modifier.size(36.dp),
+        enabled = enabled,
         colors =
             IconButtonDefaults.filledIconButtonColors(
                 containerColor = MaterialTheme.colorScheme.surfaceContainer,
                 contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                disabledContainerColor = Color.Transparent,
+                disabledContentColor =
+                    MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = DISABLED_ICON_ALPHA),
             ),
     ) {
         Icon(
@@ -476,3 +531,86 @@ private fun Long.formatPrizeAmount(): String =
         this >= 10_000 -> "${this / 10_000}만원"
         else -> "${this}원"
     }
+
+/** 6/45 골격의 볼 수. 당첨번호 여섯 개 + 보너스. */
+private const val LOTTO_SKELETON_BALLS = 7
+
+/** 연금복권 골격의 볼 수. 조 칩 + 여섯 자리. */
+private const val PENSION_SKELETON_BALLS = 7
+
+/** 골격이 숨을 쉬는 한 주기. 너무 빠르면 화면이 깜빡이는 것처럼 보인다. */
+private const val SKELETON_PULSE_MILLIS = 900
+
+/**
+ * 아직 회차를 못 받아온 자리.
+ *
+ * 예전에는 이 자리가 그냥 비어 있었다. 앱을 처음 열면 네트워크 왕복 동안 상단 바와 배너만 있는
+ * 화면이 보였고, 당겨서 새로고침 표시가 위에 잠깐 뜰 뿐 무엇을 기다리는 중인지 알 수 없었다.
+ *
+ * 실제 카드와 같은 크기·같은 자리에 회색 덩어리를 두면 곧 무엇이 채워질지 미리 읽힌다.
+ * 카드 높이도 같아서 데이터가 도착할 때 화면이 위아래로 튀지 않는다.
+ */
+@Composable
+private fun LotteryCardSkeleton(ballCount: Int) {
+    val transition = rememberInfiniteTransition()
+    val alpha by transition.animateFloat(
+        initialValue = 0.45f,
+        targetValue = 1f,
+        animationSpec =
+            infiniteRepeatable(
+                animation = tween(durationMillis = SKELETON_PULSE_MILLIS),
+                repeatMode = RepeatMode.Reverse,
+            ),
+    )
+
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        shape = LottoShapeTokens.card,
+        color = MaterialTheme.colorScheme.surfaceContainerLowest,
+    ) {
+        Column(modifier = Modifier.padding(LottoSpacing.lg)) {
+            SkeletonBlock(width = 96.dp, height = 22.dp, alpha = alpha)
+            Spacer(modifier = Modifier.height(LottoSpacing.sm))
+            SkeletonBlock(width = 160.dp, height = 14.dp, alpha = alpha)
+
+            Spacer(modifier = Modifier.height(LottoSpacing.xl))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(LottoSpacing.sm, Alignment.CenterHorizontally),
+            ) {
+                repeat(ballCount) {
+                    SkeletonBlock(
+                        width = LottoBallDefaultSize,
+                        height = LottoBallDefaultSize,
+                        alpha = alpha,
+                        shape = LottoShapeTokens.ball,
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(LottoSpacing.lg))
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+            Spacer(modifier = Modifier.height(LottoSpacing.base))
+
+            SkeletonBlock(width = 140.dp, height = 28.dp, alpha = alpha)
+            Spacer(modifier = Modifier.height(LottoSpacing.sm))
+            SkeletonBlock(width = 200.dp, height = 14.dp, alpha = alpha)
+        }
+    }
+}
+
+@Composable
+private fun SkeletonBlock(
+    width: Dp,
+    height: Dp,
+    alpha: Float,
+    shape: Shape = LottoShapes.small,
+) {
+    Surface(
+        modifier = Modifier.size(width = width, height = height),
+        shape = shape,
+        color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = alpha),
+        content = {},
+    )
+}
