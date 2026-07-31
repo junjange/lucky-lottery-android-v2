@@ -18,9 +18,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -89,6 +87,7 @@ import junjange.core.ui.component.NumberActionFab
 import junjange.core.ui.component.LotteryCard
 import junjange.core.ui.component.Lotto645WinningSection
 import junjange.core.ui.component.LottoGroupChip
+import junjange.core.ui.component.LottoLargeTitle
 import junjange.core.ui.component.LottoNumberEntry
 import junjange.core.ui.component.LottoNumberSection
 import junjange.core.ui.component.LottoPensionBalls
@@ -395,14 +394,16 @@ private fun LotteryTypeTabs(
     selectedIndex: Int,
     onSelect: (Int) -> Unit,
 ) {
+    // 상태바 여백은 위의 큰 제목이 이미 비워 둔다. 여기서 또 넣으면 제목과 탭 사이에
+    // 상태바 높이만큼(iPhone 17에서 59pt) 빈 자리가 생긴다.
     SingleChoiceSegmentedButtonRow(
         modifier =
             Modifier
-                .windowInsetsPadding(WindowInsets.statusBars)
                 .fillMaxWidth()
                 .padding(
-                    horizontal = LottoSpacing.screenHorizontal,
-                    vertical = LottoSpacing.md,
+                    start = LottoSpacing.screenHorizontal,
+                    end = LottoSpacing.screenHorizontal,
+                    bottom = LottoSpacing.md,
                 ),
     ) {
         tabs.forEachIndexed { index, title ->
@@ -571,11 +572,20 @@ fun MyNumberContent(
                     onCancelClicked = onDeleteLotteryCancelClicked,
                 )
             } else {
-                LotteryTypeTabs(
-                    tabs = tabs,
-                    selectedIndex = pagerState.currentPage,
-                    onSelect = { index -> coroutineScope.launch { pagerState.scrollToPage(index) } },
-                )
+                // 탭 루트라 다른 루트와 같이 큰 제목을 쓴다. 예전에는 제목 없이 탭만 있어서
+                // 어느 탭에 들어와 있는지는 알아도 화면 이름은 하단 탭 바에서만 읽혔다.
+                //
+                // 홈·설정과 달리 제목이 스크롤에 따라 올라가지 않는다. 이 화면은 페이저라
+                // 좌우 두 목록이 각자 스크롤하는데, 제목이 그중 하나에 딸려 움직이면
+                // 탭을 넘길 때마다 제목이 다른 자리에 있게 된다.
+                Column {
+                    LottoLargeTitle(title = stringResource(Res.string.my_numbers_title))
+                    LotteryTypeTabs(
+                        tabs = tabs,
+                        selectedIndex = pagerState.currentPage,
+                        onSelect = { index -> coroutineScope.launch { pagerState.scrollToPage(index) } },
+                    )
+                }
             }
         },
         bottomBar = {

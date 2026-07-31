@@ -11,19 +11,18 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import junjange.core.designsystem.theme.LottoSpacing
+import junjange.core.ui.component.LottoLargeTitle
 import junjange.feature.setting.resources.Res
 import junjange.feature.setting.resources.review_app
 import junjange.feature.setting.resources.setting
@@ -51,7 +50,6 @@ private const val USAGE_TERM_URL = "https://fre2-dom.tistory.com/7"
  * @param notificationSection 알림 스위치 두 줄. 알림 권한 요청이 플랫폼마다 달라 이 모듈이 직접
  *   그리지 못하고 셸이 넣어 준다. 예전에는 이걸 위해 화면을 하나 더 열었다.
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingScreen(
     viewModel: SettingViewModel,
@@ -71,7 +69,6 @@ fun SettingScreen(
 
     Scaffold(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
-        topBar = { TopAppBar(title = { Text(text = stringResource(Res.string.setting)) }) },
     ) { innerPadding ->
         Column(
             modifier =
@@ -80,6 +77,9 @@ fun SettingScreen(
                     .padding(innerPadding)
                     .verticalScroll(rememberScrollState()),
         ) {
+            // 탭 루트라 큰 제목을 쓴다. 목록과 함께 스크롤되어 올라간다.
+            LottoLargeTitle(title = stringResource(Res.string.setting))
+
             SettingSectionLabel(text = stringResource(Res.string.setting_section_notification))
             notificationSection()
 

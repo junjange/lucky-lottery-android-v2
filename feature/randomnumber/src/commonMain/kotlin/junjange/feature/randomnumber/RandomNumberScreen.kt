@@ -15,12 +15,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -28,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import junjange.core.designsystem.theme.LottoShapeTokens
 import junjange.core.designsystem.theme.LottoSpacing
+import junjange.core.ui.component.LottoLargeTitle
 import junjange.core.domain.model.LottoType
 import junjange.feature.randomnumber.RandomNumberContract.*
 import junjange.feature.randomnumber.resources.Res
@@ -55,7 +54,6 @@ private val CardImageSize = 72.dp
  * 두 줄 텍스트뿐인데 카드 하나가 300dp쯤 되어 빈 공간이 절반을 넘었다.
  * 카드를 내용 높이에 맡기고 위에서부터 쌓는다.
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RandomNumberScreen(
     viewModel: RandomNumberViewModel,
@@ -72,41 +70,38 @@ fun RandomNumberScreen(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
-        topBar = {
-            TopAppBar(
-                title = { Text(text = stringResource(Res.string.random_number_generation)) },
-            )
-        },
     ) { innerPadding ->
-        Column(
-            modifier =
-                Modifier
-                    .padding(innerPadding)
-                    // 다른 화면과 같은 좌우 여백을 쓴다. 예전에는 8dp가 두 겹으로 16dp였고
-                    // 탭을 옮길 때마다 좌우가 흔들렸다.
-                    .padding(horizontal = LottoSpacing.screenHorizontal),
-            verticalArrangement = Arrangement.spacedBy(LottoSpacing.md),
-        ) {
-            Spacer(modifier = Modifier.height(LottoSpacing.sm))
+        Column(modifier = Modifier.padding(innerPadding)) {
+            // 탭 루트라 큰 제목을 쓴다. 뒤로 가기가 있는 번호 생성 화면은 M3 앱바를 그대로 둔다.
+            LottoLargeTitle(title = stringResource(Res.string.random_number_generation))
 
-            Text(
-                text = stringResource(Res.string.random_number_guide),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
+            Column(
+                modifier =
+                    Modifier
+                        // 다른 화면과 같은 좌우 여백을 쓴다. 예전에는 8dp가 두 겹으로 16dp였고
+                        // 탭을 옮길 때마다 좌우가 흔들렸다.
+                        .padding(horizontal = LottoSpacing.screenHorizontal),
+                verticalArrangement = Arrangement.spacedBy(LottoSpacing.md),
+            ) {
+                Text(
+                    text = stringResource(Res.string.random_number_guide),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
 
-            RandomNumberCard(
-                iconRes = Res.drawable.ic_lotto645_random,
-                title = Res.string.lotto_645_random_title,
-                description = Res.string.lotto_645_random_description,
-                onClick = { viewModel.event(Event.OnRandomNumberGenerationClick(LottoType.LOTTO645)) },
-            )
-            RandomNumberCard(
-                iconRes = Res.drawable.ic_lotto720_random,
-                title = Res.string.lotto_720_random_title,
-                description = Res.string.lotto_720_random_description,
-                onClick = { viewModel.event(Event.OnRandomNumberGenerationClick(LottoType.LOTTO720)) },
-            )
+                RandomNumberCard(
+                    iconRes = Res.drawable.ic_lotto645_random,
+                    title = Res.string.lotto_645_random_title,
+                    description = Res.string.lotto_645_random_description,
+                    onClick = { viewModel.event(Event.OnRandomNumberGenerationClick(LottoType.LOTTO645)) },
+                )
+                RandomNumberCard(
+                    iconRes = Res.drawable.ic_lotto720_random,
+                    title = Res.string.lotto_720_random_title,
+                    description = Res.string.lotto_720_random_description,
+                    onClick = { viewModel.event(Event.OnRandomNumberGenerationClick(LottoType.LOTTO720)) },
+                )
+            }
         }
     }
 }
