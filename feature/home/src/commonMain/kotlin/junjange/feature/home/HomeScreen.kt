@@ -12,12 +12,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
@@ -28,12 +25,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import junjange.core.designsystem.components.ErrorRetryScreen
 import junjange.core.designsystem.theme.LottoSpacing
 import junjange.core.ui.component.LottoContent
+import junjange.core.ui.component.LottoLargeTitle
 import junjange.core.ui.platform.PlatformAdBanner
 import junjange.feature.home.HomeContract.*
 import junjange.feature.home.resources.*
@@ -47,9 +44,6 @@ fun HomeScreen(
 ) {
     val state by viewModel.state.collectAsState()
     val refreshState = rememberPullToRefreshState()
-    // 큰 제목이 스크롤에 따라 접힌다. iOS 대형 타이틀과 같은 동작이라 셸이 SwiftUI든 아니든
-    // 어색하지 않고, 접히고 나면 목록에 세로 공간을 돌려준다.
-    val topBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val snackbarHostState = remember { SnackbarHostState() }
 
     val lottoNotFound = stringResource(Res.string.lotto_number_not_found_message)
@@ -70,14 +64,7 @@ fun HomeScreen(
     }
 
     Scaffold(
-        modifier = Modifier.nestedScroll(topBarScrollBehavior.nestedScrollConnection),
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
-        topBar = {
-            LargeTopAppBar(
-                title = { Text(text = stringResource(Res.string.home_top_bar_title)) },
-                scrollBehavior = topBarScrollBehavior,
-            )
-        },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         floatingActionButton = {
             // 색은 테마의 primaryContainer가 이미 브랜드 그린이라 따로 지정하지 않는다.
@@ -118,18 +105,15 @@ fun HomeScreen(
                 return@PullToRefreshBox
             }
 
-            Column(Modifier.fillMaxSize()) {
-                // 배너는 스크롤 밖에 둔다. 예전에는 목록과 같이 올라가서 랜덤 번호 생성 화면의
-                // 고정 배너와 동작이 달랐다.
+            Column(
+                Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState()),
+            ) {
+                LottoLargeTitle(title = stringResource(Res.string.home_top_bar_title))
                 PlatformAdBanner(modifier = Modifier.fillMaxWidth())
-
-                Column(
-                    Modifier
-                        .fillMaxSize()
-                        .verticalScroll(rememberScrollState()),
-                ) {
-                    Spacer(modifier = Modifier.height(LottoSpacing.base))
-                    LottoContent(
+                Spacer(modifier = Modifier.height(LottoSpacing.base))
+                LottoContent(
                     lotteryNumbers = state.lotteryNumbers,
                     pensionLotteryHome = state.pensionLotteryHome,
                     changeLottery = { offset ->
@@ -140,12 +124,11 @@ fun HomeScreen(
                     },
                     canGoPreviousLottery = state.canGoPreviousLottery,
                     canGoNextLottery = state.canGoNextLottery,
-                        canGoPreviousPension = state.canGoPreviousPension,
-                        canGoNextPension = state.canGoNextPension,
-                    )
-                    // FAB와 하단 탭에 마지막 카드가 가리지 않을 만큼의 여유.
-                    Spacer(modifier = Modifier.height(LottoSpacing.xxxl * 2))
-                }
+                    canGoPreviousPension = state.canGoPreviousPension,
+                    canGoNextPension = state.canGoNextPension,
+                )
+                // FAB와 하단 탭에 마지막 카드가 가리지 않을 만큼의 여유.
+                Spacer(modifier = Modifier.height(LottoSpacing.xxxl * 2))
             }
         }
     }
