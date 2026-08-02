@@ -1,80 +1,38 @@
 package junjange.feature.mynumber.dialog
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import org.jetbrains.compose.resources.stringResource
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
-import junjange.core.designsystem.theme.LottoTheme
-import junjange.feature.mynumber.resources.*
-import junjange.feature.mynumber.resources.button_done
+import junjange.core.designsystem.components.dialog.LottoTwoButtonDialog
+import junjange.feature.mynumber.resources.Res
+import junjange.feature.mynumber.resources.delete_cancel
+import junjange.feature.mynumber.resources.dialog_delete_confirm
 import junjange.feature.mynumber.resources.dialog_delete_message
 import junjange.feature.mynumber.resources.dialog_delete_title
+import org.jetbrains.compose.resources.stringResource
 
+/**
+ * 삭제 확인. 디자인 시스템의 두 갈래 대화상자를 쓴다.
+ *
+ * 예전에는 312x200dp로 크기를 못 박은 커스텀 Surface였고, 그 다음에는 M3 기본 `AlertDialog`였다.
+ * 둘 다 이 화면만의 대화상자여서 같은 앱 안에서 알림 설정 대화상자와 모양이 달랐다.
+ * 대화상자는 [LottoTwoButtonDialog] 하나로 모은다.
+ *
+ * 확인 버튼은 빨강이 아니라 브랜드 색을 그대로 쓴다. 무엇이 사라지는지는 제목과 본문이
+ * 이미 말하고 있고, 앱 안의 다른 확인 버튼과 색이 달라지면 그쪽이 더 낯설다.
+ *
+ * @param count 지울 번호 개수. 몇 개가 사라지는지 확인 순간에 다시 보여준다.
+ */
 @Composable
 fun LotteryDeleteDialog(
+    count: Int,
     onDismiss: () -> Unit,
     okClick: () -> Unit,
 ) {
-    Dialog(onDismissRequest = { onDismiss() }) {
-        LotteryDeleteDialogContent(okClick)
-    }
-}
-
-@Composable
-private fun LotteryDeleteDialogContent(okClick: () -> Unit) {
-    Surface(
-        modifier =
-            Modifier
-                .width(312.dp)
-                .height(200.dp),
-        shape = RoundedCornerShape(16.dp),
-        shadowElevation = 15.dp,
-        color = MaterialTheme.colorScheme.surfaceContainerLow,
-    ) {
-        Column {
-            Text(
-                text = stringResource(Res.string.dialog_delete_title),
-                modifier = Modifier.padding(16.dp),
-                style = LottoTheme.typography.headline3,
-                color = MaterialTheme.colorScheme.onSurface,
-            )
-            Text(
-                text = stringResource(Res.string.dialog_delete_message),
-                modifier = Modifier.padding(horizontal = 16.dp),
-                style = LottoTheme.typography.body3,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-            Box(
-                modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .padding(bottom = 16.dp, end = 12.dp),
-                contentAlignment = Alignment.Center,
-            ) {
-                Text(
-                    modifier =
-                        Modifier
-                            .align(Alignment.BottomEnd)
-                            .padding(18.dp)
-                            .clickable { okClick() },
-                    text = stringResource(Res.string.button_done),
-                    style = LottoTheme.typography.body2,
-                    color = MaterialTheme.colorScheme.primary,
-                )
-            }
-        }
-    }
+    LottoTwoButtonDialog(
+        title = stringResource(Res.string.dialog_delete_title, count),
+        content = stringResource(Res.string.dialog_delete_message),
+        confirmText = stringResource(Res.string.dialog_delete_confirm),
+        cancelText = stringResource(Res.string.delete_cancel),
+        onConfirm = okClick,
+        onCancel = onDismiss,
+    )
 }

@@ -5,7 +5,7 @@
     <key>CFBundleDevelopmentRegion</key>
     <string>ko</string>
     <key>CFBundleDisplayName</key>
-    <string>행운 복권</string>
+    <string>행운복권</string>
     <key>CFBundleExecutable</key>
     <string>$(EXECUTABLE_NAME)</string>
     <key>CFBundleIdentifier</key>
@@ -44,8 +44,13 @@
     </dict>
     <key>CADisableMinimumFrameDurationOnPhone</key>
     <true/>
+    <!-- 런치스크린에도 로고를 둔다. 비워 두면 흰 화면 → Compose 스플래시 → 홈으로
+         전환이 두 번 보인다. 스플래시와 같은 자리·같은 크기라 이어져 보인다. -->
     <key>UILaunchScreen</key>
-    <dict/>
+    <dict>
+        <key>UIImageName</key>
+        <string>LaunchLogo</string>
+    </dict>
     <key>UISupportedInterfaceOrientations</key>
     <array>
         <string>UIInterfaceOrientationPortrait</string>

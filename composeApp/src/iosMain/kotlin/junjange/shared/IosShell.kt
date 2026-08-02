@@ -77,11 +77,19 @@ fun homeViewController(): UIViewController =
         )
     }
 
-fun myNumberViewController(initialPage: Int): UIViewController =
+/**
+ * @param onChromeHidden 탭 바를 내려야 하는 상태인지. 삭제할 번호를 고르는 중이거나,
+ *   번호를 담는 전체 화면이 떠 있을 때 true가 온다.
+ */
+fun myNumberViewController(
+    initialPage: Int,
+    onChromeHidden: (Boolean) -> Unit,
+): UIViewController =
     themed {
         MyNumberScreen(
             viewModel = koinInject(),
             initialPage = initialPage,
+            onChromeHidden = onChromeHidden,
         )
     }
 
@@ -106,22 +114,17 @@ fun randomNumberGenerationViewController(
         )
     }
 
-fun settingViewController(navigateToNotification: () -> Unit): UIViewController =
+fun settingViewController(): UIViewController =
     themed {
         val settingActions = rememberSettingActions()
         SettingScreen(
             viewModel = koinInject<SettingViewModel>(),
-            navigateToNotification = { _, _ -> navigateToNotification() },
+            // 알림 권한 요청이 플랫폼마다 달라 셸이 래퍼를 넣어 준다.
+            notificationSection = {
+                NotificationRoute(viewModel = koinInject<NotificationViewModel>())
+            },
             onOpenUrl = settingActions.openUrl,
             onOpenReview = settingActions.openReview,
             versionName = settingActions.versionName,
-        )
-    }
-
-fun notificationViewController(onBack: () -> Unit): UIViewController =
-    themed {
-        NotificationRoute(
-            viewModel = koinInject<NotificationViewModel>(),
-            finish = onBack,
         )
     }

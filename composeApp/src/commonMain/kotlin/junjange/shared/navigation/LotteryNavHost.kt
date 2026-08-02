@@ -1,12 +1,21 @@
 package junjange.shared.navigation
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,12 +36,9 @@ import androidx.savedstate.read
 import junjange.core.domain.model.LottoType
 import junjange.core.ui.resources.Res
 import junjange.core.ui.resources.ic_clover
-import junjange.core.ui.resources.ic_clover_outlined
 import junjange.core.ui.resources.ic_home
-import junjange.core.ui.resources.ic_home_outlined
 import junjange.core.ui.resources.ic_plus
 import junjange.core.ui.resources.ic_settings
-import junjange.core.ui.resources.ic_settings_outlined
 import junjange.feature.home.HomeScreen
 import junjange.feature.home.HomeViewModel
 import junjange.feature.mynumber.MyNumberScreen
@@ -60,7 +66,6 @@ object Routes {
     const val SPLASH = "splash"
     const val MAIN = "main"
     const val RANDOM_GENERATION = "random_generation/{lottoType}"
-    const val NOTIFICATION = "notification"
 
     fun randomGeneration(lottoType: String): String = "random_generation/$lottoType"
 }
@@ -94,13 +99,16 @@ fun LotteryNavHost(
                 onNavigateToRandomGeneration = { lottoType ->
                     navController.navigate(Routes.randomGeneration(lottoType.name))
                 },
-                onNavigateToNotification = { _, _ -> navController.navigate(Routes.NOTIFICATION) },
             )
         }
 
         composable(
             route = Routes.RANDOM_GENERATION,
             arguments = listOf(navArgument("lottoType") { type = NavType.StringType }),
+            enterTransition = { slideInHorizontally(initialOffsetX = { it }) },
+            exitTransition = { slideOutHorizontally(targetOffsetX = { -it / 4 }) },
+            popEnterTransition = { slideInHorizontally(initialOffsetX = { -it / 4 }) },
+            popExitTransition = { slideOutHorizontally(targetOffsetX = { it }) },
         ) { backStackEntry ->
             val lottoType = backStackEntry.arguments?.read { getStringOrNull("lottoType") }.orEmpty()
             RandomNumberGenerationScreen(
@@ -115,27 +123,26 @@ fun LotteryNavHost(
                 onBack = { navController.popBackStack() },
             )
         }
-
-        composable(Routes.NOTIFICATION) {
-            NotificationRoute(
-                viewModel = koinInject<NotificationViewModel>(),
-                finish = { navController.popBackStack() },
-            )
-        }
     }
 }
 
 private const val KEY_MY_NUMBER_PAGE = "myNumberPage"
 
+/**
+ * 하단 탭.
+ *
+ * 아이콘은 고르든 안 고르든 채워진 모양 하나만 쓴다. 예전에는 안 고른 탭에 윤곽선 아이콘을
+ * 썼는데, 색까지 흐린 회색이라 무엇인지 알아보기 어려웠다. 모양을 한 가지로 두고
+ * 고른 탭만 브랜드 색으로 칠하면 지금 어디에 있는지가 색 하나로 분명해진다.
+ */
 private enum class Tab(
     val label: String,
-    val selectedIcon: DrawableResource,
-    val unselectedIcon: DrawableResource,
+    val icon: DrawableResource,
 ) {
-    HOME("홈", Res.drawable.ic_home, Res.drawable.ic_home_outlined),
-    MY_NUMBER("내 번호", Res.drawable.ic_clover, Res.drawable.ic_clover_outlined),
-    RANDOM_NUMBER("랜덤 번호", Res.drawable.ic_plus, Res.drawable.ic_plus),
-    SETTING("설정", Res.drawable.ic_settings, Res.drawable.ic_settings_outlined),
+    HOME("홈", Res.drawable.ic_home),
+    MY_NUMBER("내 번호", Res.drawable.ic_clover),
+    RANDOM_NUMBER("랜덤 번호", Res.drawable.ic_plus),
+    SETTING("설정", Res.drawable.ic_settings),
 }
 
 /** 열거형은 KMP 공통 코드에서 자동 저장 대상이 아니라 이름 문자열로 저장한다. */
@@ -151,10 +158,14 @@ private fun MainTabs(
     onMyNumberPageConsumed: () -> Unit,
     onLaunchQrScanner: (() -> Unit)?,
     onNavigateToRandomGeneration: (LottoType) -> Unit,
-    onNavigateToNotification: (lottoNotificationState: Boolean, pensionLottoNotificationState: Boolean) -> Unit,
 ) {
     var selectedTab by rememberSaveable(stateSaver = TabSaver) { mutableStateOf(Tab.HOME) }
     var myNumberInitialPage by rememberSaveable { mutableStateOf(0) }
+
+    // 탭 바를 내려야 하는 화면이 떠 있는지. 삭제 모드에서는 하단에 삭제 버튼만 남아야 하고,
+    // 번호를 담는 화면은 전체 화면이라 탭 바가 남아 있으면 아래가 두 겹이 되고
+    // 고르던 중에 다른 탭으로 새어나갈 수 있다.
+    var isChromeHidden by remember { mutableStateOf(false) }
 
     LaunchedEffect(requestedMyNumberPage) {
         requestedMyNumberPage ?: return@LaunchedEffect
@@ -166,20 +177,35 @@ private fun MainTabs(
     Scaffold(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         bottomBar = {
-            NavigationBar {
-                Tab.entries.forEach { tab ->
-                    val selected = selectedTab == tab
-                    NavigationBarItem(
-                        icon = {
-                            Icon(
-                                painter = painterResource(if (selected) tab.selectedIcon else tab.unselectedIcon),
-                                contentDescription = tab.label,
-                            )
-                        },
-                        label = { Text(tab.label) },
-                        selected = selected,
-                        onClick = { selectedTab = tab },
-                    )
+            AnimatedVisibility(
+                visible = !isChromeHidden,
+                // 아래로 미끄러져 나가면서 자리도 함께 접는다. 슬라이드만 주면 애니메이션이 끝나는
+                // 순간 비어 있던 자리가 한 번에 사라져 위 콘텐츠가 툭 내려앉는다.
+                enter = expandVertically() + slideInVertically(initialOffsetY = { it }),
+                exit = slideOutVertically(targetOffsetY = { it }) + shrinkVertically(),
+            ) {
+                NavigationBar {
+                    Tab.entries.forEach { tab ->
+                        val selected = selectedTab == tab
+                        NavigationBarItem(
+                            // 고르지 않은 탭도 검게 둔다. 기본값인 onSurfaceVariant(#6B7684)는
+                            // 네잎클로버처럼 선이 얇은 아이콘에서 흐릿하게 뭉쳐 보인다.
+                            colors =
+                                NavigationBarItemDefaults.colors(
+                                    unselectedIconColor = MaterialTheme.colorScheme.onSurface,
+                                    unselectedTextColor = MaterialTheme.colorScheme.onSurface,
+                                ),
+                            icon = {
+                                Icon(
+                                    painter = painterResource(tab.icon),
+                                    contentDescription = tab.label,
+                                )
+                            },
+                            label = { Text(tab.label) },
+                            selected = selected,
+                            onClick = { selectedTab = tab },
+                        )
+                    }
                 }
             }
         },
@@ -203,6 +229,7 @@ private fun MainTabs(
                     MyNumberScreen(
                         viewModel = koinInject(),
                         initialPage = myNumberInitialPage,
+                        onChromeHidden = { isChromeHidden = it },
                     )
 
                 Tab.RANDOM_NUMBER ->
@@ -215,7 +242,10 @@ private fun MainTabs(
                     val settingActions = junjange.feature.setting.rememberSettingActions()
                     SettingScreen(
                         viewModel = koinInject<SettingViewModel>(),
-                        navigateToNotification = onNavigateToNotification,
+                        // 알림 권한 요청이 플랫폼마다 달라 셸이 래퍼를 넣어 준다.
+                        notificationSection = {
+                            NotificationRoute(viewModel = koinInject<NotificationViewModel>())
+                        },
                         onOpenUrl = settingActions.openUrl,
                         onOpenReview = settingActions.openReview,
                         versionName = settingActions.versionName,

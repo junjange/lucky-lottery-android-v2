@@ -1,7 +1,10 @@
 <resources>
     <string name="setting">설정</string>
-    <string name="app_notification">알림 설정</string>
+    <string name="setting_section_notification">알림</string>
+    <string name="setting_section_info">정보</string>
     <string name="version_info">버전 정보</string>
     <string name="usage_term">이용 약관</string>
-    <string name="review_app">칭찬하기 / 리뷰 남기기</string>
+    <string name="review_app">리뷰 남기기</string>
+    <!-- 새 창 아이콘의 대체 텍스트. 눌렀을 때 앱 밖으로 나간다는 것을 화면 낭독기에도 알린다. -->
+    <string name="setting_opens_externally">앱 밖에서 열림</string>
 </resources>

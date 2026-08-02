@@ -1,5 +1,5 @@
 <resources>
     <string name="qr_scanner_hint">QR 코드를 스캔하여 주세요:)</string>
-
-
+    <string name="splash_logo_description">행운복권</string>
+    <string name="splash_tagline">일상 속에서 행운을 찾다</string>
 </resources>

@@ -12,7 +12,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -26,13 +25,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import junjange.core.designsystem.components.ErrorRetryScreen
-import junjange.core.designsystem.theme.LottoTheme
+import junjange.core.designsystem.theme.LottoSpacing
 import junjange.core.ui.component.LottoContent
-import junjange.core.ui.component.LottoHomeTopBar
+import junjange.core.ui.component.LottoLargeTitle
 import junjange.core.ui.platform.PlatformAdBanner
 import junjange.feature.home.HomeContract.*
 import junjange.feature.home.resources.*
@@ -69,14 +67,11 @@ fun HomeScreen(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = navigateToQRScanner,
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary,
-            ) {
+            // 색은 테마의 primaryContainer가 이미 브랜드 그린이라 따로 지정하지 않는다.
+            FloatingActionButton(onClick = navigateToQRScanner) {
                 Icon(
                     painter = painterResource(Res.drawable.ic_qr_code),
-                    contentDescription = null,
+                    contentDescription = stringResource(Res.string.qr_scan_description),
                 )
             }
         },
@@ -114,10 +109,10 @@ fun HomeScreen(
                 Modifier
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState()),
-                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                LottoHomeTopBar()
+                LottoLargeTitle(title = stringResource(Res.string.home_top_bar_title))
                 PlatformAdBanner(modifier = Modifier.fillMaxWidth())
+                Spacer(modifier = Modifier.height(LottoSpacing.base))
                 LottoContent(
                     lotteryNumbers = state.lotteryNumbers,
                     pensionLotteryHome = state.pensionLotteryHome,
@@ -127,8 +122,13 @@ fun HomeScreen(
                     changePensionLottery = { offset ->
                         viewModel.event(Event.ChangePensionLottery(offset = offset))
                     },
+                    canGoPreviousLottery = state.canGoPreviousLottery,
+                    canGoNextLottery = state.canGoNextLottery,
+                    canGoPreviousPension = state.canGoPreviousPension,
+                    canGoNextPension = state.canGoNextPension,
                 )
-                Spacer(modifier = Modifier.height(50.dp))
+                // FAB와 하단 탭에 마지막 카드가 가리지 않을 만큼의 여유.
+                Spacer(modifier = Modifier.height(LottoSpacing.xxxl * 2))
             }
         }
     }

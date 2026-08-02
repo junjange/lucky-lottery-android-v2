@@ -59,12 +59,14 @@ class HomeViewModel(
         private suspend fun fetchLatestLotteryRound(): Boolean =
             getLotteryRoundUseCase()
                 .onSuccess { round ->
+                    _state.update { it.copy(latestLotteryRound = round) }
                     fetchLotteryNumbers(round)
                 }.isSuccess
 
         private suspend fun fetchLatestPensionLotteryRound(): Boolean =
             getPensionLotteryRoundUseCase()
                 .onSuccess { round ->
+                    _state.update { it.copy(latestPensionLotteryRound = round) }
                     fetchPensionLotteryNumbers(round)
                 }.isSuccess
 

@@ -243,34 +243,51 @@ class MyNumberViewModel
 
         private fun deleteLottery(userRoundIds: List<UserRoundId>) {
             launch {
-                userRoundIds.forEach { (round, id) ->
-                    deleteLotteryByRoundAndIdUseCase(round = round, id = id)
-                }
+                val results =
+                    userRoundIds.map { (round, id) ->
+                        deleteLotteryByRoundAndIdUseCase(round = round, id = id)
+                    }
                 loadLottery(refresh = true)
+                notifyDeleted(results)
             }
         }
 
         private fun deletePensionLottery(userRoundIds: List<UserRoundId>) {
             launch {
-                userRoundIds.forEach { (round, id) ->
-                    deletePensionLotteryByRoundAndIdUseCase(round = round, id = id)
-                }
+                val results =
+                    userRoundIds.map { (round, id) ->
+                        deletePensionLotteryByRoundAndIdUseCase(round = round, id = id)
+                    }
                 loadPensionLottery(refresh = true)
+                notifyDeleted(results)
             }
         }
 
         private fun deleteAllLottery() {
             launch {
-                deleteAllLotteryUseCase()
+                val result = deleteAllLotteryUseCase()
                 loadLottery(refresh = true)
+                notifyDeleted(listOf(result))
             }
         }
 
         private fun deleteAllPensionLottery() {
             launch {
-                deleteAllPensionLotteryUseCase()
+                val result = deleteAllPensionLotteryUseCase()
                 loadPensionLottery(refresh = true)
+                notifyDeleted(listOf(result))
             }
+        }
+
+        /** 삭제는 되돌릴 수 없으니 결과를 반드시 알린다. 하나라도 실패하면 실패로 알린다. */
+        private suspend fun notifyDeleted(results: List<Result<*>>) {
+            val message =
+                if (results.all { it.isSuccess }) {
+                    MyNumberMessage.DELETE_SUCCESS
+                } else {
+                    MyNumberMessage.DELETE_FAILED
+                }
+            _effect.send(Effect.ShowMessage(message))
         }
 
         private fun loading(isLoading: Boolean) {

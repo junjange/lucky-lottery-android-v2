@@ -1,6 +1,9 @@
 <resources>
+    <string name="home_top_bar_title">회차별 당첨번호</string>
     <string name="lotto_number_not_found_message">해당 회차의 로또 당첨 번호를 찾을 수 없어요.</string>
     <string name="pension_number_not_found_message">해당 회차의 연금복권 당첨 번호를 찾을 수 없어요.</string>
+
+    <string name="qr_scan_description">QR 코드로 당첨 확인</string>
 
     <!-- Error Screen -->
     <string name="error_network_title">인터넷 연결이 불안정해요.</string>

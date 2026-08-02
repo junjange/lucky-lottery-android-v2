@@ -4,21 +4,45 @@
     <string name="write_directly">직접 작성하기</string>
     <string name="load_photo">사진 불러오기</string>
     <string name="addition">번호 관리</string>
+    <string name="delete_numbers">번호 삭제하기</string>
 
     <string name="profile_default_image_select">기본 이미지로 변경</string>
     <string name="profile_image_select">앨범에서 사진 선택</string>
-    <string name="home_top_bar_title">회차별 당첨번호</string>
-    <string name="enter_lotto_numbers">로또 번호를 직접 입력해봐요</string>
+    <!-- 전체 화면이라 탭·세그먼트가 안 보이므로 제목에 복권 종류를 남긴다. -->
+    <string name="enter_lotto_numbers">로또 번호 고르기</string>
     <string name="profile_textfield_hint">닉네임 입력</string>
-    <string name="enter_pension_lottery_number">연급복권 번호를 직접 입력해봐요</string>
+    <string name="enter_pension_lottery_number">연금복권 번호 고르기</string>
+    <string name="close">닫기</string>
+
+    <!-- '취소'는 이 상황에서 '담기를 취소한다'로도 읽혀 나가기와 헷갈린다. 두 갈래를 동작 이름으로 쓴다. -->
+    <string name="entry_discard_title">저장하지 않고 나갈까요?</string>
+    <string name="entry_discard_message">지금 담은 번호는 사라져요.</string>
+    <string name="entry_discard_confirm">나가기</string>
+    <string name="entry_discard_cancel">계속하기</string>
 
     <string name="create_title">생성</string>
     <string name="group_title">조</string>
+    <string name="pension_bonus_group_all">각</string>
     <string name="add_number">번호 추가</string>
     <string name="remove_number">번호 삭제</string>
 
+    <!-- 인자는 %1$d처럼 번호를 붙인다. Compose 리소스는 위치 인자만 치환해서 맨 %d는 글자 그대로 나온다. -->
+    <string name="lotto_entry_games_count">담은 게임 %1$d개</string>
+    <string name="lotto_entry_max_games">더 담을 수 없어요</string>
+    <string name="lotto_entry_remove_game">%1$s게임 지우기</string>
+    <string name="lotto_entry_guide">번호 6개를 고른 뒤 아래 ‘번호 추가’를 누르고 생성해보세요</string>
+
+    <string name="pension_entry_group_label">조</string>
+    <string name="pension_entry_guide">조와 번호 6자리를 고른 뒤 아래 ‘번호 추가’를 누르고 생성해보세요</string>
+
     <string name="winning_numbers_title">당첨번호</string>
     <string name="bonus_numbers_title">보너스</string>
+    <string name="previous_round">이전 회차</string>
+    <string name="next_round">다음 회차</string>
+    <string name="round_with_date">%1$d회 · %2$s 추첨</string>
+    <string name="round_unannounced">%1$d회 · 추첨 전</string>
+    <string name="first_prize_total">1등 총 당첨금</string>
+    <string name="first_prize_detail">%1$d명 · 1인당 %2$s</string>
     <string name="lotto_645_title">로또 6/45</string>
     <string name="lotto_720_title">연금복권 720+</string>
 
