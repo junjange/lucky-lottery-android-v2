@@ -2,8 +2,8 @@
 # app
 compile-sdk = "36"
 min-sdk = "24"
-version-code = "13"
-version-name = "3.2.0"
+version-code = "14"
+version-name = "3.3.0"
 
 # plugins
 kotlin-lang = "2.2.20"
