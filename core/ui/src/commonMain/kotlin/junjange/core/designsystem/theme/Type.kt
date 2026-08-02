@@ -2,9 +2,7 @@ package junjange.core.designsystem.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -67,41 +65,6 @@ fun lottoTypography(fontFamily: FontFamily): Typography =
         labelMedium = scaleStyle(fontFamily, 13, 18, FontWeight.Medium, 0f),
         labelSmall = scaleStyle(fontFamily, 11, 16, FontWeight.Medium, 0f),
     )
-
-/**
- * 구 타이포 이름(headline1, body2 …)을 쓰는 화면이 남아 있는 동안만 유지하는 브리지.
- * 화면을 옮길 때마다 `MaterialTheme.typography`로 갈아타고, 마지막 참조가 사라지면 이 타입을 지운다.
- */
-@Immutable
-data class LottoTypography(
-    val headline1: TextStyle,
-    val headline2: TextStyle,
-    val headline3: TextStyle,
-    val body1: TextStyle,
-    val body2: TextStyle,
-    val body3: TextStyle,
-    val body4: TextStyle,
-    val caption1: TextStyle,
-    val caption2: TextStyle,
-    val caption3: TextStyle,
-)
-
-internal fun Typography.toLegacy(): LottoTypography =
-    LottoTypography(
-        headline1 = headlineLarge,
-        headline2 = headlineMedium,
-        headline3 = headlineSmall,
-        body1 = bodyLarge,
-        body2 = bodyMedium,
-        body3 = bodySmall,
-        body4 = labelSmall,
-        caption1 = titleMedium,
-        caption2 = labelMedium,
-        caption3 = labelSmall,
-    )
-
-internal val LocalTypography =
-    staticCompositionLocalOf { lottoTypography(FontFamily.Default).toLegacy() }
 
 /** 테마가 한 번만 만들어 두는 타이포 인스턴스. 폰트 리소스 로딩이 매 컴포지션 반복되지 않게 한다. */
 @Composable
