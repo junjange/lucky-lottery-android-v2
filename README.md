@@ -36,6 +36,31 @@
 | Android | minSdk 24 (compileSdk 36) | 단일 `MainActivity` + Compose Navigation | Compose Multiplatform |
 | iOS | iOS 17.0+ | SwiftUI `TabView` / `NavigationStack` | Compose Multiplatform 화면을 embed |
 
+## 스크린샷
+
+화면은 두 플랫폼이 같은 Compose 코드로 그리고, 탭 바처럼 셸이 그리는 부분만 OS를 따라갑니다.
+(Android는 Material 3 `NavigationBar`, iOS는 SwiftUI `TabView`의 Liquid Glass)
+
+### Android
+
+| 홈 | 내 번호 · 로또 6/45 | 내 번호 · 연금복권 720+ |
+|:---:|:---:|:---:|
+| <img src="docs/screenshots/android/01_home.png" width="240"/> | <img src="docs/screenshots/android/02_mynumber_lotto.png" width="240"/> | <img src="docs/screenshots/android/03_mynumber_pension.png" width="240"/> |
+
+| 랜덤 번호 | 번호 생성 | 설정 |
+|:---:|:---:|:---:|
+| <img src="docs/screenshots/android/04_randomnumber.png" width="240"/> | <img src="docs/screenshots/android/05_generation.png" width="240"/> | <img src="docs/screenshots/android/06_setting.png" width="240"/> |
+
+### iOS
+
+| 홈 | 내 번호 · 로또 6/45 | 내 번호 · 연금복권 720+ |
+|:---:|:---:|:---:|
+| <img src="docs/screenshots/ios/01_home.png" width="240"/> | <img src="docs/screenshots/ios/02_mynumber_lotto.png" width="240"/> | <img src="docs/screenshots/ios/03_mynumber_pension.png" width="240"/> |
+
+| 랜덤 번호 | 번호 생성 | 설정 |
+|:---:|:---:|:---:|
+| <img src="docs/screenshots/ios/04_randomnumber.png" width="240"/> | <img src="docs/screenshots/ios/05_generation.png" width="240"/> | <img src="docs/screenshots/ios/06_setting.png" width="240"/> |
+
 <br/>
 
 # Architecture
